@@ -1,15 +1,8 @@
-import {
-  Contents,
-  Footer,
-  Header,
-  HeaderContainer,
-  Page,
-  PageTitle,
-} from '../components/pageLayout';
-import { Input, Typography } from 'antd';
-import { InputContainer, InputLabel } from '../templates/MeetingCreate/styled';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { InputContainer } from '../templates/MeetingCreate/styled';
 import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../stores/createMeeting';
+import { TextField, InputLabel, Typography } from '@mui/material';
 import React from 'react';
 
 export function MeetingCreate() {
@@ -27,21 +20,26 @@ export function MeetingCreate() {
       <Header>
         <HeaderContainer>
           <div style={{ backgroundColor: 'aquamarine' }}>progress bar area</div>
-          <PageTitle>모임의 이름이 무엇인가요?</PageTitle>
+          {/* TOdo: Replace font size with theme properties */}
+          <Typography variant="h1" style={{ fontSize: 24, textAlign: 'center' }}>
+            모임의 이름이 무엇인가요?
+          </Typography>
         </HeaderContainer>
       </Header>
       <Contents>
         <InputContainer>
           <div>
-            <InputLabel htmlFor="name">
-              <Typography>모임 이름</Typography>
+            <InputLabel htmlFor="name" shrink>
+              모임 이름
             </InputLabel>
-            <Input
+            <TextField
               id="name"
-              allowClear
-              style={{ borderRadius: 0 }}
-              onChange={handleNameChange}
+              hiddenLabel
+              size="small"
+              variant="outlined"
+              fullWidth
               placeholder="한사랑산악회 신년 모임"
+              onChange={handleNameChange}
             />
           </div>
         </InputContainer>

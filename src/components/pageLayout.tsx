@@ -1,4 +1,3 @@
-import { Typography } from 'antd';
 import styled from 'styled-components';
 
 export const Page = styled.div`
@@ -34,9 +33,4 @@ export const Contents = styled.div`
 
 export const Footer = styled.footer`
   height: 56px;
-`;
-
-export const PageTitle = styled(Typography.Title)`
-  font-size: 24px !important;
-  text-align: center;
 `;
