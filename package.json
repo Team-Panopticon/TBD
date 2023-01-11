@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "antd": "^5.1.1",
+    "@mui/material": "^5.11.3",
+    "@mui/styled-engine-sc": "^5.11.0",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.5",
@@ -35,5 +37,8 @@
     "prettier": "^2.8.1",
     "typescript": "^4.6.4",
     "vite": "^3.1.0"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   }
 }
