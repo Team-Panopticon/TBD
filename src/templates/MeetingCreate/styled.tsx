@@ -1,3 +1,4 @@
+import { ToggleButtonGroup } from '@mui/material';
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
@@ -11,3 +12,15 @@ export const InputContainer = styled.div`
 export const InputLabel = styled.label`
   padding-bottom: 4px;
 `;
+
+export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)({
+  display: 'flex',
+  justifyContent: 'space-between',
+
+  gap: '25px',
+});
+
+export const customButtonStyle = {
+  border: '1px solid #D9D9D9',
+  borderRadius: '0',
+};

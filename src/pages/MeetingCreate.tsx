@@ -4,6 +4,7 @@ import { useRecoilState } from 'recoil';
 import { createMeetingState } from '../stores/createMeeting';
 import { TextField, InputLabel, Typography } from '@mui/material';
 import React from 'react';
+import { SelectMeetingType } from '../templates/MeetingCreate/SelectMeetingType';
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
@@ -41,6 +42,14 @@ export function MeetingCreate() {
               placeholder="한사랑산악회 신년 모임"
               onChange={handleNameChange}
             />
+          </div>
+        </InputContainer>
+        <InputContainer>
+          <div>
+            <InputLabel htmlFor="name" shrink>
+              투표 종류
+            </InputLabel>
+            <SelectMeetingType></SelectMeetingType>
           </div>
         </InputContainer>
       </Contents>
