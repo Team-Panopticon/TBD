@@ -49,7 +49,7 @@ export function MeetingCreate() {
             <InputLabel htmlFor="name" shrink>
               투표 종류
             </InputLabel>
-            <SelectMeetingType></SelectMeetingType>
+            <SelectMeetingType />
           </div>
         </InputContainer>
       </Contents>

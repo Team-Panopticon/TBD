@@ -13,12 +13,12 @@ export const InputLabel = styled.label`
   padding-bottom: 4px;
 `;
 
-export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)({
-  display: 'flex',
-  justifyContent: 'space-between',
+export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)`
+  display: flex;
+  justify-content: space-between;
 
-  gap: '25px',
-});
+  gap: 25px;
+`;
 
 export const customButtonStyle = {
   border: '1px solid #D9D9D9',
