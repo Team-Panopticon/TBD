@@ -20,7 +20,7 @@ export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)`
   gap: 25px;
 `;
 
-export const customButtonStyle = {
+export const customButtonStyle: React.CSSProperties = {
   border: '1px solid #D9D9D9',
   borderRadius: '0',
 };
