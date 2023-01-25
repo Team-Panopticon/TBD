@@ -7,20 +7,25 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
 
-interface CustomPickerDayProps extends PickersDayProps<Dayjs> {
-  isSelected: boolean;
-}
+type CustomPickerDayProps = PickersDayProps<Dayjs>;
 
 const CustomPickersDay = styled(PickersDay, {
-  shouldForwardProp: (prop) => prop !== 'isSelected',
-})<CustomPickerDayProps>(({ theme, isSelected }) => ({
-  ...(isSelected && {
+  shouldForwardProp: (prop) => prop !== 'selected',
+})<CustomPickerDayProps>(({ theme, selected }) => {
+  const style: React.CSSProperties = {
     backgroundColor: theme.palette.primary.main,
-    '&:hover, &:focus': {
-      backgroundColor: theme.palette.primary.main,
-    },
-  }),
-})) as React.ComponentType<CustomPickerDayProps>;
+    color: 'white',
+  };
+
+  return {
+    ...(selected && {
+      ...style,
+      '&:hover, &:focus': {
+        ...style,
+      },
+    }),
+  };
+}) as React.ComponentType<CustomPickerDayProps>;
 
 export function Calender() {
   const [values, setValues] = React.useState<Dayjs[]>([]);
@@ -34,24 +39,23 @@ export function Calender() {
 
   const renderWeekPickerDay = (
     date: Dayjs,
-    selectedDates: Array<Dayjs | null>,
+    _: Array<Dayjs | null>,
     pickersDayProps: PickersDayProps<Dayjs>,
   ) => {
-    const isSelected = values.some((value) => value.isSame(date));
+    const selected = values.some((value) => value.isSame(date));
 
-    return <CustomPickersDay {...pickersDayProps} isSelected={isSelected} disableMargin />;
+    return <CustomPickersDay {...pickersDayProps} selected={selected} disableMargin />;
   };
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StaticDatePicker
         displayStaticWrapperAs="desktop"
-        label="Week picker"
         value={values}
         onChange={onChange}
         renderDay={renderWeekPickerDay}
         renderInput={(params) => <TextField {...params} />}
-        inputFormat="'Week of' MMM d"
+        disableHighlightToday={true}
       />
     </LocalizationProvider>
   );
