@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
-import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProivder, StyledEngineProvider } from '@mui/material/styles';
+import styled, { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { RecoilRoot } from 'recoil';
 import { MeetingCreate } from './pages/MeetingCreate';
 import { MeetingEdit } from './pages/MeetingEdit';
@@ -36,9 +37,11 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <RecoilRoot>
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <MuiThemeProivder theme={theme}>
+        <StyledThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </StyledThemeProvider>
+      </MuiThemeProivder>
     </RecoilRoot>
   </React.StrictMode>,
 );
