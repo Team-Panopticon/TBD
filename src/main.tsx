@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
-import { createTheme, Theme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { RecoilRoot } from 'recoil';
 import { MeetingCreate } from './pages/MeetingCreate';
-import { MeetingEdit } from './pages/MeetingEdit';
+import { MeetingModify } from './pages/MeetingModify';
 import { MeetingResult } from './pages/MeetingResult';
 import { MeetingView } from './pages/MeetingView';
 import { theme } from './theme';
@@ -24,8 +24,8 @@ const router = createBrowserRouter([
     element: <MeetingView />,
   },
   {
-    path: 'meetings/:meetingId/edit',
-    element: <MeetingEdit />,
+    path: 'meetings/:meetingId/modify',
+    element: <MeetingModify />,
   },
   {
     path: 'meetings/:meetingId/result',

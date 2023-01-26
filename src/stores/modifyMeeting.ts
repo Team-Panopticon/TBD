@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 import { MeetingStatus, MeetingType } from '../constants/meeting';
 
-export interface CreateMeetingState {
+export interface ModifyMeetingState {
   name: string;
   /** 투표 가능 날짜, ISO date string with timezone */
   dates: string[];
@@ -12,7 +12,7 @@ export interface CreateMeetingState {
   password: string;
 }
 
-export const initialState: CreateMeetingState = {
+export const initialState: ModifyMeetingState = {
   name: '',
   dates: [],
   type: MeetingType.date,
@@ -21,7 +21,7 @@ export const initialState: CreateMeetingState = {
   password: '',
 };
 
-export const createMeetingState = atom<CreateMeetingState>({
-  key: 'createMeeting',
+export const modifyMeetingState = atom<ModifyMeetingState>({
+  key: 'modifyMeeting',
   default: initialState,
 });
