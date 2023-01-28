@@ -6,13 +6,14 @@ import { useState } from 'react';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 
 export function MeetingModify() {
-  const [, setMeeting] = useRecoilState(modifyMeetingState);
+  const [meeting, setMeeting] = useRecoilState(modifyMeetingState);
   const [step, setStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const meetingeditSteps = getMeetingEditSteps('modify');
   return (
     <Page>
       <MeetingEditTemplate
+        meeting={meeting}
         meetingEditSteps={meetingeditSteps}
         step={step}
         setStep={setStep}

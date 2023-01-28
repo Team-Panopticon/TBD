@@ -5,7 +5,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../../component
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { CreateMeetingState } from '../../stores/createMeeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
-
+import dayjs from 'dayjs';
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 8,
   borderRadius: 5,
@@ -16,13 +16,14 @@ const FullHeightButtonGroup = styled(ButtonGroup)(({ theme }) => ({
 }));
 export interface ICreateMeetingTemplateProps {
   step: number;
-
+  meeting: CreateMeetingState;
   setStep: SetterOrUpdater<number>;
   onChange: SetterOrUpdater<CreateMeetingState>;
   meetingEditSteps: IMeetingEditStep[];
 }
 export function MeetingEditTemplate({
   step,
+  meeting,
   setStep,
   onChange,
   meetingEditSteps,
@@ -53,6 +54,7 @@ export function MeetingEditTemplate({
       </Header>
       <Contents>
         <MeetingEditStepper
+          meeting={meeting}
           step={step}
           meetingEditSteps={meetingEditSteps}
           onChange={onChange}

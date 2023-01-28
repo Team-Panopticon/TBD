@@ -13,6 +13,7 @@ export function MeetingCreate() {
   return (
     <Page>
       <MeetingEditTemplate
+        meeting={meeting}
         meetingEditSteps={meetingeditSteps}
         step={step}
         setStep={setStep}

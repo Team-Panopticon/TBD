@@ -1,9 +1,13 @@
 import { Divider, InputLabel, TextField } from '@mui/material';
+import dayjs from 'dayjs';
 import React from 'react';
 import { SetterOrUpdater } from 'recoil';
 import styled from 'styled-components';
+import { DateInput } from '../../components/DateInput';
+import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import { CreateMeetingState } from '../../stores/createMeeting';
+import { SelectMeetingType } from './SelectMeetingType';
 import { InputContainer } from './styled';
 
 interface StepBox {
@@ -20,19 +24,16 @@ const StepBox = styled.div<StepBox>`
 
   padding: 0 32px;
   overflow: hidden;
-
-  //   background-color: aquamarine;
-  //   align-items: center;
-  //   justify-content: center;
 `;
 
 export interface IMeetingEditStepper {
   step: number;
   onChange: SetterOrUpdater<CreateMeetingState>;
   meetingEditSteps: IMeetingEditStep[];
+  meeting: CreateMeetingState;
 }
 
-export function MeetingEditStepper({ step, onChange }: IMeetingEditStepper) {
+export function MeetingEditStepper({ meeting, step, onChange }: IMeetingEditStepper) {
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange((prev) => {
       return {
@@ -41,11 +42,45 @@ export function MeetingEditStepper({ step, onChange }: IMeetingEditStepper) {
       };
     });
   };
+  const handleDeadlineChange = (deadline: string) => {
+    onChange((prev) => {
+      return {
+        ...prev,
+        deadline: deadline,
+      };
+    });
+  };
+  const handleMeetingTypeChange = (type: MeetingType) => {
+    onChange((prev) => {
+      return {
+        ...prev,
+        type: type,
+      };
+    });
+  };
   return (
     <>
-      <StepBox show={step > 2}>기한</StepBox>
+      <StepBox show={step > 2}>
+        <InputLabel htmlFor="deadline" shrink>
+          투표 기한
+        </InputLabel>
+        <DateInput
+          selectedDate={meeting.deadline}
+          onChange={handleDeadlineChange}
+          minDate={dayjs()}
+        />
+      </StepBox>
       <Divider />
-      <StepBox show={step > 1}>종류</StepBox>
+      <StepBox show={step > 1}>
+        <InputContainer>
+          <div>
+            <InputLabel htmlFor="name" shrink>
+              투표 종류
+            </InputLabel>
+            <SelectMeetingType value={meeting.type} onChange={handleMeetingTypeChange} />
+          </div>
+        </InputContainer>
+      </StepBox>
       <Divider />
       <StepBox show={step > 0}>달력</StepBox>
       <Divider />
