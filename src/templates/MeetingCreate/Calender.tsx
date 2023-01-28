@@ -30,11 +30,12 @@ const CustomPickersDay = styled(PickersDay, {
 export function Calender() {
   const [values, setValues] = React.useState<Dayjs[]>([]);
 
-  const onChange = (newValue: Dayjs | null) => {
-    if (!newValue) {
-      return;
+  const dayOnClick = (newDate: Dayjs, selected: boolean) => {
+    if (selected) {
+      setValues(() => values.filter((date) => !date.isSame(newDate)));
+    } else {
+      setValues(() => values.concat(newDate));
     }
-    setValues(() => values.concat(newValue));
   };
 
   const renderWeekPickerDay = (
@@ -44,7 +45,14 @@ export function Calender() {
   ) => {
     const selected = values.some((value) => value.isSame(date));
 
-    return <CustomPickersDay {...pickersDayProps} selected={selected} disableMargin />;
+    return (
+      <CustomPickersDay
+        {...pickersDayProps}
+        selected={selected}
+        disableMargin
+        onClick={() => dayOnClick(date, selected)}
+      />
+    );
   };
 
   return (
@@ -52,10 +60,13 @@ export function Calender() {
       <StaticDatePicker
         displayStaticWrapperAs="desktop"
         value={values}
-        onChange={onChange}
+        // onChange는 처음 클릭한 날짜에 대해 다시 클릭했을 때 이벤트가 발생하지 않으므로 사용하지 않음, PickersDay의 onClick으로 클릭 처리
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onChange={() => {}}
         renderDay={renderWeekPickerDay}
         renderInput={(params) => <TextField {...params} />}
         disableHighlightToday={true}
+        disablePast={true}
       />
     </LocalizationProvider>
   );
