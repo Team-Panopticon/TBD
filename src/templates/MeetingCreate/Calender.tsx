@@ -13,15 +13,24 @@ const CustomPickersDay = styled(PickersDay, {
   shouldForwardProp: (prop) => prop !== 'selected',
 })<CustomPickerDayProps>(({ theme, selected }) => {
   const style: React.CSSProperties = {
+    borderRadius: 0,
+    width: 28,
+    height: 28,
+    margin: 6,
+  };
+
+  const selectedStyle: React.CSSProperties = {
     backgroundColor: theme.palette.primary.main,
     color: 'white',
+    ...style,
   };
 
   return {
+    ...style,
     ...(selected && {
-      ...style,
+      ...selectedStyle,
       '&:hover, &:focus': {
-        ...style,
+        ...selectedStyle,
       },
     }),
   };
