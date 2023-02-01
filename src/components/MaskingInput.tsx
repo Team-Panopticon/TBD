@@ -58,7 +58,13 @@ export function MaskingInput({ length }: IMaskingInputProps) {
           <Dot key={index} filled={dot} />
         ))}
       </Flex>
-      <HiddenInput ref={inputRef} type="number" value={text} onChange={onChange} />
+      <HiddenInput
+        inputMode="numeric"
+        ref={inputRef}
+        type="number"
+        value={text}
+        onChange={onChange}
+      />
     </>
   );
 }
