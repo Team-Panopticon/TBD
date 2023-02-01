@@ -41,7 +41,9 @@ export function MaskingInput({ length }: IMaskingInputProps) {
   const [dots, setDots] = useState<boolean[]>(new Array(length).fill(false));
   const [text, setText] = useState<string>('');
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > length) return;
+    if (e.target.value.length > length) {
+      return;
+    }
     setText(e.target.value);
     setDots(new Array(length).fill(false).map((_, index) => index < e.target.value.length));
   };
@@ -56,7 +58,7 @@ export function MaskingInput({ length }: IMaskingInputProps) {
           <Dot key={index} filled={dot} />
         ))}
       </Flex>
-      <HiddenInput ref={inputRef} type="text" value={text} onChange={onChange} />
+      <HiddenInput ref={inputRef} type="number" value={text} onChange={onChange} />
     </>
   );
 }
