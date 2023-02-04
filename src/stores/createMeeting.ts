@@ -1,10 +1,11 @@
+import { Dayjs } from 'dayjs';
 import { atom } from 'recoil';
 import { MeetingStatus, MeetingType } from '../constants/meeting';
 
 export interface CreateMeetingState {
   name: string;
-  /** 투표 가능 날짜, ISO date string with timezone */
-  dates: string[];
+  /** 투표 가능 날짜, Dayjs */
+  dates: Dayjs[];
   type: MeetingType;
   /** ISO date string with timezone */
   deadline: string;
