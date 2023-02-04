@@ -20,5 +20,5 @@ export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)`
 
 export const customButtonStyle: React.CSSProperties = {
   border: '1px solid #D9D9D9',
-  borderRadius: '0',
+  borderRadius: '4px',
 };
