@@ -9,6 +9,7 @@ import { MeetingResult } from './pages/MeetingResult';
 import { MeetingView } from './pages/MeetingView';
 import { theme } from './theme';
 import '../index.css';
+import { GlobalStyle } from './GlobalStyle';
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <RecoilRoot>
       <ThemeProvider theme={theme}>
+        <GlobalStyle />
         <RouterProvider router={router} />
       </ThemeProvider>
     </RecoilRoot>
