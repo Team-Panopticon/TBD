@@ -1,5 +1,3 @@
 export function MeetingView() {
-  return (
-    <div>MeetingView Page</div>
-  )
+  return <div>MeetingView Page</div>;
 }

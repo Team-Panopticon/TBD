@@ -1,6 +1,7 @@
-import { MeetingType } from '../../constants/meeting';
 import { ToggleButton } from '@mui/material';
 import { useRecoilState } from 'recoil';
+
+import { MeetingType } from '../../constants/meeting';
 import { createMeetingState } from '../../stores/createMeeting';
 import { customButtonStyle, CustomTogglebuttonGroup } from './styled';
 
