@@ -6,7 +6,6 @@ export const Page = styled.div`
   flex-direction: column;
   flex-wrap: nowrap;
   height: 100vh;
-  overflow-y: hidden;
 `;
 
 export const Header = styled.header`
@@ -36,4 +35,5 @@ export const Contents = styled.div`
 
 export const Footer = styled.footer`
   height: 56px;
+  flex-shrink: 0;
 `;
