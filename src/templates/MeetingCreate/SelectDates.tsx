@@ -38,7 +38,7 @@ const CustomPickersDay = styled(PickersDay, {
   };
 }) as React.ComponentType<CustomPickerDayProps>;
 
-export function Calender() {
+export function SelectDates() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
 
   const dayOnClick = (newDate: Dayjs, selected: boolean) => {

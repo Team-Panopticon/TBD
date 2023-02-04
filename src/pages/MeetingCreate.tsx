@@ -7,7 +7,7 @@ import React from 'react';
 import { SelectMeetingType } from '../templates/MeetingCreate/SelectMeetingType';
 import { DateInput } from '../components/DateInput';
 import dayjs from 'dayjs';
-import { Calender } from '../templates/MeetingCreate/Calender';
+import { SelectDates } from '../templates/MeetingCreate/SelectDates';
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
@@ -77,7 +77,7 @@ export function MeetingCreate() {
             <InputLabel htmlFor="name" shrink>
               투표 대상 날짜
             </InputLabel>
-            <Calender />
+            <SelectDates />
           </div>
         </InputContainer>
       </Contents>
