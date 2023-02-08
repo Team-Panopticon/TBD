@@ -7,18 +7,16 @@ import useMeetingEdit from '../hooks/useMeetingEdit';
 
 export function MeetingModify() {
   const [meeting, setMeeting] = useRecoilState(modifyMeetingState);
-  const [step, setStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const meetingeditSteps = getMeetingEditSteps('modify');
   return (
     <Page>
-      <MeetingEditTemplate
+      {/* <MeetingEditTemplate
         meeting={meeting}
         meetingEditSteps={meetingeditSteps}
-        step={step}
-        setStep={setStep}
+        step={meetingeditSteps.length - 1}
         onChange={setMeeting}
-      ></MeetingEditTemplate>
+      ></MeetingEditTemplate> */}
     </Page>
   );
 }
