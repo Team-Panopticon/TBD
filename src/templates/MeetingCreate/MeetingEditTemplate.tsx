@@ -1,5 +1,5 @@
 import { Button, TextField, Typography } from '@mui/material';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
 import { SetterOrUpdater } from 'recoil';
 
@@ -23,7 +23,7 @@ export interface ICreateMeetingTemplateProps {
 
 const getMeetingEditContent = (
   type: IMeetingEditStep['type'],
-  onChange: SetterOrUpdater<CreateMeetingState>,
+  setValue: SetterOrUpdater<CreateMeetingState>,
   meeting: CreateMeetingState,
 ) => {
   switch (type) {
@@ -36,16 +36,40 @@ const getMeetingEditContent = (
           variant="outlined"
           fullWidth
           placeholder="한사랑산악회 신년 모임"
-          onChange={() => onChange}
+          onChange={(v) => {
+            setValue((prev) => ({
+              ...prev,
+              name: v.target.value,
+            }));
+          }}
         />
       );
     case 'date':
       return <SelectDates></SelectDates>;
     case 'type':
-      return <SelectMeetingType value={meeting.type} onChange={() => onChange} />;
+      return (
+        <SelectMeetingType
+          value={meeting.type}
+          onChange={(v: number) => {
+            setValue((prev) => ({
+              ...prev,
+              type: v,
+            }));
+          }}
+        />
+      );
     case 'deadline':
       return (
-        <DateInput selectedDate={meeting.deadline} onChange={() => onChange} minDate={dayjs()} />
+        <DateInput
+          selectedDate={meeting.deadline}
+          onChange={(v) => {
+            setValue((prev) => ({
+              ...prev,
+              deadline: v,
+            }));
+          }}
+          minDate={dayjs()}
+        />
       );
     default:
       return <></>;
