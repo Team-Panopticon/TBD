@@ -27,16 +27,10 @@ export function MeetingCreate() {
     });
   };
 
-  const onRemoveDate = (targetDate: Dayjs) => {
+  const handleSelectDates = (dates: Dayjs[]) => {
     setMeeting({
       ...meeting,
-      dates: meeting.dates.filter((date) => !date.isSame(targetDate)),
-    });
-  };
-  const onAddDate = (targetDate: Dayjs) => {
-    setMeeting({
-      ...meeting,
-      dates: meeting.dates.concat(targetDate),
+      dates,
     });
   };
 
@@ -91,7 +85,7 @@ export function MeetingCreate() {
             <InputLabel htmlFor="name" shrink>
               투표 대상 날짜
             </InputLabel>
-            <SelectDates dates={meeting.dates} onAddDate={onAddDate} onRemoveDate={onRemoveDate} />
+            <SelectDates dates={meeting.dates} handleSelectDates={handleSelectDates} />
           </div>
         </InputContainer>
       </Contents>

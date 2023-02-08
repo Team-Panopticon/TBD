@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { Dayjs } from 'dayjs';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { Dayjs } from 'dayjs';
+import * as React from 'react';
 
 type CustomPickerDayProps = PickersDayProps<Dayjs>;
 
@@ -38,18 +38,17 @@ const CustomPickersDay = styled(PickersDay, {
 
 interface Props {
   dates: Dayjs[];
-  onAddDate: (date: Dayjs) => void;
-  onRemoveDate: (date: Dayjs) => void;
+  handleSelectDates: (dates: Dayjs[]) => void;
 }
 
 export function SelectDates(props: Props) {
-  const { dates, onAddDate, onRemoveDate } = props;
+  const { dates, handleSelectDates } = props;
 
   const dayOnClick = (newDate: Dayjs, selected: boolean) => {
     if (selected) {
-      onRemoveDate(newDate);
+      handleSelectDates(dates.filter((date) => !date.isSame(newDate)));
     } else {
-      onAddDate(newDate);
+      handleSelectDates(dates.concat(newDate));
     }
   };
 
