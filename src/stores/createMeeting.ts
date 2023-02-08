@@ -1,5 +1,6 @@
-import { atom } from "recoil";
-import { MeetingStatus, MeetingType } from "../constants/meeting";
+import { atom } from 'recoil';
+
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 
 export interface CreateMeetingState {
   name: string;
@@ -13,15 +14,15 @@ export interface CreateMeetingState {
 }
 
 export const initialState: CreateMeetingState = {
-  name: "",
+  name: '',
   dates: [],
   type: MeetingType.date,
-  deadline: "",
+  deadline: '',
   status: MeetingStatus.inProgress,
-  password: "",
+  password: '',
 };
 
 export const createMeetingState = atom<CreateMeetingState>({
-  key: "createMeeting",
+  key: 'createMeeting',
   default: initialState,
 });
