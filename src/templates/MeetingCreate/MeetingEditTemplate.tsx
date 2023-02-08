@@ -45,7 +45,17 @@ const getMeetingEditContent = (
         />
       );
     case 'date':
-      return <SelectDates></SelectDates>;
+      return (
+        <SelectDates
+          dates={meeting.dates}
+          handleSelectDates={(dates: Dayjs[]) => {
+            setValue((prev) => ({
+              ...prev,
+              dates,
+            }));
+          }}
+        ></SelectDates>
+      );
     case 'type':
       return (
         <SelectMeetingType
