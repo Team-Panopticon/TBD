@@ -6,7 +6,7 @@ import { TextField, InputLabel, Typography } from '@mui/material';
 import React from 'react';
 import { SelectMeetingType } from '../templates/MeetingCreate/SelectMeetingType';
 import { DateInput } from '../components/DateInput';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { SelectDates } from '../templates/MeetingCreate/SelectDates';
 
 export function MeetingCreate() {
@@ -23,6 +23,19 @@ export function MeetingCreate() {
     setMeeting({
       ...meeting,
       deadline,
+    });
+  };
+
+  const onRemoveDate = (targetDate: Dayjs) => {
+    setMeeting({
+      ...meeting,
+      dates: meeting.dates.filter((date) => !date.isSame(targetDate)),
+    });
+  };
+  const onAddDate = (targetDate: Dayjs) => {
+    setMeeting({
+      ...meeting,
+      dates: meeting.dates.concat(targetDate),
     });
   };
 
@@ -77,7 +90,7 @@ export function MeetingCreate() {
             <InputLabel htmlFor="name" shrink>
               투표 대상 날짜
             </InputLabel>
-            <SelectDates />
+            <SelectDates dates={meeting.dates} onAddDate={onAddDate} onRemoveDate={onRemoveDate} />
           </div>
         </InputContainer>
       </Contents>
