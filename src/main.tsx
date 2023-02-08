@@ -1,15 +1,17 @@
+import '../index.css';
+
+import { ThemeProvider } from '@mui/material/styles';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles';
 import { RecoilRoot } from 'recoil';
+
+import { GlobalStyle } from './GlobalStyle';
 import { MeetingCreate } from './pages/MeetingCreate';
 import { MeetingModify } from './pages/MeetingModify';
 import { MeetingResult } from './pages/MeetingResult';
 import { MeetingView } from './pages/MeetingView';
 import { theme } from './theme';
-import '../index.css';
-import { GlobalStyle } from './GlobalStyle';
 
 const router = createBrowserRouter([
   {

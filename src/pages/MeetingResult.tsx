@@ -1,5 +1,3 @@
 export function MeetingResult() {
-  return (
-    <div>MeetingResult Page</div>
-  )
+  return <div>MeetingResult Page</div>;
 }

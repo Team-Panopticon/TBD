@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "yarn eslint ./src/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@mui/material": "^5.11.3",
