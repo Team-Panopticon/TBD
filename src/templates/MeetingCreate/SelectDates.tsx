@@ -1,13 +1,11 @@
-import * as React from 'react';
-import { Dayjs } from 'dayjs';
 import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
-import { useRecoilState } from 'recoil';
-import { createMeetingState } from '../../stores/createMeeting';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+import { Dayjs } from 'dayjs';
+import * as React from 'react';
 
 type CustomPickerDayProps = PickersDayProps<Dayjs>;
 
@@ -38,20 +36,19 @@ const CustomPickersDay = styled(PickersDay, {
   };
 }) as React.ComponentType<CustomPickerDayProps>;
 
-export function SelectDates() {
-  const [meeting, setMeeting] = useRecoilState(createMeetingState);
+interface Props {
+  dates: Dayjs[];
+  handleSelectDates: (dates: Dayjs[]) => void;
+}
+
+export function SelectDates(props: Props) {
+  const { dates, handleSelectDates } = props;
 
   const dayOnClick = (newDate: Dayjs, selected: boolean) => {
     if (selected) {
-      setMeeting({
-        ...meeting,
-        dates: meeting.dates.filter((date) => !date.isSame(newDate)),
-      });
+      handleSelectDates(dates.filter((date) => !date.isSame(newDate)));
     } else {
-      setMeeting({
-        ...meeting,
-        dates: meeting.dates.concat(newDate),
-      });
+      handleSelectDates(dates.concat(newDate));
     }
   };
 
@@ -60,7 +57,7 @@ export function SelectDates() {
     _: Array<Dayjs | null>,
     pickersDayProps: PickersDayProps<Dayjs>,
   ) => {
-    const selected = meeting.dates.some((date) => targetDate.isSame(date));
+    const selected = dates.some((date) => targetDate.isSame(date));
 
     return (
       <CustomPickersDay
@@ -76,7 +73,7 @@ export function SelectDates() {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <StaticDatePicker
         displayStaticWrapperAs="desktop"
-        value={meeting.dates}
+        value={dates}
         // onChange는 처음 클릭한 날짜에 대해 다시 클릭했을 때 이벤트가 발생하지 않으므로 사용하지 않음, PickersDay의 onClick으로 클릭 처리
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         onChange={() => {}}
