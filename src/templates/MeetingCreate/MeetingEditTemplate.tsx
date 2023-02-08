@@ -1,30 +1,17 @@
-import { SetterOrUpdater } from 'recoil';
-import { Typography, Button, ButtonGroup, LinearProgress, styled, TextField } from '@mui/material';
-import { useMemo } from 'react';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
-import { MeetingEditStepper } from './MeetingEditStepper';
-import { CreateMeetingState } from '../../stores/createMeeting';
-import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
+import { Button, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
-import { SelectMeetingType } from './SelectMeetingType';
-import { MeetingType } from '../../constants/meeting';
+import { useMemo } from 'react';
+import { SetterOrUpdater } from 'recoil';
+
 import { DateInput } from '../../components/DateInput';
+import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
+import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
+import { CreateMeetingState } from '../../stores/createMeeting';
+import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 8,
-  borderRadius: 4,
-}));
+import { SelectMeetingType } from './SelectMeetingType';
+import { BorderLinearProgress, FullHeightButtonGroup } from './styled';
 
-const FullHeightButtonGroup = styled(ButtonGroup)(({ theme }) => ({
-  height: '100%',
-
-  '& .MuiButton-root': {
-    height: '100%',
-    borderRadius: 0,
-    color: '#fff',
-    fontWeight: 500,
-  },
-}));
 export interface ICreateMeetingTemplateProps {
   step: number;
   meeting: CreateMeetingState;

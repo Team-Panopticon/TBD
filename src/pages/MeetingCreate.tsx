@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useRecoilState } from 'recoil';
 
-import { DateInput } from '../components/DateInput';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { createMeetingState } from '../stores/createMeeting';
 import { MeetingEditTemplate } from '../templates/MeetingCreate/MeetingEditTemplate';
