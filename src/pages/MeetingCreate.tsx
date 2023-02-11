@@ -10,7 +10,7 @@ export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
   const [step, setStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
-  const meetingeditSteps = getMeetingEditSteps('modify');
+  const meetingeditSteps = getMeetingEditSteps('create');
   return (
     <Page>
       <MeetingEditTemplate
