@@ -21,6 +21,71 @@ export interface ICreateMeetingTemplateProps {
   pageType?: 'create' | 'modify';
 }
 
+export function MeetingEditTemplate({
+  step,
+  meeting,
+  setStep,
+  onChange,
+  meetingEditSteps,
+  pageType,
+}: ICreateMeetingTemplateProps) {
+  const stepLen = useMemo(() => {
+    return meetingEditSteps.length;
+  }, [meetingEditSteps]);
+
+  const description = useMemo(() => {
+    return meetingEditSteps[step]?.description;
+  }, []);
+  const progress = useMemo(() => {
+    return meetingEditSteps[step]?.progress || 0;
+  }, []);
+
+  const onClickNext = () => {
+    setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
+  };
+  const onClickPrev = () => {
+    setStep?.((prev) => (prev > 0 ? prev - 1 : prev));
+  };
+  return (
+    <>
+      <Header>
+        <HeaderContainer>
+          <BorderLinearProgress variant="determinate" value={progress} />
+          {/* TOdo: Replace font size with theme properties */}
+          <Typography variant="h5" fontWeight={300} align="center">
+            {description}
+          </Typography>
+        </HeaderContainer>
+      </Header>
+      <Contents>
+        <MeetingEditStepper
+          meeting={meeting}
+          currentStep={step}
+          meetingEditSteps={meetingEditSteps
+            .map((step) => ({
+              ...step,
+              component: getMeetingEditContent(step.type, onChange, meeting),
+            }))
+            .reverse()}
+        ></MeetingEditStepper>
+      </Contents>
+      <Footer>
+        <FullHeightButtonGroup
+          fullWidth
+          disableElevation
+          variant="contained"
+          aria-label="Disabled elevation buttons"
+        >
+          {/* <Button disabled={step == 0} onClick={onClickPrev}>
+            이전
+          </Button> */}
+          <Button onClick={onClickNext}>다음</Button>
+        </FullHeightButtonGroup>
+      </Footer>
+    </>
+  );
+}
+
 const getMeetingEditContent = (
   type: IMeetingEditStep['type'],
   setValue: SetterOrUpdater<CreateMeetingState>,
@@ -85,68 +150,3 @@ const getMeetingEditContent = (
       return <></>;
   }
 };
-export function MeetingEditTemplate({
-  step,
-  meeting,
-  setStep,
-  onChange,
-  meetingEditSteps,
-  pageType,
-}: ICreateMeetingTemplateProps) {
-  const stepLen = useMemo(() => {
-    return meetingEditSteps.length;
-  }, [meetingEditSteps]);
-
-  const description = useMemo(() => {
-    return meetingEditSteps[step]?.description;
-  }, [meetingEditSteps, step]);
-  const progress = useMemo(() => {
-    return meetingEditSteps[step]?.progress || 0;
-  }, [meetingEditSteps, step]);
-
-  const onClickNext = () => {
-    setStep && setStep((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
-  };
-  const onClickPrev = () => {
-    setStep && setStep((prev) => (prev > 0 ? prev - 1 : prev));
-  };
-  return (
-    <>
-      <Header>
-        <HeaderContainer>
-          <BorderLinearProgress variant="determinate" value={progress} />
-          {/* TOdo: Replace font size with theme properties */}
-          <Typography variant="h5" fontWeight={300} align="center">
-            {description}
-          </Typography>
-        </HeaderContainer>
-      </Header>
-      <Contents>
-        <MeetingEditStepper
-          meeting={meeting}
-          currentStep={step}
-          meetingEditSteps={[
-            ...meetingEditSteps.map((step) => ({
-              ...step,
-              component: getMeetingEditContent(step.type, onChange, meeting),
-            })),
-          ].reverse()}
-          onChange={onChange}
-        ></MeetingEditStepper>
-      </Contents>
-      <Footer>
-        <FullHeightButtonGroup
-          fullWidth
-          disableElevation
-          variant="contained"
-          aria-label="Disabled elevation buttons"
-        >
-          {/* <Button disabled={step == 0} onClick={onClickPrev}>
-            이전
-          </Button> */}
-          <Button onClick={onClickNext}>다음</Button>
-        </FullHeightButtonGroup>
-      </Footer>
-    </>
-  );
-}
