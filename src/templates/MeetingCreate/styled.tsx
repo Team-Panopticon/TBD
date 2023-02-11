@@ -48,9 +48,11 @@ export const StepBox = styled.div<StepBox>`
   display: flex;
   flex-direction: column;
 
-  transition: all 1.5s ease-in-out;
+  transition: all 0.8s ease-in-out;
 
   max-height: ${({ show }) => (show ? '100%' : '0')};
+
+  margin-bottom: ${({ show }) => (show ? '20px' : '0')};
 
   overflow: hidden;
   flex-shrink: 0;
@@ -64,5 +66,5 @@ export const StepBoxContainer = styled.div`
   padding-bottom: 4px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* gap: 12px; */
 `;
