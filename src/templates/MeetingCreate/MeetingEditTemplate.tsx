@@ -13,7 +13,7 @@ import { SelectMeetingType } from './SelectMeetingType';
 import { BorderLinearProgress, FullHeightButtonGroup } from './styled';
 
 export interface ICreateMeetingTemplateProps {
-  step: number;
+  currentStep: number;
   meeting: CreateMeetingState;
   setStep?: SetterOrUpdater<number>;
   onChange: SetterOrUpdater<CreateMeetingState>;
@@ -22,7 +22,7 @@ export interface ICreateMeetingTemplateProps {
 }
 
 export function MeetingEditTemplate({
-  step,
+  currentStep,
   meeting,
   setStep,
   onChange,
@@ -34,10 +34,10 @@ export function MeetingEditTemplate({
   }, [meetingEditSteps]);
 
   const description = useMemo(() => {
-    return meetingEditSteps[step]?.description;
+    return meetingEditSteps[currentStep]?.description;
   }, []);
   const progress = useMemo(() => {
-    return meetingEditSteps[step]?.progress || 0;
+    return meetingEditSteps[currentStep]?.progress || 0;
   }, []);
 
   const onClickNext = () => {
@@ -60,7 +60,7 @@ export function MeetingEditTemplate({
       <Contents>
         <MeetingEditStepper
           meeting={meeting}
-          currentStep={step}
+          currentStep={currentStep}
           meetingEditSteps={meetingEditSteps
             .map((step) => ({
               ...step,

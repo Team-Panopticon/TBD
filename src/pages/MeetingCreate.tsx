@@ -8,7 +8,7 @@ import { MeetingEditTemplate } from '../templates/MeetingCreate/MeetingEditTempl
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
-  const [step, setStep] = useState<number>(0);
+  const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const meetingeditSteps = useMemo(() => {
     return getMeetingEditSteps('create');
@@ -18,8 +18,8 @@ export function MeetingCreate() {
       <MeetingEditTemplate
         meeting={meeting}
         meetingEditSteps={meetingeditSteps}
-        step={step}
-        setStep={setStep}
+        currentStep={currentStep}
+        setStep={setCurrentStep}
         onChange={setMeeting}
       ></MeetingEditTemplate>
     </Page>
