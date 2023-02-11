@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 export interface IMeetingEditStep {
   index: number;
   description: string;
@@ -8,7 +10,7 @@ export interface IMeetingEditStep {
 }
 
 export default function useMeetingEdit() {
-  const getMeetingEditSteps = (type: 'create' | 'modify'): IMeetingEditStep[] => {
+  const getMeetingEditSteps = useCallback((type: 'create' | 'modify'): IMeetingEditStep[] => {
     return [
       {
         index: 0,
@@ -46,6 +48,6 @@ export default function useMeetingEdit() {
         type: 'confirm',
       },
     ];
-  };
+  }, []);
   return { getMeetingEditSteps };
 }
