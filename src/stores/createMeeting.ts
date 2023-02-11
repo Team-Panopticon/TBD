@@ -1,10 +1,12 @@
-import { atom } from "recoil";
-import { MeetingStatus, MeetingType } from "../constants/meeting";
+import { Dayjs } from 'dayjs';
+import { atom } from 'recoil';
+
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 
 export interface CreateMeetingState {
   name: string;
-  /** 투표 가능 날짜, ISO date string with timezone */
-  dates: string[];
+  /** 투표 가능 날짜, Dayjs */
+  dates: Dayjs[];
   type: MeetingType;
   /** ISO date string with timezone */
   deadline: string;
@@ -13,15 +15,15 @@ export interface CreateMeetingState {
 }
 
 export const initialState: CreateMeetingState = {
-  name: "",
+  name: '',
   dates: [],
   type: MeetingType.date,
-  deadline: "",
+  deadline: '',
   status: MeetingStatus.inProgress,
-  password: "",
+  password: '',
 };
 
 export const createMeetingState = atom<CreateMeetingState>({
-  key: "createMeeting",
+  key: 'createMeeting',
   default: initialState,
 });

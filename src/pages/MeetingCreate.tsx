@@ -1,12 +1,14 @@
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { InputContainer } from '../templates/MeetingCreate/styled';
-import { useRecoilState } from 'recoil';
-import { createMeetingState } from '../stores/createMeeting';
-import { TextField, InputLabel, Typography } from '@mui/material';
+import { InputLabel, TextField, Typography } from '@mui/material';
+import dayjs, { Dayjs } from 'dayjs';
 import React from 'react';
-import { SelectMeetingType } from '../templates/MeetingCreate/SelectMeetingType';
+import { useRecoilState } from 'recoil';
+
 import { DateInput } from '../components/DateInput';
-import dayjs from 'dayjs';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { createMeetingState } from '../stores/createMeeting';
+import { SelectDates } from '../templates/MeetingCreate/SelectDates';
+import { SelectMeetingType } from '../templates/MeetingCreate/SelectMeetingType';
+import { InputContainer } from '../templates/MeetingCreate/styled';
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
@@ -22,6 +24,13 @@ export function MeetingCreate() {
     setMeeting({
       ...meeting,
       deadline,
+    });
+  };
+
+  const handleSelectDates = (dates: Dayjs[]) => {
+    setMeeting({
+      ...meeting,
+      dates,
     });
   };
 
@@ -69,6 +78,14 @@ export function MeetingCreate() {
               투표 종류
             </InputLabel>
             <SelectMeetingType />
+          </div>
+        </InputContainer>
+        <InputContainer>
+          <div>
+            <InputLabel htmlFor="name" shrink>
+              투표 대상 날짜
+            </InputLabel>
+            <SelectDates dates={meeting.dates} handleSelectDates={handleSelectDates} />
           </div>
         </InputContainer>
       </Contents>

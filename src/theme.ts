@@ -1,4 +1,4 @@
-import { ThemeOptions, createTheme } from '@mui/material/styles';
+import { createTheme, ThemeOptions } from '@mui/material/styles';
 
 const PRIMARY_COLOR = '#66D6B4';
 const SECONDARY_COLOR = '#d9d9d9';
