@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs';
 import { atom } from 'recoil';
 
 import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { localStorageEffect } from './localstorageEffect';
 
 export interface CreateMeetingState {
   name: string;
@@ -26,4 +27,6 @@ export const initialState: CreateMeetingState = {
 export const createMeetingState = atom<CreateMeetingState>({
   key: 'createMeeting',
   default: initialState,
+
+  effects: [localStorageEffect<CreateMeetingState>('createMeeting')],
 });
