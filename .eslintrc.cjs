@@ -38,6 +38,7 @@ module.exports = {
     'prettier',
     'import',
     'simple-import-sort',
+    'unused-imports',
   ],
   rules: {
     'no-console': 'off',
@@ -54,7 +55,12 @@ module.exports = {
     '@typescript-eslint/no-floating-promises': 'off',
     '@typescript-eslint/no-unsafe-return': 'warn',
     '@typescript-eslint/no-unsafe-assignment': 'warn',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+    ],
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
     curly: 'error',
