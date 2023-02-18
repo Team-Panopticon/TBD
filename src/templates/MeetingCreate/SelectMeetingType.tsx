@@ -1,31 +1,29 @@
 import { ToggleButton } from '@mui/material';
-import { useRecoilState } from 'recoil';
 
 import { MeetingType } from '../../constants/meeting';
-import { createMeetingState } from '../../stores/createMeeting';
 import { customButtonStyle, CustomTogglebuttonGroup } from './styled';
 
-export function SelectMeetingType() {
-  const [meeting, setMeeting] = useRecoilState(createMeetingState);
+interface Props {
+  value: MeetingType;
+  onChange: (date: MeetingType) => void;
+}
 
-  const onChange = (e: React.MouseEvent<HTMLElement>) => {
+export function SelectMeetingType({ value, onChange }: Props) {
+  const onClickToggleButton = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLButtonElement;
     const meetingValue = parseInt(target.value);
 
     if (meetingValue in MeetingType) {
-      setMeeting({
-        ...meeting,
-        type: meetingValue,
-      });
+      onChange(meetingValue);
     }
   };
 
   return (
     <CustomTogglebuttonGroup
-      onChange={onChange}
+      onChange={onClickToggleButton}
       color="primary"
       exclusive
-      value={meeting.type}
+      value={value}
       fullWidth
     >
       <ToggleButton style={customButtonStyle} value={MeetingType.date}>
