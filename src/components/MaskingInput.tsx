@@ -36,16 +36,18 @@ const HiddenInput = styled.input`
 `;
 interface IMaskingInputProps {
   length: number;
+  text: string;
+  setText: (newText: string) => void;
 }
-export function MaskingInput({ length }: IMaskingInputProps) {
+export function MaskingInput({ length, text, setText }: IMaskingInputProps) {
   const [dots, setDots] = useState<boolean[]>(new Array(length).fill(false));
-  const [text, setText] = useState<string>('');
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > length) {
+    const filledLength = e.target.value.length;
+    if (filledLength > length) {
       return;
     }
     setText(e.target.value);
-    setDots(new Array(length).fill(false).map((_, index) => index < e.target.value.length));
+    setDots(new Array(length).fill(false).map((_, index) => index < filledLength));
   };
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = () => {
