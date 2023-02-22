@@ -67,14 +67,39 @@ export const StepBoxContainer = styled.div`
   flex-direction: column;
 `;
 
-export const PasswordInputContainer = styled.div`
+export const PasswordContainer = styled.div`
   width: 100%;
+  height: 100%;
+`;
+
+export const PasswordContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: white;
+  width: 330px;
+  height: 230px;
+
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const PasswordInput = styled.div`
-  background-color: white;
-  width: 330px;
-  height: 250px;
+  padding: 30px 40px;
+
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+`;
+
+export const MaskingInputContainer = styled.div`
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
