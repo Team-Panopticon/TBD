@@ -1,4 +1,5 @@
 import React, { CSSProperties, PropsWithChildren } from 'react';
+
 import { ChipContainer } from './styled';
 
 interface Props {
@@ -6,7 +7,7 @@ interface Props {
   style?: CSSProperties;
   checked?: boolean;
   focus?: boolean;
-  onClick?: () => void;
+  onClick?: (checked: boolean) => void;
 }
 
 export function Chip(props: PropsWithChildren<Props>) {
@@ -14,7 +15,13 @@ export function Chip(props: PropsWithChildren<Props>) {
 
   return (
     <div className={className} style={style}>
-      <ChipContainer onClick={onClick} checked={checked} focus={focus}>
+      <ChipContainer
+        onClick={() => {
+          onClick?.(!checked);
+        }}
+        checked={checked}
+        focus={focus}
+      >
         {children}
       </ChipContainer>
     </div>
