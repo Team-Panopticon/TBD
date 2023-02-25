@@ -35,10 +35,10 @@ export function MeetingEditTemplate({
 
   const description = useMemo(() => {
     return meetingEditSteps[currentStep]?.description;
-  }, []);
+  }, [currentStep]);
   const progress = useMemo(() => {
     return meetingEditSteps[currentStep]?.progress || 0;
-  }, []);
+  }, [currentStep]);
 
   const onClickNext = () => {
     setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
@@ -76,10 +76,13 @@ export function MeetingEditTemplate({
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
-          {/* <Button disabled={step == 0} onClick={onClickPrev}>
-            이전
-          </Button> */}
           <Button onClick={onClickNext}>다음</Button>
+
+          {/* {currentStep < meetingEditSteps.length ? (
+            <Button onClick={onClickNext}>다음</Button>
+          ) : (
+            <Button>생성하기</Button>
+          )} */}
         </FullHeightButtonGroup>
       </Footer>
     </>
