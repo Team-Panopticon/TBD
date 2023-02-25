@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { createMeetingState } from '../stores/createMeeting';
-import { MeetingEditTemplate } from '../templates/MeetingCreate/MeetingEditTemplate';
+import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
