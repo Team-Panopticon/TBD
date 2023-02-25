@@ -56,7 +56,10 @@ export function InputPasswordModal({ showMaskingInput }: Props) {
                 variant="contained"
                 aria-label="Disabled elevation buttons"
               >
-                <Button onClick={onEndCreate}>생략하기</Button>
+                {/* ButtonGroup 컴포넌트의 borderRight 기본 스타일을 diable 하기 위하여 스타일 추가 */}
+                <Button color="transPrimary" onClick={onEndCreate} style={{ borderRight: 0 }}>
+                  생략하기
+                </Button>
                 <Button onClick={onEndCreate}>설정하기</Button>
               </FullHeightButtonGroup>
             </div>

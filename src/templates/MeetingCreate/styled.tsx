@@ -35,7 +35,6 @@ export const FullHeightButtonGroup = styled(ButtonGroup)(({ theme }) => ({
   '& .MuiButton-root': {
     height: '100%',
     borderRadius: 0,
-    color: '#fff',
     fontWeight: 500,
   },
 }));
