@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-import { localStorageEffect } from './localstorageEffect';
+import { localstorageEffect } from './localstorageEffect';
 
 interface IUser {
   id: number;
@@ -9,5 +9,5 @@ interface IUser {
 export const currentUserState = atom({
   key: 'CurrentUserID',
   default: { id: 0, name: '' },
-  effects: [localStorageEffect<IUser>('current_user')],
+  effects: [localstorageEffect<IUser>('current_user')],
 });
