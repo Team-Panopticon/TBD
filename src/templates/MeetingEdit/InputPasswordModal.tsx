@@ -1,5 +1,4 @@
 import { Button, Modal, Typography } from '@mui/material';
-import { useState } from 'react';
 
 import { MaskingInput } from '../../components/MaskingInput';
 import {
@@ -12,15 +11,17 @@ import {
 
 interface Props {
   showMaskingInput: boolean;
+  password: string;
+  onChange: (newPassword: string) => void;
+  onConfirm: () => Promise<void>;
 }
 
-export function InputPasswordModal({ showMaskingInput }: Props) {
-  const [passwordText, setPasswordText] = useState('');
-
+export function InputPasswordModal({ showMaskingInput, password, onChange, onConfirm }: Props) {
   const onEndCreate = () => {
+    onConfirm();
     /**
      * @TODO
-     * API 요청, 응답 시 리다이렉팅
+     * 응답 시 리다이렉팅
      */
   };
   return (
@@ -42,8 +43,8 @@ export function InputPasswordModal({ showMaskingInput }: Props) {
               <MaskingInputContainer>
                 <MaskingInput
                   length={4}
-                  text={passwordText}
-                  setText={setPasswordText}
+                  text={password}
+                  setText={onChange}
                   size={28}
                   style={{ paddingTop: 10 }}
                 />
