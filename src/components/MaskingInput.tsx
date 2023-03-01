@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface IDotProps {
@@ -54,6 +54,11 @@ export function MaskingInput({ style, length, text, setText, size }: IMaskingInp
   const handleClick = () => {
     inputRef.current?.focus();
   };
+
+  useEffect(() => {
+    handleClick();
+  }, []);
+
   return (
     <div style={style}>
       <Flex onClick={handleClick}>
