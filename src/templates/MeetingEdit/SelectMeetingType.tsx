@@ -11,11 +11,8 @@ interface Props {
 export function SelectMeetingType({ value, onChange }: Props) {
   const onClickToggleButton = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLButtonElement;
-    const meetingValue = parseInt(target.value);
-
-    if (meetingValue in MeetingType) {
-      onChange(meetingValue);
-    }
+    const meetingValue = target.value as MeetingType;
+    onChange(meetingValue);
   };
 
   return (
