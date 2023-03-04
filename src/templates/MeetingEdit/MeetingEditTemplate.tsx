@@ -5,6 +5,7 @@ import { SetterOrUpdater } from 'recoil';
 
 import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
+import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import { CreateMeetingState } from '../../stores/createMeeting';
 import { InputPasswordModal } from './InputPasswordModal';
@@ -18,6 +19,7 @@ export interface ICreateMeetingTemplateProps {
   meeting: CreateMeetingState;
   setStep?: SetterOrUpdater<number>;
   onChange: SetterOrUpdater<CreateMeetingState>;
+  onConfirm: () => Promise<void>;
   meetingEditSteps: IMeetingEditStep[];
   pageType?: 'create' | 'modify';
 }
@@ -27,6 +29,7 @@ export function MeetingEditTemplate({
   meeting,
   setStep,
   onChange,
+  onConfirm,
   meetingEditSteps,
   pageType,
 }: ICreateMeetingTemplateProps) {
@@ -87,7 +90,17 @@ export function MeetingEditTemplate({
           )}
         </FullHeightButtonGroup>
       </Footer>
-      <InputPasswordModal showMaskingInput={showMaskingInput} />
+      <InputPasswordModal
+        showMaskingInput={showMaskingInput}
+        password={meeting.password}
+        onChange={(newPassword) => {
+          onChange((prev) => ({
+            ...prev,
+            password: newPassword,
+          }));
+        }}
+        onConfirm={onConfirm}
+      />
     </>
   );
 }
@@ -131,10 +144,10 @@ const getMeetingEditContent = (
       return (
         <SelectMeetingType
           value={meeting.type}
-          onChange={(v: number) => {
+          onChange={(type: MeetingType) => {
             setValue((prev) => ({
               ...prev,
-              type: v,
+              type,
             }));
           }}
         />

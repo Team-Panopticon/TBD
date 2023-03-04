@@ -1,12 +1,14 @@
 export enum MeetingType {
-  date,
-  meal,
+  date = 'date',
+  meal = 'meal',
 }
+
 export enum MealType {
-  lunch,
-  dinner,
+  lunch = 'lunch',
+  dinner = 'dinner',
 }
+
 export enum MeetingStatus {
-  inProgress,
-  done,
+  inProgress = 'inProgress',
+  done = 'done',
 }
