@@ -38,7 +38,7 @@ export function InputPasswordModal({ showMaskingInput, password, onChange, onCon
                 fontWeight={300}
                 style={{ paddingTop: 10, paddingBottom: 10 }}
               >
-                모임을 수정하거나 확정할 떄 사용해요
+                모임을 수정하거나 확정할 때 사용해요
               </Typography>
               <MaskingInputContainer>
                 <MaskingInput
