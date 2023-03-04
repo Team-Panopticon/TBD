@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 interface IDotProps {
   filled: boolean;
@@ -16,10 +16,18 @@ const Flex = styled.div`
   cursor: pointer;
 `;
 const Dot = styled.div<IDotProps>`
-  ${({ size }) => `width: ${size}px; height: ${size}px;`}
+  ${({ size }) =>
+    css`
+      width: ${size}px;
+      height: ${size}px;
+    `}
   border-radius: 50%;
   background-color: #d9d9d9;
-  ${({ filled, theme }) => filled && `background-color: ${theme.palette.primary.main};`}
+  ${({ filled, theme }) =>
+    filled &&
+    css`
+      background-color: ${theme.palette.primary.main};
+    `}
   margin-right: 8px;
 `;
 
