@@ -35,7 +35,6 @@ export const FullHeightButtonGroup = styled(ButtonGroup)(({ theme }) => ({
   '& .MuiButton-root': {
     height: '100%',
     borderRadius: 0,
-    color: '#fff',
     fontWeight: 500,
   },
 }));
@@ -65,4 +64,41 @@ export const StepBoxContainer = styled.div`
   padding-bottom: 4px;
   display: flex;
   flex-direction: column;
+`;
+
+export const PasswordContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+export const PasswordContent = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: white;
+  width: 330px;
+  height: 230px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+export const PasswordInput = styled.div`
+  padding: 30px 40px;
+
+  display: flex;
+  flex-direction: column;
+
+  flex-grow: 1;
+`;
+
+export const MaskingInputContainer = styled.div`
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;

@@ -1,12 +1,13 @@
 import { Button, TextField, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { SetterOrUpdater } from 'recoil';
 
 import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import { CreateMeetingState } from '../../stores/createMeeting';
+import { InputPasswordModal } from './InputPasswordModal';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
@@ -46,6 +47,9 @@ export function MeetingEditTemplate({
   const onClickPrev = () => {
     setStep?.((prev) => (prev > 0 ? prev - 1 : prev));
   };
+
+  const [showMaskingInput, setShowMaskingInput] = useState(false);
+
   return (
     <>
       <Header>
@@ -76,15 +80,14 @@ export function MeetingEditTemplate({
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
-          <Button onClick={onClickNext}>다음</Button>
-
-          {/* {currentStep < meetingEditSteps.length ? (
+          {currentStep < meetingEditSteps.length - 1 ? (
             <Button onClick={onClickNext}>다음</Button>
           ) : (
-            <Button>생성하기</Button>
-          )} */}
+            <Button onClick={() => setShowMaskingInput(true)}>생성하기</Button>
+          )}
         </FullHeightButtonGroup>
       </Footer>
+      <InputPasswordModal showMaskingInput={showMaskingInput} />
     </>
   );
 }

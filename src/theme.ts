@@ -7,9 +7,14 @@ const themeOptions: ThemeOptions = {
   palette: {
     primary: {
       main: PRIMARY_COLOR,
+      contrastText: '#fff',
     },
     secondary: {
       main: SECONDARY_COLOR,
+    },
+    transPrimary: {
+      main: 'rgba(102, 214, 180, 0.5)',
+      contrastText: '#747474',
     },
   },
   components: {
