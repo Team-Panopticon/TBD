@@ -4,7 +4,7 @@ import { useRecoilState } from 'recoil';
 import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
-import { createMeetingState } from '../stores/createMeeting';
+import { CreateMeetingState, createMeetingState } from '../stores/createMeeting';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 export function MeetingCreate() {
@@ -16,7 +16,11 @@ export function MeetingCreate() {
   }, [getMeetingEditSteps]);
 
   const onEndCreate = async () => {
-    await createMeeting(meeting);
+    if (meeting.name === undefined || meeting.deadline === undefined) {
+      return;
+    }
+
+    await createMeeting(meeting as Required<CreateMeetingState>);
     /**
      * @TODO
      * 응답 시 리다이렉팅
