@@ -3,25 +3,25 @@ import React, { CSSProperties } from 'react';
 import { Chip } from '../Chip/Chip';
 import { UserListContainer } from './styled';
 
-export type DataType = {
+export interface VoteData {
   checked: boolean;
   focused: boolean;
-};
+}
 
-export type UserDataType = DataType & {
+export interface UserListData extends VoteData {
   username: string;
-};
+}
 
-export type handler<T extends DataType> = (checked: boolean, target: T) => void;
+export type handler<T extends VoteData> = (checked: boolean, target: T) => void;
 
-type Props = {
+interface Props {
   style?: CSSProperties;
-  users: UserDataType[];
-  handleClick?: handler<UserDataType>;
-};
+  users: UserListData[];
+  onClick?: handler<UserListData>;
+}
 
 export const UserList: React.FC<Props> = (props) => {
-  const { users, style, handleClick } = props;
+  const { users, style, onClick } = props;
 
   return (
     <UserListContainer style={style}>
@@ -30,8 +30,8 @@ export const UserList: React.FC<Props> = (props) => {
           key={index}
           checked={targetUser.checked}
           focus={targetUser.focused}
-          onClick={(checked) => {
-            handleClick?.(checked, targetUser);
+          onClick={(checked: boolean) => {
+            onClick?.(checked, targetUser);
           }}
         >
           {targetUser.username}
