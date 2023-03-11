@@ -1,6 +1,8 @@
 import '../index.css';
+import 'dayjs/locale/ko';
 
 import { ThemeProvider } from '@mui/material/styles';
+import dayjs from 'dayjs';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
@@ -12,6 +14,8 @@ import { MeetingModify } from './pages/MeetingModify';
 import { MeetingResult } from './pages/MeetingResult';
 import { MeetingView } from './pages/MeetingView';
 import { theme } from './theme';
+
+dayjs.locale('ko');
 
 const router = createBrowserRouter([
   {
