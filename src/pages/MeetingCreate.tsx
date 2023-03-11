@@ -15,8 +15,8 @@ export function MeetingCreate() {
     return getMeetingEditSteps('create');
   }, [getMeetingEditSteps]);
 
-  const onEndCreate = async () => {
-    await createMeeting(meeting);
+  const onEndCreate = async (setPassword: boolean) => {
+    await createMeeting(meeting, setPassword);
     /**
      * @TODO
      * 응답 시 리다이렉팅

@@ -19,7 +19,7 @@ export interface ICreateMeetingTemplateProps {
   meeting: CreateMeetingState;
   setStep?: SetterOrUpdater<number>;
   onChange: SetterOrUpdater<CreateMeetingState>;
-  onConfirm: () => Promise<void>;
+  onConfirm: (setPassword: boolean) => Promise<void>;
   meetingEditSteps: IMeetingEditStep[];
   pageType?: 'create' | 'modify';
 }
