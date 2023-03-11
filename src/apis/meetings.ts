@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
 
-import { CreateMeetingState } from '../stores/createMeeting';
+import { ValidCreateMeetingState } from '../stores/createMeeting';
 import { api } from './instance';
 import { CreateMeetingRequest, CreateMeetingResponse } from './types';
 
-const meetingStateToRequest = (state: Required<CreateMeetingState>): CreateMeetingRequest => {
+const meetingStateToRequest = (state: ValidCreateMeetingState): CreateMeetingRequest => {
   return {
     ...state,
     dates: state.dates.map((date) => date.toISOString()),
@@ -12,7 +12,7 @@ const meetingStateToRequest = (state: Required<CreateMeetingState>): CreateMeeti
   };
 };
 
-export const createMeeting = async (meeting: Required<CreateMeetingState>) => {
+export const createMeeting = async (meeting: ValidCreateMeetingState) => {  
   const meetingRequest = meetingStateToRequest(meeting);
 
   const response: AxiosResponse<CreateMeetingResponse> = await api.post(

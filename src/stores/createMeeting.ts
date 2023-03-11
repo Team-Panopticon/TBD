@@ -14,6 +14,11 @@ export interface CreateMeetingState {
   password?: string;
 }
 
+export interface ValidCreateMeetingState extends CreateMeetingState{
+  name: string;
+  deadline: Dayjs;
+}
+
 export const initialState: CreateMeetingState = {
   name: undefined,
   dates: [],
