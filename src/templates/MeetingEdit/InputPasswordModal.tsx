@@ -19,10 +19,6 @@ interface Props {
 export function InputPasswordModal({ showMaskingInput, password, onChange, onConfirm }: Props) {
   const onEndCreate = (setPassword: boolean) => {
     onConfirm(setPassword);
-    /**
-     * @TODO
-     * 응답 시 리다이렉팅
-     */
   };
   const disableConfirmBtn = password.length !== 4;
 

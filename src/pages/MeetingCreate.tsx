@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { createMeeting } from '../apis/meetings';
@@ -15,12 +16,18 @@ export function MeetingCreate() {
     return getMeetingEditSteps('create');
   }, [getMeetingEditSteps]);
 
-  const onEndCreate = async (setPassword: boolean) => {
-    await createMeeting(meeting, setPassword);
-    /**
-     * @TODO
-     * 응답 시 리다이렉팅
-     */
+  const navigate = useNavigate();
+
+  const onConfirm = async (setPassword: boolean): Promise<void> => {
+    try {
+      const response = await createMeeting(meeting, setPassword);
+      navigate(`/meetings/${response.id}`);
+    } catch (e) {
+      /**
+       * @TODO
+       * Meeting을 생성하지 못했을 경우 처리
+       */
+    }
   };
 
   return (
@@ -31,7 +38,7 @@ export function MeetingCreate() {
         currentStep={currentStep}
         setStep={setCurrentStep}
         onChange={setMeeting}
-        onConfirm={onEndCreate}
+        onConfirm={onConfirm}
       ></MeetingEditTemplate>
     </Page>
   );
