@@ -7,7 +7,7 @@ import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
-import { CreateMeetingState } from '../../stores/createMeeting';
+import { CreateMeetingState, validateMeetingName } from '../../stores/createMeeting';
 import { InputPasswordModal } from './InputPasswordModal';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
@@ -112,6 +112,8 @@ const getMeetingEditContent = (
 ) => {
   switch (type) {
     case 'name':
+      const isMeetingInValid = meeting.name !== undefined && !validateMeetingName(meeting.name);
+      const helperText = isMeetingInValid ? '모임의 이름을 입력해주세요' : '';
       return (
         <TextField
           id="name"
@@ -120,6 +122,8 @@ const getMeetingEditContent = (
           variant="outlined"
           fullWidth
           placeholder="한사랑산악회 신년 모임"
+          error={isMeetingInValid}
+          helperText={helperText}
           onChange={(v) => {
             setValue((prev) => ({
               ...prev,
