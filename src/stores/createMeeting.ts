@@ -11,7 +11,7 @@ export interface CreateMeetingState {
   /** ISO date string with timezone */
   deadline?: Dayjs;
   status: MeetingStatus;
-  password: string;
+  password?: string;
 }
 
 export const initialState: CreateMeetingState = {
@@ -20,7 +20,7 @@ export const initialState: CreateMeetingState = {
   type: MeetingType.date,
   deadline: undefined,
   status: MeetingStatus.inProgress,
-  password: '',
+  password: undefined,
 };
 
 export const createMeetingState = atom<CreateMeetingState>({
