@@ -12,12 +12,10 @@ export interface UserListData extends VoteData {
   username: string;
 }
 
-export type handler<T extends VoteData> = (checked: boolean, target: T) => void;
-
 interface Props {
   style?: CSSProperties;
   users: UserListData[];
-  onClick?: handler<UserListData>;
+  onClick?: (checked: boolean, target: UserListData) => void;
 }
 
 export const UserList: React.FC<Props> = (props) => {

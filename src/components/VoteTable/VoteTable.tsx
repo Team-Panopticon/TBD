@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { handler, VoteData } from '../UserList/UserList';
+import { VoteData } from '../UserList/UserList';
 import {
   ContentBox,
   ContentWrapper,
@@ -22,9 +22,11 @@ export interface VoteTableData {
   votings: Voting[];
 }
 
+type onClickHandler = (checked: boolean, target: Voting) => void;
+
 interface Props {
   data: VoteTableData[];
-  onClick?: handler<Voting>;
+  onClick?: onClickHandler;
 }
 
 export const VoteTable: React.FC<Props> = (props) => {
@@ -49,7 +51,7 @@ export const VoteTable: React.FC<Props> = (props) => {
 
 interface VoteTableContentProps {
   item: VoteTableData;
-  onClick?: handler<Voting>;
+  onClick?: onClickHandler;
 }
 
 const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
