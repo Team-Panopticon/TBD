@@ -7,7 +7,7 @@ import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
-import { CreateMeetingState, validateMeetingName } from '../../stores/createMeeting';
+import { CreateMeetingState, validateDeadline, validateMeetingName, validateSelectedDates } from '../../stores/createMeeting';
 import { InputPasswordModal } from './InputPasswordModal';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
@@ -36,13 +36,15 @@ export function MeetingEditTemplate({
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
-
   const description = useMemo(() => {
     return meetingEditSteps[currentStep]?.description;
   }, [currentStep]);
   const progress = useMemo(() => {
     return meetingEditSteps[currentStep]?.progress || 0;
   }, [currentStep]);
+  const isCurrentStepValid = useMemo(() => {
+    return  getIsCurrentStepValid(meetingEditSteps[currentStep]?.type, meeting);
+  }, [currentStep, meeting]);
 
   const onClickNext = () => {
     setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
@@ -84,7 +86,7 @@ export function MeetingEditTemplate({
           aria-label="Disabled elevation buttons"
         >
           {currentStep < meetingEditSteps.length - 1 ? (
-            <Button onClick={onClickNext}>다음</Button>
+            <Button onClick={onClickNext} disabled={!isCurrentStepValid}>다음</Button>
           ) : (
             <Button onClick={() => setShowMaskingInput(true)}>생성하기</Button>
           )}
@@ -173,3 +175,20 @@ const getMeetingEditContent = (
       return <></>;
   }
 };
+
+const getIsCurrentStepValid = (type: IMeetingEditStep['type'], meeting: CreateMeetingState) => {
+  const today = dayjs();
+  
+  switch (type) {
+    case 'name':
+      return meeting.name !== undefined && validateMeetingName(meeting.name);
+    case 'date':
+      return meeting.dates.length > 0 && validateSelectedDates({ selectedDates: meeting.dates, today });
+    case 'type':
+      return meeting.type !== undefined;
+    case 'deadline':
+      return meeting.deadline !== undefined && validateDeadline({ deadline: meeting.deadline, today });
+    default:
+      return false;
+  }
+}
