@@ -1,4 +1,5 @@
-import dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
+import { CSSProperties } from 'react';
 
 import { VoteData } from '../UserList/UserList';
 import {
@@ -18,22 +19,24 @@ interface Voting extends VoteData {
 }
 
 export interface VoteTableData {
-  date: dayjs.Dayjs;
+  date: Dayjs;
   votings: Voting[];
 }
 
 type onClickHandler = (checked: boolean, target: Voting) => void;
 
 interface Props {
+  className?: string;
+  style?: CSSProperties;
   data: VoteTableData[];
   onClick?: onClickHandler;
 }
 
 export const VoteTable: React.FC<Props> = (props) => {
-  const { data, onClick } = props;
+  const { data, onClick, style, className } = props;
 
   return (
-    <VoteTableContainer>
+    <VoteTableContainer className={className} style={style}>
       <Header>
         <HeaderBox>투표 가능 날짜</HeaderBox>
         <Divider />

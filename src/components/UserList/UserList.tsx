@@ -13,16 +13,17 @@ export interface UserListData extends VoteData {
 }
 
 interface Props {
+  className?: string;
   style?: CSSProperties;
   users: UserListData[];
   onClick?: (checked: boolean, target: UserListData) => void;
 }
 
 export const UserList: React.FC<Props> = (props) => {
-  const { users, style, onClick } = props;
+  const { users, style, className, onClick } = props;
 
   return (
-    <UserListContainer style={style}>
+    <UserListContainer className={className} style={style}>
       {users.map((targetUser, index) => (
         <Chip
           key={index}
