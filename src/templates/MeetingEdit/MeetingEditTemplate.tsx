@@ -177,7 +177,7 @@ const getMeetingEditContent = (
 };
 
 const getIsCurrentStepValid = (type: IMeetingEditStep['type'], meeting: CreateMeetingState) => {
-  const today = dayjs();
+  const today = dayjs().startOf('day');
   
   switch (type) {
     case 'name':
