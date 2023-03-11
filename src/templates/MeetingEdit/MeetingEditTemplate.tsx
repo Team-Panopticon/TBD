@@ -1,6 +1,6 @@
 import { Button, TextField, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { SetterOrUpdater } from 'recoil';
 
 import { DateInput } from '../../components/DateInput';
@@ -8,7 +8,6 @@ import { Contents, Footer, Header, HeaderContainer } from '../../components/page
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import { CreateMeetingState, validateDeadline, validateMeetingName, validateSelectedDates } from '../../stores/createMeeting';
-import { InputPasswordModal } from './InputPasswordModal';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
@@ -19,17 +18,22 @@ export interface ICreateMeetingTemplateProps {
   meeting: CreateMeetingState;
   setStep?: SetterOrUpdater<number>;
   onChange: SetterOrUpdater<CreateMeetingState>;
-  onConfirm: () => Promise<void>;
+  onSubmit: () => void;
   meetingEditSteps: IMeetingEditStep[];
   pageType?: 'create' | 'modify';
 }
 
+/**
+ * 모임생성, 모임수정을 위한 공통 템플릿
+ * - Step 진행 애니메이션, Progress Bar, 메시지 처리
+ * - 모임생성, 모임수정에 공통적인 로직 처리
+ */
 export function MeetingEditTemplate({
   currentStep,
   meeting,
   setStep,
   onChange,
-  onConfirm,
+  onSubmit,
   meetingEditSteps,
   pageType,
 }: ICreateMeetingTemplateProps) {
@@ -53,7 +57,6 @@ export function MeetingEditTemplate({
     setStep?.((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
-  const [showMaskingInput, setShowMaskingInput] = useState(false);
 
   return (
     <>
@@ -88,21 +91,10 @@ export function MeetingEditTemplate({
           {currentStep < meetingEditSteps.length - 1 ? (
             <Button onClick={onClickNext} disabled={!isCurrentStepValid}>다음</Button>
           ) : (
-            <Button onClick={() => setShowMaskingInput(true)}>생성하기</Button>
+            <Button onClick={onSubmit}>생성하기</Button>
           )}
         </FullHeightButtonGroup>
       </Footer>
-      <InputPasswordModal
-        showMaskingInput={showMaskingInput}
-        password={meeting.password}
-        onChange={(newPassword) => {
-          onChange((prev) => ({
-            ...prev,
-            password: newPassword,
-          }));
-        }}
-        onConfirm={onConfirm}
-      />
     </>
   );
 }
