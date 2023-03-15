@@ -6,10 +6,12 @@ import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { createMeetingState } from '../stores/createMeeting';
+import { showProgressState } from '../stores/showProgress';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
+  const [_, setShowProgress] = useRecoilState(showProgressState);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const meetingeditSteps = useMemo(() => {
@@ -20,6 +22,7 @@ export function MeetingCreate() {
 
   const onConfirm = async (setPassword: boolean): Promise<void> => {
     try {
+      setShowProgress(true);
       const response = await createMeeting(meeting, setPassword);
       navigate(`/meetings/${response.id}`);
     } catch (e) {
@@ -27,6 +30,8 @@ export function MeetingCreate() {
        * @TODO
        * Meeting을 생성하지 못했을 경우 처리
        */
+    } finally {
+      setShowProgress(false);
     }
   };
 
