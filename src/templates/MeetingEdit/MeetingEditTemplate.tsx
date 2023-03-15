@@ -92,6 +92,13 @@ export function MeetingEditTemplate({
       </Footer>
       <InputPasswordModal
         showMaskingInput={showMaskingInput}
+        hideMaskingInput={() => {
+          setShowMaskingInput(false);
+          onChange({
+            ...meeting,
+            password: '',
+          });
+        }}
         password={meeting.password}
         onChange={(newPassword) => {
           onChange((prev) => ({
