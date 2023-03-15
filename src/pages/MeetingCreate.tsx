@@ -32,10 +32,10 @@ export function MeetingCreate() {
       ...prev,
       password: newPassword,
     }));
-  }
+  };
 
   const handlePasswordConfirm = async (password?: string) => {
-    // 패스워드 입력 단계에서는 이미 유효성 검사를 마친 상태  
+    // 패스워드 입력 단계에서는 이미 유효성 검사를 마친 상태
     await createMeeting({
       ...(meeting as ValidCreateMeetingState),
       password,
@@ -44,7 +44,7 @@ export function MeetingCreate() {
      * @TODO
      * 응답 시 리다이렉팅
      */
-  }
+  };
 
   return (
     <Page>

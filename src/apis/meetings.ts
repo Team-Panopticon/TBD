@@ -12,7 +12,7 @@ const meetingStateToRequest = (state: ValidCreateMeetingState): CreateMeetingReq
   };
 };
 
-export const createMeeting = async (meeting: ValidCreateMeetingState) => {  
+export const createMeeting = async (meeting: ValidCreateMeetingState) => {
   const meetingRequest = meetingStateToRequest(meeting);
 
   const response: AxiosResponse<CreateMeetingResponse> = await api.post(

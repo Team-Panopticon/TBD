@@ -14,7 +14,7 @@ export interface CreateMeetingState {
   password?: string;
 }
 
-export interface ValidCreateMeetingState extends CreateMeetingState{
+export interface ValidCreateMeetingState extends CreateMeetingState {
   name: string;
   deadline: Dayjs;
 }
@@ -35,7 +35,7 @@ export const createMeetingState = atom<CreateMeetingState>({
 
 export const validateMeetingName = (name: string) => {
   return name.length > 0;
-}
+};
 
 interface ValidateSelectedDatesProps {
   selectedDates: Dayjs[];
@@ -43,12 +43,14 @@ interface ValidateSelectedDatesProps {
 }
 
 export const validateSelectedDates = ({ selectedDates, today }: ValidateSelectedDatesProps) => {
-  if (selectedDates.length === 0){
+  if (selectedDates.length === 0) {
     return false;
   }
-  const isSameOrAfterToday = selectedDates.every((date) => date.isSame(today) || date.isAfter(today));
+  const isSameOrAfterToday = selectedDates.every(
+    (date) => date.isSame(today) || date.isAfter(today),
+  );
   return isSameOrAfterToday;
-}
+};
 
 interface ValidateDeadlineProps {
   deadline: Dayjs;
@@ -58,18 +60,18 @@ interface ValidateDeadlineProps {
 export const validateDeadline = ({ deadline, today }: ValidateDeadlineProps) => {
   const isSameOrAfterToday = deadline.isSame(today) || deadline.isAfter(today);
   return isSameOrAfterToday;
-}
+};
 
 export const validatePassword = (password: string) => {
   if (password.length !== 4) {
-    return false
+    return false;
   }
-  
+
   const digitStringRegex = /^[0-9]+$/;
   const isDigitString = digitStringRegex.test(password);
 
   return isDigitString;
-}
+};
 
 export const validateMeeting = (state: CreateMeetingState, today: Dayjs) => {
   const { name, dates, deadline } = state;
@@ -78,6 +80,4 @@ export const validateMeeting = (state: CreateMeetingState, today: Dayjs) => {
   const isDeadlineValid = deadline !== undefined && validateDeadline({ deadline, today });
 
   return isNameValid && isDatesValid && isDeadlineValid;
-
-}
-
+};
