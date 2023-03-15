@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
+import { Progress } from './components/Progress';
 import { GlobalStyle } from './GlobalStyle';
 import { MeetingCreate } from './pages/MeetingCreate';
 import { MeetingModify } from './pages/MeetingModify';
@@ -42,6 +43,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
       <ThemeProvider theme={theme}>
         <GlobalStyle />
         <RouterProvider router={router} />
+        <Progress />
       </ThemeProvider>
     </RecoilRoot>
   </React.StrictMode>,
