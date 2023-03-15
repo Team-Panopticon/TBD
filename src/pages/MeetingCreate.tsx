@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
@@ -11,7 +11,7 @@ import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplat
 
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
-  const [_, setShowProgress] = useRecoilState(showProgressState);
+  const setShowProgress = useSetRecoilState(showProgressState);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const meetingeditSteps = useMemo(() => {
