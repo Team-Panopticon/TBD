@@ -7,16 +7,24 @@ import {
   PasswordContainer,
   PasswordContent,
   PasswordInput,
+  PasswordSkipBtn,
 } from './styled';
 
 interface Props {
   showMaskingInput: boolean;
+  hideMaskingInput: () => void;
   password: string;
   onChange: (newPassword: string) => void;
   onConfirm: (setPassword: boolean) => Promise<void>;
 }
 
-export function InputPasswordModal({ showMaskingInput, password, onChange, onConfirm }: Props) {
+export function InputPasswordModal({
+  showMaskingInput,
+  hideMaskingInput,
+  password,
+  onChange,
+  onConfirm,
+}: Props) {
   const onEndCreate = (setPassword: boolean) => {
     onConfirm(setPassword);
   };
@@ -56,18 +64,23 @@ export function InputPasswordModal({ showMaskingInput, password, onChange, onCon
                 aria-label="Disabled elevation buttons"
               >
                 {/* ButtonGroup 컴포넌트의 borderRight 기본 스타일을 diable 하기 위하여 스타일 추가 */}
-                <Button
-                  color="transPrimary"
-                  onClick={() => onEndCreate(false)}
-                  style={{ borderRight: 0 }}
-                >
-                  생략하기
+                <Button color="secondary" onClick={hideMaskingInput} style={{ borderRight: 0 }}>
+                  취소하기
                 </Button>
                 <Button disabled={disableConfirmBtn} onClick={() => onEndCreate(true)}>
                   설정하기
                 </Button>
               </FullHeightButtonGroup>
             </div>
+            <PasswordSkipBtn
+              color="primary"
+              variant="text"
+              size="small"
+              onClick={() => onEndCreate(false)}
+              style={{ borderRight: 0 }}
+            >
+              생략하기
+            </PasswordSkipBtn>
           </PasswordContent>
         </PasswordContainer>
       </Modal>

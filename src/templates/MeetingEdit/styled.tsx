@@ -1,4 +1,4 @@
-import { ButtonGroup, LinearProgress, ToggleButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, LinearProgress, ToggleButtonGroup } from '@mui/material';
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
@@ -87,7 +87,7 @@ export const PasswordContent = styled.div`
 `;
 
 export const PasswordInput = styled.div`
-  padding: 30px 40px;
+  padding: 25px 35px;
 
   display: flex;
   flex-direction: column;
@@ -101,4 +101,10 @@ export const MaskingInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+export const PasswordSkipBtn = styled(Button)`
+  position: absolute;
+  right: 5px;
+  top: 5px;
 `;
