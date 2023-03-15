@@ -7,7 +7,7 @@ import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
-import { CreateMeetingState, validateDeadline, validateMeetingName, validateSelectedDates } from '../../stores/createMeeting';
+import { CreateMeetingState, validateDeadline, validateMeeting, validateMeetingName, validateSelectedDates } from '../../stores/createMeeting';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
@@ -47,8 +47,11 @@ export function MeetingEditTemplate({
     return meetingEditSteps[currentStep]?.progress || 0;
   }, [currentStep]);
   const isCurrentStepValid = useMemo(() => {
-    return  getIsCurrentStepValid(meetingEditSteps[currentStep]?.type, meeting);
+    return getIsCurrentStepValid(meetingEditSteps[currentStep]?.type, meeting);
   }, [currentStep, meeting]);
+  const isMeetingValid = useMemo(() => {
+    return validateMeeting(meeting, dayjs().startOf('day'));
+  }, [meeting]);
 
   const onClickNext = () => {
     setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
@@ -91,7 +94,7 @@ export function MeetingEditTemplate({
           {currentStep < meetingEditSteps.length - 1 ? (
             <Button onClick={onClickNext} disabled={!isCurrentStepValid}>다음</Button>
           ) : (
-            <Button onClick={onSubmit}>생성하기</Button>
+            <Button onClick={onSubmit} disabled={!isMeetingValid} >생성하기</Button>
           )}
         </FullHeightButtonGroup>
       </Footer>

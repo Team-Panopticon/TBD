@@ -71,3 +71,13 @@ export const validatePassword = (password: string) => {
   return isDigitString;
 }
 
+export const validateMeeting = (state: CreateMeetingState, today: Dayjs) => {
+  const { name, dates, deadline } = state;
+  const isNameValid = name !== undefined && validateMeetingName(name);
+  const isDatesValid = validateSelectedDates({ selectedDates: dates, today });
+  const isDeadlineValid = deadline !== undefined && validateDeadline({ deadline, today });
+
+  return isNameValid && isDatesValid && isDeadlineValid;
+
+}
+
