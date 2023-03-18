@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+
 import { MeetingStatus, MeetingType } from '../constants/meeting';
 
 export interface ModifyMeetingState {
