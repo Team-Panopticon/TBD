@@ -1,6 +1,7 @@
 import { Button, Modal, Typography } from '@mui/material';
 
 import { MaskingInput } from '../../components/MaskingInput';
+import { validatePassword } from '../../stores/createMeeting';
 import {
   FullHeightButtonGroup,
   MaskingInputContainer,
@@ -11,28 +12,32 @@ import {
 } from './styled';
 
 interface Props {
-  showMaskingInput: boolean;
-  hideMaskingInput: () => void;
-  password: string;
+  show: boolean;
+  password?: string;
   onChange: (newPassword: string) => void;
   onConfirm: (setPassword: boolean) => Promise<void>;
+  onCancel: () => void;
 }
 
-export function InputPasswordModal({
-  showMaskingInput,
-  hideMaskingInput,
-  password,
-  onChange,
-  onConfirm,
-}: Props) {
-  const onEndCreate = (setPassword: boolean) => {
-    onConfirm(setPassword);
-  };
-  const disableConfirmBtn = password.length !== 4;
+/**
+ * 비밀번호 생성 모달창
+ * - 비밀번호 유효성 검증과 표시
+ * - 버튼 클릭에 따라서 비밀번호를 인자로 onConfirm handler 호출
+ */
+export function InputPasswordModal({ show, password, onChange, onConfirm, onCancel }: Props) {
+  const isPasswordValid = password !== undefined && validatePassword(password);
+  
+  const handleSkip = () => {
+    onConfirm(false);
+  }
+
+  const handleSubmit = () => {
+    onConfirm(true);
+  }
 
   return (
     <>
-      <Modal open={showMaskingInput}>
+      <Modal open={show}>
         <PasswordContainer>
           <PasswordContent>
             <PasswordInput>
@@ -49,7 +54,7 @@ export function InputPasswordModal({
               <MaskingInputContainer>
                 <MaskingInput
                   length={4}
-                  text={password}
+                  text={password ?? ''}
                   setText={onChange}
                   size={28}
                   style={{ paddingTop: 10 }}
@@ -64,19 +69,17 @@ export function InputPasswordModal({
                 aria-label="Disabled elevation buttons"
               >
                 {/* ButtonGroup 컴포넌트의 borderRight 기본 스타일을 diable 하기 위하여 스타일 추가 */}
-                <Button color="secondary" onClick={hideMaskingInput} style={{ borderRight: 0 }}>
+                <Button color="secondary" onClick={onCancel} style={{ borderRight: 0 }}>
                   취소하기
                 </Button>
-                <Button disabled={disableConfirmBtn} onClick={() => onEndCreate(true)}>
-                  설정하기
-                </Button>
+                <Button onClick={handleSubmit} disabled={!isPasswordValid}>설정하기</Button>
               </FullHeightButtonGroup>
             </div>
             <PasswordSkipBtn
               color="primary"
               variant="text"
               size="small"
-              onClick={() => onEndCreate(false)}
+              onClick={handleSkip}
               style={{ borderRight: 0 }}
             >
               생략하기
