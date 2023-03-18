@@ -2,13 +2,13 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { showProgressState } from '../stores/showProgress';
 import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
 import { InputPasswordModal } from '../templates/MeetingEdit/InputPasswordModal';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
+import { createMeeting } from '../apis/meetings';
 
 /**
  * 모임생성 최상위 페이지
@@ -28,22 +28,6 @@ export function MeetingCreate() {
 
   const navigate = useNavigate();
 
-  const onConfirm = async (setPassword: boolean): Promise<void> => {
-    try {
-      setShowProgress(true);
-      const response = await createMeeting(meeting as ValidCreateMeetingState, setPassword);
-      navigate(`/meetings/${response.id}`);
-    } catch (e) {
-      /**
-       * @TODO
-       * Meeting을 생성하지 못했을 경우 처리
-       */
-    } finally {
-      setShowProgress(false);
-    }
-  } 
-
-
   const handleMeetingEditComplete = () => {
     setShowPasswordModal(true);
   };
@@ -58,7 +42,7 @@ export function MeetingCreate() {
   const handlePasswordConfirm = async (setPassword: boolean) => {
     try {
       setShowProgress(true);
-      const response = await createMeeting((meeting as ValidCreateMeetingState), setPassword);
+      const response = await createMeeting(meeting as ValidCreateMeetingState, setPassword);
       navigate(`/meetings/${response.id}`);
     } catch (e) {
       /**
