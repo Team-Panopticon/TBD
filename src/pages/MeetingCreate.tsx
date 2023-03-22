@@ -1,14 +1,14 @@
+import { AxiosError } from 'axios';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
+import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
-import { showProgressState } from '../stores/showProgress';
 import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
 import { InputPasswordModal } from '../templates/MeetingEdit/InputPasswordModal';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
-import { createMeeting } from '../apis/meetings';
 
 /**
  * 모임생성 최상위 페이지
@@ -18,10 +18,10 @@ import { createMeeting } from '../apis/meetings';
  */
 export function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
-  const setShowProgress = useSetRecoilState(showProgressState);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
+
   const meetingeditSteps = useMemo(() => {
     return getMeetingEditSteps('create');
   }, [getMeetingEditSteps]);
@@ -41,16 +41,14 @@ export function MeetingCreate() {
 
   const handlePasswordConfirm = async (setPassword: boolean) => {
     try {
-      setShowProgress(true);
       const response = await createMeeting(meeting as ValidCreateMeetingState, setPassword);
       navigate(`/meetings/${response.id}`);
-    } catch (e) {
-      /**
-       * @TODO
-       * Meeting을 생성하지 못했을 경우 처리
-       */
-    } finally {
-      setShowProgress(false);
+    } catch (e: unknown) {
+      if (e instanceof AxiosError) {
+        alert(e.message);
+      } else {
+        alert('알수 없는 에러가 발생했습니다');
+      }
     }
   };
 
