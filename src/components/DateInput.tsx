@@ -12,7 +12,7 @@ interface Props {
 
 const DEFAULT_FORMAT = 'YYYY-MM-DD';
 
-export const DateInput: React.FC<Props> = (props: Props) => {
+export function DateInput(props: Props) {
   const { minDate, maxDate, onChange, selectedDate, format = DEFAULT_FORMAT } = props;
   const inputRef = useRef<HTMLInputElement>(null);
   const inputValue = selectedDate ? selectedDate.format(format) : '';
@@ -40,4 +40,4 @@ export const DateInput: React.FC<Props> = (props: Props) => {
       value={inputValue}
     />
   );
-};
+}

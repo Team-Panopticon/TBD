@@ -7,7 +7,13 @@ import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
-import { CreateMeetingState, validateDeadline, validateMeeting, validateMeetingName, validateSelectedDates } from '../../stores/createMeeting';
+import {
+  CreateMeetingState,
+  validateDeadline,
+  validateMeeting,
+  validateMeetingName,
+  validateSelectedDates,
+} from '../../stores/createMeeting';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
@@ -20,7 +26,7 @@ export interface ICreateMeetingTemplateProps {
   onChange: SetterOrUpdater<CreateMeetingState>;
   onSubmit: () => void;
   meetingEditSteps: IMeetingEditStep[];
-  pageType?: 'create' | 'modify';
+  // pageType: 'create' | 'modify';
 }
 
 /**
@@ -35,20 +41,20 @@ export function MeetingEditTemplate({
   onChange,
   onSubmit,
   meetingEditSteps,
-  pageType,
-}: ICreateMeetingTemplateProps) {
+}: // pageType,
+ICreateMeetingTemplateProps) {
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
   const description = useMemo(() => {
     return meetingEditSteps[currentStep]?.description;
-  }, [currentStep]);
+  }, [meetingEditSteps, currentStep]);
   const progress = useMemo(() => {
     return meetingEditSteps[currentStep]?.progress || 0;
-  }, [currentStep]);
+  }, [meetingEditSteps, currentStep]);
   const isCurrentStepValid = useMemo(() => {
     return getIsCurrentStepValid(meetingEditSteps[currentStep]?.type, meeting);
-  }, [currentStep, meeting]);
+  }, [meetingEditSteps, currentStep, meeting]);
   const isMeetingValid = useMemo(() => {
     return validateMeeting(meeting, dayjs().startOf('day'));
   }, [meeting]);
@@ -56,17 +62,12 @@ export function MeetingEditTemplate({
   const onClickNext = () => {
     setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
   };
-  const onClickPrev = () => {
-    setStep?.((prev) => (prev > 0 ? prev - 1 : prev));
-  };
-
 
   return (
     <>
       <Header>
         <HeaderContainer>
           <BorderLinearProgress variant="determinate" value={progress} />
-          {/* TOdo: Replace font size with theme properties */}
           <Typography variant="h5" fontWeight={300} align="center">
             {description}
           </Typography>
@@ -92,9 +93,13 @@ export function MeetingEditTemplate({
           aria-label="Disabled elevation buttons"
         >
           {currentStep < meetingEditSteps.length - 1 ? (
-            <Button onClick={onClickNext} disabled={!isCurrentStepValid}>다음</Button>
+            <Button onClick={onClickNext} disabled={!isCurrentStepValid}>
+              다음
+            </Button>
           ) : (
-            <Button onClick={onSubmit} disabled={!isMeetingValid} >생성하기</Button>
+            <Button onClick={onSubmit} disabled={!isMeetingValid}>
+              생성하기
+            </Button>
           )}
         </FullHeightButtonGroup>
       </Footer>
@@ -108,7 +113,7 @@ const getMeetingEditContent = (
   meeting: CreateMeetingState,
 ) => {
   switch (type) {
-    case 'name':
+    case 'name': {
       const isMeetingInValid = meeting.name !== undefined && !validateMeetingName(meeting.name);
       const helperText = isMeetingInValid ? '모임의 이름을 입력해주세요' : '';
       return (
@@ -129,6 +134,7 @@ const getMeetingEditContent = (
           }}
         />
       );
+    }
     case 'date':
       return (
         <SelectDates
@@ -173,17 +179,21 @@ const getMeetingEditContent = (
 
 const getIsCurrentStepValid = (type: IMeetingEditStep['type'], meeting: CreateMeetingState) => {
   const today = dayjs().startOf('day');
-  
+
   switch (type) {
     case 'name':
       return meeting.name !== undefined && validateMeetingName(meeting.name);
     case 'date':
-      return meeting.dates.length > 0 && validateSelectedDates({ selectedDates: meeting.dates, today });
+      return (
+        meeting.dates.length > 0 && validateSelectedDates({ selectedDates: meeting.dates, today })
+      );
     case 'type':
       return meeting.type !== undefined;
     case 'deadline':
-      return meeting.deadline !== undefined && validateDeadline({ deadline: meeting.deadline, today });
+      return (
+        meeting.deadline !== undefined && validateDeadline({ deadline: meeting.deadline, today })
+      );
     default:
       return false;
   }
-}
+};
