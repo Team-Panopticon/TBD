@@ -1,4 +1,5 @@
 import '../index.css';
+import 'dayjs/locale/ko';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';

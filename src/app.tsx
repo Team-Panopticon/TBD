@@ -1,4 +1,5 @@
 import { ThemeProvider } from '@mui/material/styles';
+import dayjs from 'dayjs';
 import { useEffect } from 'react';
 import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -12,6 +13,8 @@ import { MeetingResult } from './pages/MeetingResult';
 import { MeetingView } from './pages/MeetingView';
 import { showProgressState } from './stores/showProgress';
 import { theme } from './theme';
+
+dayjs.locale('ko');
 
 const router = createBrowserRouter([
   {
