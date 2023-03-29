@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 
-interface IDotProps {
+interface DotProps {
   filled: boolean;
   size: number;
 }
@@ -15,7 +15,7 @@ const Flex = styled.div`
   color: #000;
   cursor: pointer;
 `;
-const Dot = styled.div<IDotProps>`
+const Dot = styled.div<DotProps>`
   ${({ size }) =>
     css`
       width: ${size}px;
@@ -41,22 +41,20 @@ const HiddenInput = styled.input`
   margin: 0;
   padding: 0;
 `;
-interface IMaskingInputProps {
+interface MaskingInputProps {
   style?: React.CSSProperties;
   length: number;
   text: string;
   setText: (newText: string) => void;
   size: number;
 }
-export function MaskingInput({ style, length, text, setText, size }: IMaskingInputProps) {
-  const [dots, setDots] = useState<boolean[]>(new Array(length).fill(false));
+export function MaskingInput({ style, length, text, setText, size }: MaskingInputProps) {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const filledLength = e.target.value.length;
     if (filledLength > length) {
       return;
     }
     setText(e.target.value);
-    setDots(new Array(length).fill(false).map((_, index) => index < filledLength));
   };
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = () => {
@@ -70,7 +68,7 @@ export function MaskingInput({ style, length, text, setText, size }: IMaskingInp
   return (
     <div style={style}>
       <Flex onClick={handleClick}>
-        {dots.map((dot, index) => (
+        {getDots(length, text.length).map((dot, index) => (
           <Dot key={index} filled={dot} size={size} />
         ))}
       </Flex>
@@ -83,4 +81,8 @@ export function MaskingInput({ style, length, text, setText, size }: IMaskingInp
       />
     </div>
   );
+}
+
+export function getDots(totalLength: number, textLength: number) {
+  return new Array(totalLength).fill(false).map((_, index) => index < textLength);
 }

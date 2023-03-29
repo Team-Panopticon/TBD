@@ -1,20 +1,21 @@
 import { TextField } from '@mui/material';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useRef } from 'react';
 
 interface Props {
   minDate: Dayjs;
   maxDate?: Dayjs;
-  selectedDate: string;
-  onChange: (date: string) => void;
+  selectedDate?: Dayjs;
+  onChange: (date: Dayjs) => void;
   format?: string;
 }
 
 const DEFAULT_FORMAT = 'YYYY-MM-DD';
 
-export const DateInput: React.FC<Props> = (props: Props) => {
+export function DateInput(props: Props) {
   const { minDate, maxDate, onChange, selectedDate, format = DEFAULT_FORMAT } = props;
   const inputRef = useRef<HTMLInputElement>(null);
+  const inputValue = selectedDate ? selectedDate.format(format) : '';
 
   useEffect(() => {
     if (inputRef.current) {
@@ -34,9 +35,9 @@ export const DateInput: React.FC<Props> = (props: Props) => {
       variant="outlined"
       fullWidth
       onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(event.target.value);
+        onChange(dayjs(event.target.value));
       }}
-      value={selectedDate}
+      value={inputValue}
     />
   );
-};
+}

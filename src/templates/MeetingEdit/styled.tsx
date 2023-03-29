@@ -1,4 +1,4 @@
-import { ButtonGroup, LinearProgress, ToggleButtonGroup } from '@mui/material';
+import { Button, ButtonGroup, LinearProgress, ToggleButtonGroup } from '@mui/material';
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
@@ -24,20 +24,20 @@ export const customButtonStyle: React.CSSProperties = {
 };
 
 // StyledComponent for MeetingEditTemplate
-export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 8,
-  borderRadius: 4,
-}));
+export const BorderLinearProgress = styled(LinearProgress)`
+  height: 8;
+  border-radius: 4;
+`;
 
-export const FullHeightButtonGroup = styled(ButtonGroup)(({ theme }) => ({
-  height: '100%',
+export const FullHeightButtonGroup = styled(ButtonGroup)`
+  height: 100%;
 
-  '& .MuiButton-root': {
-    height: '100%',
-    borderRadius: 0,
-    fontWeight: 500,
-  },
-}));
+  & .MuiButton-root {
+    height: 100%;
+    border-radius: 0;
+    font-weight: 500;
+  }
+`;
 
 // StyledComponent for MeetingEditStepper
 export interface StepBox {
@@ -87,7 +87,7 @@ export const PasswordContent = styled.div`
 `;
 
 export const PasswordInput = styled.div`
-  padding: 30px 40px;
+  padding: 25px 35px;
 
   display: flex;
   flex-direction: column;
@@ -101,4 +101,10 @@ export const MaskingInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+`;
+
+export const PasswordSkipBtn = styled(Button)`
+  position: absolute;
+  right: 5px;
+  top: 5px;
 `;

@@ -4,26 +4,80 @@ import { atom } from 'recoil';
 import { MeetingStatus, MeetingType } from '../constants/meeting';
 
 export interface CreateMeetingState {
-  name: string;
+  name?: string;
   /** 투표 가능 날짜, Dayjs */
   dates: Dayjs[];
   type: MeetingType;
   /** ISO date string with timezone */
-  deadline: string;
+  deadline?: Dayjs;
   status: MeetingStatus;
-  password: string;
+  password?: string;
+}
+
+export interface ValidCreateMeetingState extends CreateMeetingState {
+  name: string;
+  deadline: Dayjs;
 }
 
 export const initialState: CreateMeetingState = {
-  name: '',
+  name: undefined,
   dates: [],
   type: MeetingType.date,
-  deadline: '',
+  deadline: undefined,
   status: MeetingStatus.inProgress,
-  password: '',
+  password: undefined,
 };
 
 export const createMeetingState = atom<CreateMeetingState>({
   key: 'createMeeting',
   default: initialState,
 });
+
+export const validateMeetingName = (name: string) => {
+  return name.length > 0;
+};
+
+interface ValidateSelectedDatesProps {
+  selectedDates: Dayjs[];
+  today: Dayjs;
+}
+
+export const validateSelectedDates = ({ selectedDates, today }: ValidateSelectedDatesProps) => {
+  if (selectedDates.length === 0) {
+    return false;
+  }
+  const isSameOrAfterToday = selectedDates.every(
+    (date) => date.isSame(today) || date.isAfter(today),
+  );
+  return isSameOrAfterToday;
+};
+
+interface ValidateDeadlineProps {
+  deadline: Dayjs;
+  today: Dayjs;
+}
+
+export const validateDeadline = ({ deadline, today }: ValidateDeadlineProps) => {
+  const isSameOrAfterToday = deadline.isSame(today) || deadline.isAfter(today);
+  return isSameOrAfterToday;
+};
+
+export const validatePassword = (password: string) => {
+  if (password.length !== 4) {
+    return false;
+  }
+
+  const digitStringRegex = /^[0-9]+$/;
+  const isDigitString = digitStringRegex.test(password);
+
+  return isDigitString;
+};
+
+export const validateMeeting = (state: CreateMeetingState, today: Dayjs) => {
+  const { name, dates, deadline } = state;
+  const isNameValid = name !== undefined && validateMeetingName(name);
+  const isDatesValid = validateSelectedDates({ selectedDates: dates, today });
+  const isDeadlineValid = deadline !== undefined && validateDeadline({ deadline, today });
+
+  return isNameValid && isDatesValid && isDeadlineValid;
+};
