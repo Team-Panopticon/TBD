@@ -24,20 +24,20 @@ export const customButtonStyle: React.CSSProperties = {
 };
 
 // StyledComponent for MeetingEditTemplate
-export const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 8,
-  borderRadius: 4,
-}));
+export const BorderLinearProgress = styled(LinearProgress)`
+  height: 8;
+  border-radius: 4;
+`;
 
-export const FullHeightButtonGroup = styled(ButtonGroup)(({ theme }) => ({
-  height: '100%',
+export const FullHeightButtonGroup = styled(ButtonGroup)`
+  height: 100%;
 
-  '& .MuiButton-root': {
-    height: '100%',
-    borderRadius: 0,
-    fontWeight: 500,
-  },
-}));
+  & .MuiButton-root {
+    height: 100%;
+    border-radius: 0;
+    font-weight: 500;
+  }
+`;
 
 // StyledComponent for MeetingEditStepper
 export interface StepBox {

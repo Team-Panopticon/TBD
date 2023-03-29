@@ -26,14 +26,14 @@ interface Props {
  */
 export function InputPasswordModal({ show, password, onChange, onConfirm, onCancel }: Props) {
   const isPasswordValid = password !== undefined && validatePassword(password);
-  
+
   const handleSkip = () => {
     onConfirm(false);
-  }
+  };
 
   const handleSubmit = () => {
     onConfirm(true);
-  }
+  };
 
   return (
     <>
@@ -72,7 +72,9 @@ export function InputPasswordModal({ show, password, onChange, onConfirm, onCanc
                 <Button color="secondary" onClick={onCancel} style={{ borderRight: 0 }}>
                   취소하기
                 </Button>
-                <Button onClick={handleSubmit} disabled={!isPasswordValid}>설정하기</Button>
+                <Button onClick={handleSubmit} disabled={!isPasswordValid}>
+                  설정하기
+                </Button>
               </FullHeightButtonGroup>
             </div>
             <PasswordSkipBtn
