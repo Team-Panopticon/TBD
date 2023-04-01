@@ -5,6 +5,7 @@ import { SetterOrUpdater } from 'recoil';
 
 import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
+import { FullHeightButtonGroup } from '../../components/styled';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import {
@@ -17,7 +18,7 @@ import {
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
-import { BorderLinearProgress, FullHeightButtonGroup } from './styled';
+import { BorderLinearProgress } from './styled';
 
 export interface ICreateMeetingTemplateProps {
   currentStep: number;
