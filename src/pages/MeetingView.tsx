@@ -1,3 +1,4 @@
+import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -5,6 +6,7 @@ import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
 import { getUsers, GetUsersResponse } from '../apis/users';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { currentUserState } from '../stores/currentUser';
@@ -50,7 +52,36 @@ export function MeetingView() {
         <VoteTable data={voteTableDataList} headers={['투표 현황']} />
       </Contents>
       <Footer>
-        {isViewMode ? <div>다시 투표하러 가기</div> : <div>다음에하기 + 투표하기</div>}
+        {isViewMode ? (
+          <div>다시 투표하러 가기</div>
+        ) : (
+          <FullHeightButtonGroup
+            fullWidth
+            disableElevation
+            variant="contained"
+            aria-label="Disabled elevation buttons"
+          >
+            <Button
+              color="secondary"
+              onClick={() => {
+                /**
+                 * @TODO viewmode로 변경
+                 */
+              }}
+            >
+              다음에하기
+            </Button>
+            <Button
+              onClick={() => {
+                /**
+                 * @TODO 투표 api
+                 */
+              }}
+            >
+              투표하기
+            </Button>
+          </FullHeightButtonGroup>
+        )}
       </Footer>
     </Page>
   );
