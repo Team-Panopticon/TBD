@@ -4,6 +4,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
 import { getUsers, GetUsersResponse } from '../apis/users';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { currentUserState } from '../stores/currentUser';
@@ -36,13 +37,21 @@ export function MeetingView() {
   }
 
   return (
-    <div>
-      <h1>모임 이름</h1>
-      <div>toast message</div>
-      <UserList users={userList} />
-      {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
-      <VoteTable data={voteTableDataList} headers={['투표 현황']} />
-      {isViewMode ? <div>다시 투표하러 가기</div> : <div>다음에하기 + 투표하기</div>}
-    </div>
+    <Page>
+      <Header>
+        <HeaderContainer>
+          <h1>모임 이름</h1>
+        </HeaderContainer>
+      </Header>
+      <Contents>
+        <div>toast message</div>
+        <UserList users={userList} />
+        {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
+        <VoteTable data={voteTableDataList} headers={['투표 현황']} />
+      </Contents>
+      <Footer>
+        {isViewMode ? <div>다시 투표하러 가기</div> : <div>다음에하기 + 투표하기</div>}
+      </Footer>
+    </Page>
   );
 }
