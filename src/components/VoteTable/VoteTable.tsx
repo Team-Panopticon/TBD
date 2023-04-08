@@ -76,7 +76,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             focus={focused}
             checked={checked}
             onClick={() => onClick?.(!checked, vote)}
-          >{`${current}/${total} (${(current / total) * 100}%)`}</ContentBox>
+          >{`${current}/${total} (${((current / total) * 100).toFixed(0)}%)`}</ContentBox>
         );
       })}
     </Wrapper>
