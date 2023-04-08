@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { MealType } from '../constants/meeting';
 import { api } from './instance';
 
-export interface Users {
+export interface GetUsersResponse {
   [username: string]: {
     name: string;
     votings: {
@@ -20,7 +20,7 @@ export interface Users {
 }
 
 export const getUsers = async (meetingId: number) => {
-  const response: AxiosResponse<Users> = await api.get(`/meetings/${meetingId}/users`);
+  const response: AxiosResponse<GetUsersResponse> = await api.get(`/meetings/${meetingId}/users`);
 
   return response.data;
 };

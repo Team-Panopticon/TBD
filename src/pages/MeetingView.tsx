@@ -3,7 +3,7 @@ import { useRecoilValue } from 'recoil';
 
 import { getUsers, Users } from '../apis/users';
 import { UserList, UserListData } from '../components/UserList/UserList';
-import { currentUserState } from '../stores/user';
+import { currentUserState } from '../stores/currentUser';
 
 export function MeetingView() {
   const currentUser = useRecoilValue(currentUserState);
