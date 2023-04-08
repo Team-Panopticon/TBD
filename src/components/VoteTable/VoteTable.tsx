@@ -19,8 +19,8 @@ interface Voting extends VoteData {
 }
 
 export interface VoteTableData {
-  date: Dayjs;
-  votings: [Voting, Voting] | [Voting];
+  date: Dayjs; // 현재 투표 가능한 날짜
+  votings: [Voting, Voting] | [Voting]; // [meal, meal], [date]
 }
 
 type onClickHandler = (checked: boolean, target: Voting) => void;

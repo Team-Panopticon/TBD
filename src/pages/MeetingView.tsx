@@ -1,53 +1,38 @@
-import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
 
+import { getUsers, Users } from '../apis/users';
 import { UserList, UserListData } from '../components/UserList/UserList';
-import { VoteTable, VoteTableData } from '../components/VoteTable/VoteTable';
+import { currentUserState } from '../stores/user';
 
 export function MeetingView() {
-  const [isViewMode, setIsViewMode] = useState(false);
+  const currentUser = useRecoilValue(currentUserState);
+  const [isViewMode, setIsViewMode] = useState<boolean>(!!currentUser);
+  const [voteList, setVoteList] = useState<any>({});
+  const [userMap, setUserMap] = useState<Users>({});
 
-  const mockData: VoteTableData[] = [
-    {
-      date: dayjs('2022-11-26T01:44:39.114Z'),
-      votings: [
-        { total: 8, current: 8, checked: false, focused: false },
-        { total: 8, current: 3, checked: true, focused: false },
-      ],
-    },
-    {
-      date: dayjs('2022-11-26T01:44:39.114Z'),
-      votings: [
-        { total: 8, current: 5, checked: true, focused: false },
-        { total: 8, current: 3, checked: false, focused: false },
-      ],
-    },
-  ];
+  useEffect(() => {
+    (async () => {
+      const data = await getUsers(1);
+      setUserMap(data);
+    })();
+  }, []);
 
-  const mockData2: VoteTableData[] = [
-    {
-      date: dayjs('2022-11-26T01:44:39.114Z'),
-      votings: [{ total: 8, current: 8, checked: false, focused: false }],
-    },
-    {
-      date: dayjs('2022-11-26T01:44:39.114Z'),
-      votings: [{ total: 8, current: 5, checked: true, focused: false }],
-    },
-  ];
-
-  const mockUserList: UserListData[] = [
-    { username: '김철수', checked: false, focused: false },
-    { username: '김영희', checked: false, focused: false },
-    { username: '김민수', checked: false, focused: false },
-  ];
+  const userList = Object.keys(userMap).map<UserListData>((username) => {
+    return {
+      username,
+      checked: false,
+      focused: false,
+    };
+  });
 
   return (
     <div>
       <h1>모임 이름</h1>
       <div>toast message</div>
-      <UserList users={mockUserList} />
-      <VoteTable data={mockData} headers={['점심', '저녁']} />
-      <VoteTable data={mockData2} headers={['투표 현황']} />
+      <UserList users={userList} />
+      {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
+      {/* <VoteTable data={mockData2} headers={['투표 현황']} /> */}
       {isViewMode ? <div>다시 투표하러 가기</div> : <div>다음에하기 + 투표하기</div>}
     </div>
   );
