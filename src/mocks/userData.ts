@@ -13,7 +13,7 @@ export const mockDateUserData = {
           date: '2022-11-26T01:44:39.114Z', // ISO date string
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-27T01:44:39.114Z', // ISO date string
         },
       ],
       meal: [
@@ -22,7 +22,7 @@ export const mockDateUserData = {
           meal: MealType.lunch,
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-27T01:44:39.114Z', // ISO date string
           meal: MealType.lunch,
         },
       ],
@@ -36,7 +36,17 @@ export const mockDateUserData = {
           date: '2022-11-26T01:44:39.114Z', // ISO date string
         },
         {
+          date: '2022-11-29T01:44:39.114Z', // ISO date string
+        },
+      ],
+      meals: [
+        {
           date: '2022-11-26T01:44:39.114Z', // ISO date string
+          meal: MealType.lunch,
+        },
+        {
+          date: '2022-11-29T01:44:39.114Z', // ISO date string
+          meal: MealType.lunch,
         },
       ],
     },
@@ -46,19 +56,19 @@ export const mockDateUserData = {
     votings: {
       date: [
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-30T01:44:39.114Z', // ISO date string
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-25T01:44:39.114Z', // ISO date string
         },
       ],
       meal: [
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-30T01:44:39.114Z', // ISO date string
           meal: MealType.lunch,
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-25T01:44:39.114Z', // ISO date string
           meal: MealType.lunch,
         },
       ],
@@ -75,7 +85,7 @@ export const mockMealUserData = {
           date: '2022-11-26T01:44:39.114Z', // ISO date string
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-27T01:44:39.114Z', // ISO date string
         },
       ],
       meal: [
@@ -85,6 +95,10 @@ export const mockMealUserData = {
         },
         {
           date: '2022-11-26T01:44:39.114Z', // ISO date string
+          meal: 'dinner', // 'lunch' | 'dinner'
+        },
+        {
+          date: '2022-11-27T01:44:39.114Z', // ISO date string
           meal: 'lunch', // 'lunch' | 'dinner'
         },
       ],
@@ -95,19 +109,19 @@ export const mockMealUserData = {
     votings: {
       date: [
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-27T01:44:39.114Z', // ISO date string
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-28T01:44:39.114Z', // ISO date string
         },
       ],
       meal: [
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-27T01:44:39.114Z', // ISO date string
           meal: 'lunch', // 'lunch' | 'dinner'
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-28T01:44:39.114Z', // ISO date string
           meal: 'lunch', // 'lunch' | 'dinner'
         },
       ],
@@ -118,20 +132,20 @@ export const mockMealUserData = {
     votings: {
       date: [
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-28T01:44:39.114Z', // ISO date string
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-30T01:44:39.114Z', // ISO date string
         },
       ],
       meal: [
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
+          date: '2022-11-28T01:44:39.114Z', // ISO date string
           meal: 'lunch', // 'lunch' | 'dinner'
         },
         {
-          date: '2022-11-26T01:44:39.114Z', // ISO date string
-          meal: 'lunch', // 'lunch' | 'dinner'
+          date: '2022-11-30T01:44:39.114Z', // ISO date string
+          meal: 'dinner', // 'lunch' | 'dinner'
         },
       ],
     },
