@@ -14,3 +14,11 @@ export interface CreateMeetingResponse extends CreateMeetingRequest {
   id: string;
   status: MeetingStatus;
 }
+
+export interface GetMeetingResponse {
+  id: string;
+  name: string;
+  dates: ISODateTime[];
+  type: MeetingType;
+  deadline: ISODateTime;
+}

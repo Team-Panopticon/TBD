@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { ValidCreateMeetingState } from '../stores/createMeeting';
 import { api } from './instance';
-import { CreateMeetingRequest, CreateMeetingResponse } from './types';
+import { CreateMeetingRequest, CreateMeetingResponse, GetMeetingResponse } from './types';
 
 const meetingStateToRequest = (
   state: ValidCreateMeetingState,
@@ -23,6 +23,12 @@ export const createMeeting = async (meeting: ValidCreateMeetingState, setPasswor
     '/meetings',
     meetingRequest,
   );
+
+  return response.data;
+};
+
+export const getMeeting = async (meetingId: string) => {
+  const response: AxiosResponse<GetMeetingResponse> = await api.get(`/meetings/${meetingId}`);
 
   return response.data;
 };
