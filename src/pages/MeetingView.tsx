@@ -35,7 +35,7 @@ export function MeetingView() {
       const meetingData = await getMeeting(MEETING_ID);
       setMeeting(meetingData);
     })();
-  }, [setUserMap]);
+  }, [setUserMap, isViewMode]);
 
   if (!meeting || !voteTableDataList) {
     return null;
