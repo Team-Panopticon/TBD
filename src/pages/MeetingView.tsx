@@ -1,4 +1,6 @@
 import { Button } from '@mui/material';
+import { Dayjs } from 'dayjs';
+import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -8,7 +10,8 @@ import { getUsers, UserMap } from '../apis/users';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
-import { VoteTable } from '../components/VoteTable/VoteTable';
+import { VoteTable, Voting } from '../components/VoteTable/VoteTable';
+import { MeetingType } from '../constants/meeting';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
 
@@ -38,6 +41,30 @@ export function MeetingView() {
     return null;
   }
 
+  // 필요한 정보: 유저 ID, 새로 투표하는 날짜, 점심/저녁 여부, 이미 투표되어있는지
+  const onClick = (clickedDate: Dayjs, clicked: boolean, target: Voting) => {
+    /**
+     * 테스트용 코드
+     * key: user1
+     * name: 재빠른 표범
+     */
+    const userId = 'user1';
+    const user = userMap[userId];
+    const meetingType = meeting.type;
+
+    const currentVotings = user.votings[meetingType];
+    const isClickedDateAlreadyVoted = currentVotings.some((voting) =>
+      voting.date.isSame(clickedDate, 'day'),
+    );
+
+    if (!isClickedDateAlreadyVoted) {
+      const newUserMap = produce(userMap, (draft) => {
+        draft[userId].votings[MeetingType.date].push({ date: clickedDate });
+      });
+      setUserMap(newUserMap);
+    }
+  };
+
   return (
     <Page>
       <Header>
@@ -49,7 +76,7 @@ export function MeetingView() {
         <div>toast message</div>
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
-        <VoteTable data={voteTableDataList} headers={['투표 현황']} />
+        <VoteTable onClick={onClick} rowData={voteTableDataList} headers={['투표 현황']} />
       </Contents>
       <Footer>
         {isViewMode ? (

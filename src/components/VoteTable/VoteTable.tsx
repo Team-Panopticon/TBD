@@ -13,7 +13,7 @@ import {
   Wrapper,
 } from './styled';
 
-interface Voting extends VoteData {
+export interface Voting extends VoteData {
   total: number;
   current: number;
 }
@@ -23,7 +23,7 @@ export interface VoteTableData {
   votings: [Voting, Voting] | [Voting]; // [meal, meal], [date]
 }
 
-type onClickHandler = (checked: boolean, target: Voting) => void;
+type onClickHandler = (date: Dayjs, checked: boolean, target: Voting) => void;
 
 interface Props {
   className?: string;
@@ -75,7 +75,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             key={`vote-content-${idx}`}
             focus={focused}
             checked={checked}
-            onClick={() => onClick?.(!checked, vote)}
+            onClick={() => onClick?.(date, !checked, vote)}
           >{`${current}/${total} (${((current / total) * 100).toFixed(0)}%)`}</ContentBox>
         );
       })}
