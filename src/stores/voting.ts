@@ -23,12 +23,12 @@ type SelectorMapper<Type> = {
 };
 
 interface DateVoting {
-  date: ISODateTime;
+  date: Dayjs;
 }
 
 interface MealVoting {
   date: ISODateTime;
-  meal: MealType;
+  meal: Dayjs;
 }
 
 interface UserVoting {
@@ -48,7 +48,7 @@ export const getVotingCountByDay = (day: Dayjs, userVotings: UserVoting[]) => {
   }, 0);
 };
 
-export const userMapState = atom<GetUsersResponse>({
+export const userMapState = atom<UserMap>({
   key: 'userMap',
   default: {},
 });

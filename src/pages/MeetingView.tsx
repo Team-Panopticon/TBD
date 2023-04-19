@@ -1,10 +1,10 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getUsers, GetUsersResponse } from '../apis/users';
+import { getUsers, UserMap } from '../apis/users';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
@@ -18,7 +18,7 @@ export function MeetingView() {
 
   const MEETING_ID = '1';
 
-  const setUserMap = useSetRecoilState<GetUsersResponse>(userMapState);
+  const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
 
   const userList = useRecoilValue(userListState);
