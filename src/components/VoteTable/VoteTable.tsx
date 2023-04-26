@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
 
-import { VoteData } from '../UserList/UserList';
+import { UserListVoteData } from '../UserList/UserList';
 import {
   ContentBox,
   ContentWrapper,
@@ -13,22 +13,22 @@ import {
   Wrapper,
 } from './styled';
 
-export interface Voting extends VoteData {
+export interface VoteTableVoting extends UserListVoteData {
   total: number;
   current: number;
 }
 
-export interface VoteTableData {
+export interface VoteTableRowData {
   date: Dayjs; // 현재 투표 가능한 날짜
-  votings: [Voting, Voting] | [Voting]; // [meal, meal], [date]
+  votings: [VoteTableVoting, VoteTableVoting] | [VoteTableVoting]; // [meal, meal], [date]
 }
 
-type onClickHandler = (date: Dayjs, checked: boolean, target: Voting) => void;
+type onClickHandler = (date: Dayjs, checked: boolean, target: VoteTableVoting) => void;
 
 interface Props {
   className?: string;
   style?: CSSProperties;
-  data: VoteTableData[];
+  data: VoteTableRowData[];
   onClick?: onClickHandler;
 
   headers: ReactNode[];
@@ -56,7 +56,7 @@ export const VoteTable: React.FC<Props> = (props) => {
 };
 
 interface VoteTableContentProps {
-  item: VoteTableData;
+  item: VoteTableRowData;
   onClick?: onClickHandler;
 }
 

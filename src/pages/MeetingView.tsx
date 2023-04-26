@@ -10,7 +10,7 @@ import { getUsers, UserMap } from '../apis/users';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
-import { VoteTable, Voting } from '../components/VoteTable/VoteTable';
+import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
@@ -42,7 +42,7 @@ export function MeetingView() {
   }
 
   // 필요한 정보: 유저 ID, 새로 투표하는 날짜, 점심/저녁 여부, 이미 투표되어있는지
-  const onClick = (clickedDate: Dayjs, clicked: boolean, target: Voting) => {
+  const onClick = (clickedDate: Dayjs, clicked: boolean, target: VoteTableVoting) => {
     /**
      * 테스트용 코드
      * key: user1
@@ -76,7 +76,7 @@ export function MeetingView() {
         <div>toast message</div>
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
-        <VoteTable onClick={onClick} rowData={voteTableDataList} headers={['투표 현황']} />
+        <VoteTable onClick={onClick} data={voteTableDataList} headers={['투표 현황']} />
       </Contents>
       <Footer>
         {isViewMode ? (
