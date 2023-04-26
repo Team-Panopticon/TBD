@@ -44,11 +44,19 @@ export function MeetingView() {
   // 필요한 정보: 유저 ID, 새로 투표하는 날짜, 점심/저녁 여부, 이미 투표되어있는지
   const onClick = (clickedDate: Dayjs, clicked: boolean, target: VoteTableVoting) => {
     /**
-     * 테스트용 코드
-     * key: user1
-     * name: 재빠른 표범
+     * 투표모드일 때 currentUser가
+     * 1. 사용자를 선택했으면 존재한다.
+     * 2. 사용자를 선택하지 않았으면 존재하지 않는다.(신규 유저)
+     *
+     * 신규 유저를 어떤 상태에다가 저장할꺼냐.....
+     * 1. 사용자의 투표 현황을 따로 상태에 저장하고, 투표를 결정할 떄 userId 받고 userMap에 적용한다
+     *    userMap에 데이터를 업데이트하기로 결정했다.....
+     * 2. 신규 유저 id를 강제로 만들어서 map에다가 집어넣는다
      */
-    const userId = 'user1';
+    const userId = String(currentUser?.id);
+    if (userId) {
+      return;
+    }
     const user = userMap[userId];
     const meetingType = meeting.type;
 

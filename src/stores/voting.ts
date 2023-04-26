@@ -21,16 +21,16 @@ type SelectorMapper<Type> = {
   [Property in keyof Type]: Type[Property];
 };
 
-interface DateVoting {
+export interface DateVoting {
   date: Dayjs;
 }
 
-interface MealVoting {
+export interface MealVoting {
   date: ISODateTime;
   meal: Dayjs;
 }
 
-interface UserVoting {
+export interface UserVoting {
   date: DateVoting[];
   meals?: MealVoting[];
 }
