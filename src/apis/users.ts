@@ -5,7 +5,7 @@ import { MealType } from '../constants/meeting';
 import { api } from './instance';
 
 interface GetUsersResponse {
-  [username: string]: {
+  [userId: string]: {
     name: string;
     votings: {
       date: {
@@ -21,18 +21,20 @@ interface GetUsersResponse {
 }
 
 export interface UserMap {
-  [username: string]: {
-    name: string;
-    votings: {
-      date: {
-        date: Dayjs;
-        meal?: MealType;
-      }[];
-      meal: {
-        date: Dayjs;
-        meal?: MealType;
-      }[];
-    };
+  [userId: string]: User;
+}
+
+export interface User {
+  name: string;
+  votings: {
+    date: {
+      date: Dayjs;
+      meal?: MealType;
+    }[];
+    meal: {
+      date: Dayjs;
+      meal?: MealType;
+    }[];
   };
 }
 
