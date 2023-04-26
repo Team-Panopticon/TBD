@@ -13,7 +13,7 @@ import {
   Wrapper,
 } from './styled';
 
-interface Voting extends VoteData {
+export interface Voting extends VoteData {
   total: number;
   current: number;
 }
