@@ -8,7 +8,7 @@ import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { currentUserState } from '../stores/currentUser';
-import { userMapState, voteTableDataListState } from '../stores/voting';
+import { userMapState } from '../stores/voting';
 
 export function MeetingView() {
   const currentUser = useRecoilValue(currentUserState);
@@ -19,9 +19,8 @@ export function MeetingView() {
   const setUserMap = useSetRecoilState<GetUsersResponse>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
 
-  const voteTableDataList = useRecoilValue(voteTableDataListState(meeting));
-
-  const { handleClickUserList, handleClickVoteTable, userList } = useMeetingView();
+  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
+    useMeetingView(meeting);
 
   useEffect(() => {
     (async () => {
@@ -42,7 +41,6 @@ export function MeetingView() {
       <h1>모임 이름</h1>
       <div>toast message</div>
       <UserList users={userList} onClick={handleClickUserList} />
-      {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
       <VoteTable data={voteTableDataList} onClick={handleClickVoteTable} headers={['투표 현황']} />
       {isViewMode ? <div>다시 투표하러 가기</div> : <div>다음에하기 + 투표하기</div>}
     </div>

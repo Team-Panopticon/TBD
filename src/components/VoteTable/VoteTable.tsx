@@ -18,12 +18,14 @@ export interface Voting extends VoteData {
   current: number;
 }
 
+export type Votings = [Voting, Voting] | [Voting];
+
 export interface VoteTableData {
   date: Dayjs; // 현재 투표 가능한 날짜
-  votings: [Voting, Voting] | [Voting]; // [meal, meal], [date]
+  votings: Votings; // [meal, meal], [date]
 }
 
-type onClickHandler = (checked: boolean, target: Voting) => void;
+type onClickHandler = (checked: boolean, target: VoteTableData) => void;
 
 interface Props {
   className?: string;
@@ -75,7 +77,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             key={`vote-content-${idx}`}
             focus={focused}
             checked={checked}
-            onClick={() => onClick?.(!checked, vote)}
+            onClick={() => onClick?.(!checked, item)}
           >{`${current}/${total} (${((current / total) * 100).toFixed(0)}%)`}</ContentBox>
         );
       })}

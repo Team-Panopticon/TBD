@@ -3,19 +3,21 @@ import { AxiosResponse } from 'axios';
 import { MealType } from '../constants/meeting';
 import { api } from './instance';
 
+export interface Votings {
+  date: {
+    date: string;
+    meal?: MealType;
+  }[];
+  meal: {
+    date: string;
+    meal?: MealType;
+  }[];
+}
+
 export interface GetUsersResponse {
   [username: string]: {
     name: string;
-    votings: {
-      date: {
-        date: string;
-        meal?: MealType;
-      }[];
-      meal: {
-        date: string;
-        meal?: MealType;
-      }[];
-    };
+    votings: Votings;
   };
 }
 
