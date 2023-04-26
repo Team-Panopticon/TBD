@@ -22,6 +22,10 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   }, [userListStateValue, voteTableDataListValue, meeting]);
 
   const handleClickUserList = (checked: boolean, target: UserListData) => {
+    setvoteTableDataList((prev) => {
+      return resolveVoteTableDataList(prev);
+    });
+
     setUserList((prev) => {
       const { username } = target;
       const newUserList = resolveUserList(prev);
@@ -40,6 +44,10 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   };
 
   const handleClickVoteTable = (checked: boolean, target: VoteTableData) => {
+    setUserList((prev) => {
+      return resolveUserList(prev);
+    });
+
     setvoteTableDataList((prev) => {
       const { date } = target;
       const newVoteTableDataList = resolveVoteTableDataList(prev);
