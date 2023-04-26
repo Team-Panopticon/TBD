@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { produce } from 'immer';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -10,7 +10,7 @@ import { getUsers, UserMap } from '../apis/users';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
-import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
+import { SlotClickHandlerProps, VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
@@ -42,7 +42,7 @@ export function MeetingView() {
   }
 
   // 필요한 정보: 유저 ID, 새로 투표하는 날짜, 점심/저녁 여부, 이미 투표되어있는지
-  const onClick = (clickedDate: Dayjs, clicked: boolean, target: VoteTableVoting) => {
+  const onSlotClick = ({ date: clickedDate, mealType }: SlotClickHandlerProps) => {
     /**
      * 투표모드일 때 currentUser가
      * 1. 사용자를 선택했으면 존재한다.
@@ -53,8 +53,8 @@ export function MeetingView() {
      *    userMap에 데이터를 업데이트하기로 결정했다.....
      * 2. 신규 유저 id를 강제로 만들어서 map에다가 집어넣는다
      */
-    const userId = String(currentUser?.id);
-    if (userId) {
+    const userId = currentUser?.id;
+    if (!userId) {
       return;
     }
     const user = userMap[userId];
@@ -84,7 +84,13 @@ export function MeetingView() {
         <div>toast message</div>
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
-        <VoteTable onClick={onClick} data={voteTableDataList} headers={['투표 현황']} />
+        <VoteTable
+          dates={meeting.dates.map(dayjs)}
+          meetingType={meeting.type}
+          userMap={userMap}
+          currentUserId={currentUser?.id}
+          onSlotClick={onSlotClick}
+        />
       </Contents>
       <Footer>
         {isViewMode ? (
