@@ -1,4 +1,3 @@
-import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
@@ -23,13 +22,14 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
 
   const handleClickUserList = (checked: boolean, target: UserListData) => {
     setvoteTableDataList((prev) => {
+      // TODO: 현재 targetUser에 속하는 투표들을 checked
       return resolveVoteTableDataList(prev);
     });
 
     setUserList((prev) => {
       const { username } = target;
       const newUserList = resolveUserList(prev);
-      const user = findUserByName(newUserList, username);
+      const user = newUserList.find((user) => user.username === username);
 
       if (user) {
         return changeUser(newUserList, {
@@ -45,13 +45,14 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
 
   const handleClickVoteTable = (checked: boolean, target: VoteTableData) => {
     setUserList((prev) => {
+      // TODO: target table데이터에 속하는 유저들 다 찾아서 checked
       return resolveUserList(prev);
     });
 
     setvoteTableDataList((prev) => {
-      const { date } = target;
+      const { date: targetDate } = target;
       const newVoteTableDataList = resolveVoteTableDataList(prev);
-      const voteTableData = findVoteTableDataByDate(newVoteTableDataList, date);
+      const voteTableData = newVoteTableDataList.find(({ date }) => date.isSame(targetDate));
 
       if (voteTableData) {
         const { votings } = voteTableData;
@@ -78,14 +79,6 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
     userList,
     voteTableDataList,
   };
-};
-
-const findUserByName = (userList: UserListData[], name: string) => {
-  return userList.find((user) => user.username === name);
-};
-
-const findVoteTableDataByDate = (voteTableDataList: VoteTableData[], date: Dayjs) => {
-  return voteTableDataList.find((voteTableData) => voteTableData.date.isSame(date));
 };
 
 const changeUser = (userList: UserListData[], newUser: UserListData) => {
