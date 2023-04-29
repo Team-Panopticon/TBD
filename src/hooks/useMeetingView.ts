@@ -81,28 +81,15 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   };
 };
 
-const changeUser = (userList: UserListData[], newUser: UserListData) => {
-  return userList.map((user) => {
-    if (user.username === newUser.username) {
-      return newUser;
-    }
-
-    return user;
-  });
+const changeData = <T>(dataList: T[], newData: T, predicate: (data: T) => boolean) => {
+  return dataList.map((data) => (predicate(data) ? newData : data));
 };
 
-const changeVoteTableData = (
-  voteTableDatList: VoteTableData[],
-  newVoteTableData: VoteTableData,
-) => {
-  return voteTableDatList.map((voteTableData) => {
-    if (newVoteTableData.date.isSame(voteTableData.date)) {
-      return newVoteTableData;
-    }
+const changeUser = (userList: UserListData[], newUser: UserListData) =>
+  changeData(userList, newUser, (user) => user.username === newUser.username);
 
-    return voteTableData;
-  });
-};
+const changeVoteTableData = (voteTableDatList: VoteTableData[], newVoteTableData: VoteTableData) =>
+  changeData(voteTableDatList, newVoteTableData, ({ date }) => date.isSame(newVoteTableData.date));
 
 const resolveUserList = (userList: UserListData[]) => {
   return userList.map((user) => ({
