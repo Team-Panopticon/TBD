@@ -69,8 +69,27 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   };
 
   const handleClickVoteTable = (checked: boolean, target: VoteTableData) => {
+    const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
+
+    const usernames = Object.values(userMap)
+      .filter((user) => user.votings[meetingType].some(({ date }) => target.date.isSame(date)))
+      .map((user) => {
+        return user.name;
+      });
+
     setUserList((prev) => {
-      // TODO: target table데이터에 속하는 유저들 다 찾아서 checked
+      if (checked) {
+        return resolveUserList(prev).map((user) => {
+          const isVotedUser = usernames.some((username) => username === user.username);
+
+          if (isVotedUser) {
+            return checkUser(user);
+          }
+
+          return user;
+        });
+      }
+
       return resolveUserList(prev);
     });
 
@@ -145,4 +164,12 @@ const checkVoteTableData = (voteTableData: VoteTableData) => {
     ...voteTableData,
     votings: newVotings,
   } as VoteTableData;
+};
+
+const checkUser = (user: UserListData) => {
+  return {
+    ...user,
+    checked: true,
+    focus: false,
+  };
 };
