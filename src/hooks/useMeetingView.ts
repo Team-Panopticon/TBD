@@ -1,28 +1,53 @@
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableData, Votings } from '../components/VoteTable/VoteTable';
-import { userListState, voteTableDataListState } from '../stores/voting';
+import { MeetingType } from '../constants/meeting';
+import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
 
 export const useMeetingView = (meeting?: GetMeetingResponse) => {
+  const userMap = useRecoilValue(userMapState);
   const userListStateValue = useRecoilValue(userListState);
   const voteTableDataListValue = useRecoilValue(voteTableDataListState(meeting));
 
   const [userList, setUserList] = useState<UserListData[]>([]);
-  const [voteTableDataList, setvoteTableDataList] = useState<VoteTableData[]>([]);
+  const [voteTableDataList, setVoteTableDataList] = useState<VoteTableData[]>([]);
 
   useEffect(() => {
     setUserList(userListStateValue);
     if (voteTableDataListValue) {
-      setvoteTableDataList(voteTableDataListValue);
+      setVoteTableDataList(voteTableDataListValue);
     }
   }, [userListStateValue, voteTableDataListValue, meeting]);
 
   const handleClickUserList = (checked: boolean, target: UserListData) => {
-    setvoteTableDataList((prev) => {
-      // TODO: 현재 targetUser에 속하는 투표들을 checked
+    const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
+
+    const user = Object.entries(userMap).find(([, value]) => value.name === target.username);
+
+    if (!user) {
+      return;
+    }
+
+    const { votings } = userMap[user[0]];
+
+    const votedDates = votings[meetingType].map((voting) => dayjs(voting.date));
+
+    setVoteTableDataList((prev) => {
+      if (checked) {
+        return resolveVoteTableDataList(prev).map((voteTableData) => {
+          const isVoted = votedDates.some((votedDate) => votedDate.isSame(voteTableData.date));
+          if (isVoted) {
+            return checkVoteTableData(voteTableData);
+          }
+
+          return voteTableData;
+        });
+      }
+
       return resolveVoteTableDataList(prev);
     });
 
@@ -49,7 +74,7 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
       return resolveUserList(prev);
     });
 
-    setvoteTableDataList((prev) => {
+    setVoteTableDataList((prev) => {
       const { date: targetDate } = target;
       const newVoteTableDataList = resolveVoteTableDataList(prev);
       const voteTableData = newVoteTableDataList.find(({ date }) => date.isSame(targetDate));
@@ -110,4 +135,14 @@ const resolveVoteTableDataList = (voteTableDataList: VoteTableData[]) => {
       votings: newVotings,
     };
   }) as VoteTableData[];
+};
+
+const checkVoteTableData = (voteTableData: VoteTableData) => {
+  const { votings } = voteTableData;
+  const newVotings = votings.map((voting) => ({ ...voting, checked: true, focused: false }));
+
+  return {
+    ...voteTableData,
+    votings: newVotings,
+  } as VoteTableData;
 };
