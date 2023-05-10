@@ -1,9 +1,10 @@
 import { AxiosResponse } from 'axios';
+import dayjs, { Dayjs } from 'dayjs';
 
 import { MealType } from '../constants/meeting';
 import { api } from './instance';
 
-export interface GetUsersResponse {
+interface GetUsersResponse {
   [username: string]: {
     name: string;
     votings: {
@@ -19,8 +20,37 @@ export interface GetUsersResponse {
   };
 }
 
+export interface UserMap {
+  [username: string]: {
+    name: string;
+    votings: {
+      date: {
+        date: Dayjs;
+        meal?: MealType;
+      }[];
+      meal: {
+        date: Dayjs;
+        meal?: MealType;
+      }[];
+    };
+  };
+}
+
+const usersResponseToState = (response: GetUsersResponse): UserMap => {
+  const responseCopy = structuredClone(response) as unknown as UserMap;
+
+  const users = Object.values(responseCopy);
+  users.forEach((user) => {
+    Object.values(user.votings.date).forEach((date) => (date.date = dayjs(date.date)));
+  });
+
+  return responseCopy;
+};
+
 export const getUsers = async (meetingId: number) => {
   const response: AxiosResponse<GetUsersResponse> = await api.get(`/meetings/${meetingId}/users`);
 
-  return response.data;
+  const userMap = usersResponseToState(response.data);
+
+  return userMap;
 };
