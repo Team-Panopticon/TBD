@@ -1,6 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
 
+import { VotingSlot } from '../../apis/users';
 import { UserListVoteData } from '../UserList/UserList';
 import {
   ContentBox,
@@ -23,14 +24,18 @@ export interface VoteTableRowData {
   votings: [VoteTableVoting, VoteTableVoting] | [VoteTableVoting]; // [meal, meal], [date]
 }
 
-type onClickHandler = (date: Dayjs, checked: boolean, target: VoteTableVoting) => void;
+type onClickHandler = (
+  date: Dayjs,
+  checked: boolean,
+  target: VoteTableVoting,
+  slot: VotingSlot,
+) => void;
 
 interface Props {
   className?: string;
   style?: CSSProperties;
   data: VoteTableRowData[];
   onClick?: onClickHandler;
-
   headers: ReactNode[];
 }
 
@@ -75,7 +80,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             key={`vote-content-${idx}`}
             focus={focused}
             checked={checked}
-            onClick={() => onClick?.(date, !checked, vote)}
+            onClick={() => onClick?.(date, !checked, vote, { date })}
           >{`${current}/${total} (${((current / total) * 100).toFixed(0)}%)`}</ContentBox>
         );
       })}

@@ -21,19 +21,22 @@ interface GetUsersResponse {
 }
 
 export interface UserMap {
-  [username: string]: {
-    name: string;
-    votings: {
-      date: {
-        date: Dayjs;
-        meal?: MealType;
-      }[];
-      meal: {
-        date: Dayjs;
-        meal?: MealType;
-      }[];
-    };
-  };
+  [userId: string]: User;
+}
+
+export interface User {
+  name: string;
+  votings: UserVotings;
+}
+
+export interface UserVotings {
+  date: VotingSlot[];
+  meal: VotingSlot[];
+}
+
+export interface VotingSlot {
+  date: Dayjs;
+  meal?: MealType;
 }
 
 const usersResponseToState = (response: GetUsersResponse): UserMap => {
