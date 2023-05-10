@@ -2,10 +2,9 @@ import dayjs, { Dayjs } from 'dayjs';
 import { atom, selector, selectorFamily } from 'recoil';
 
 import { GetMeetingResponse, ISODateTime } from '../apis/types';
-import { GetUsersResponse } from '../apis/users';
+import { UserMap } from '../apis/users';
 import { UserListData } from '../components/UserList/UserList';
-import { VoteTableData } from '../components/VoteTable/VoteTable';
-import { MealType } from '../constants/meeting';
+import { VoteTableRowData } from '../components/VoteTable/VoteTable';
 
 // 원본 데이터 있고, 원본데이터를 정제
 // 프론트쓸때 -> 정제해서 보내주고
@@ -23,12 +22,12 @@ type SelectorMapper<Type> = {
 };
 
 interface DateVoting {
-  date: ISODateTime;
+  date: Dayjs;
 }
 
 interface MealVoting {
   date: ISODateTime;
-  meal: MealType;
+  meal: Dayjs;
 }
 
 interface UserVoting {
@@ -48,13 +47,13 @@ export const getVotingCountByDay = (day: Dayjs, userVotings: UserVoting[]) => {
   }, 0);
 };
 
-export const userMapState = atom<GetUsersResponse>({
+export const userMapState = atom<UserMap>({
   key: 'userMap',
   default: {},
 });
 
 export const voteTableDataListState = selectorFamily<
-  VoteTableData[] | undefined,
+  VoteTableRowData[] | undefined,
   SelectorMapper<GetMeetingResponse | undefined>
 >({
   key: 'voteTableDataList',
@@ -64,7 +63,7 @@ export const voteTableDataListState = selectorFamily<
       const userVotings = get(userVotingsState);
       const total = userVotings.length;
 
-      return meeting?.dates.map(dayjs).map<VoteTableData>((day) => ({
+      return meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
         date: day,
         votings: [
           {

@@ -1,14 +1,17 @@
+import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getUsers, GetUsersResponse } from '../apis/users';
+import { getUsers, UserMap } from '../apis/users';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { useMeetingView } from '../hooks/useMeetingView';
+import { useMeetingViewVoteMode } from '../hooks/useMeetingViewVoteMode';
 import { currentUserState } from '../stores/currentUser';
-import { userMapState } from '../stores/voting';
+import { userListState, userMapState } from '../stores/voting';
 
 export function MeetingView() {
   const currentUser = useRecoilValue(currentUserState);
@@ -16,11 +19,15 @@ export function MeetingView() {
 
   const MEETING_ID = '1';
 
-  const setUserMap = useSetRecoilState<GetUsersResponse>(userMapState);
+  const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
 
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingView(meeting);
+  // const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
+  //   useMeetingView(meeting);
+
+  const userList = useRecoilValue(userListState);
+
+  const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
 
   useEffect(() => {
     (async () => {
@@ -30,19 +37,62 @@ export function MeetingView() {
       const meetingData = await getMeeting(MEETING_ID);
       setMeeting(meetingData);
     })();
-  }, [setUserMap]);
+  }, [setUserMap, isViewMode]);
 
   if (!meeting || !voteTableDataList) {
     return null;
   }
 
   return (
-    <div>
-      <h1>모임 이름</h1>
-      <div>toast message</div>
-      <UserList users={userList} onClick={handleClickUserList} />
-      <VoteTable data={voteTableDataList} onClick={handleClickVoteTable} headers={['투표 현황']} />
-      {isViewMode ? <div>다시 투표하러 가기</div> : <div>다음에하기 + 투표하기</div>}
-    </div>
+    <Page>
+      <Header>
+        <HeaderContainer>
+          <h1>모임 이름</h1>
+        </HeaderContainer>
+      </Header>
+      <Contents>
+        <div>toast message</div>
+
+        <UserList users={userList} />
+        {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
+        <VoteTable
+          onClick={handleClickVoteTableSlot}
+          data={voteTableDataList}
+          headers={['투표 현황']}
+        />
+      </Contents>
+      <Footer>
+        {isViewMode ? (
+          <div>다시 투표하러 가기</div>
+        ) : (
+          <FullHeightButtonGroup
+            fullWidth
+            disableElevation
+            variant="contained"
+            aria-label="Disabled elevation buttons"
+          >
+            <Button
+              color="secondary"
+              onClick={() => {
+                /**
+                 * @TODO viewmode로 변경
+                 */
+              }}
+            >
+              다음에하기
+            </Button>
+            <Button
+              onClick={() => {
+                /**
+                 * @TODO 투표 api
+                 */
+              }}
+            >
+              투표하기
+            </Button>
+          </FullHeightButtonGroup>
+        )}
+      </Footer>
+    </Page>
   );
 }

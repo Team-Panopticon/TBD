@@ -3,12 +3,14 @@ import React, { CSSProperties } from 'react';
 import { Chip } from '../Chip/Chip';
 import { UserListContainer } from './styled';
 
-export interface VoteData {
+export interface UserListVoteData {
+  /** 투표 여부 */
   checked: boolean;
+  /** highlight를 위해 마지막에 유저가 클릭을 했는지 */
   focused: boolean;
 }
 
-export interface UserListData extends VoteData {
+export interface UserListData extends UserListVoteData {
   username: string;
 }
 

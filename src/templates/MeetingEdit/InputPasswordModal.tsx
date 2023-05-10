@@ -1,9 +1,9 @@
 import { Button, Modal, Typography } from '@mui/material';
 
 import { MaskingInput } from '../../components/MaskingInput';
+import { FullHeightButtonGroup } from '../../components/styled';
 import { validatePassword } from '../../stores/createMeeting';
 import {
-  FullHeightButtonGroup,
   MaskingInputContainer,
   PasswordContainer,
   PasswordContent,
@@ -68,8 +68,7 @@ export function InputPasswordModal({ show, password, onChange, onConfirm, onCanc
                 variant="contained"
                 aria-label="Disabled elevation buttons"
               >
-                {/* ButtonGroup 컴포넌트의 borderRight 기본 스타일을 diable 하기 위하여 스타일 추가 */}
-                <Button color="secondary" onClick={onCancel} style={{ borderRight: 0 }}>
+                <Button color="secondary" onClick={onCancel}>
                   취소하기
                 </Button>
                 <Button onClick={handleSubmit} disabled={!isPasswordValid}>

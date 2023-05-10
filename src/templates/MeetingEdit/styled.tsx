@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, LinearProgress, ToggleButtonGroup } from '@mui/material';
+import { Button, LinearProgress, ToggleButtonGroup } from '@mui/material';
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
@@ -27,16 +27,6 @@ export const customButtonStyle: React.CSSProperties = {
 export const BorderLinearProgress = styled(LinearProgress)`
   height: 8;
   border-radius: 4;
-`;
-
-export const FullHeightButtonGroup = styled(ButtonGroup)`
-  height: 100%;
-
-  & .MuiButton-root {
-    height: 100%;
-    border-radius: 0;
-    font-weight: 500;
-  }
 `;
 
 // StyledComponent for MeetingEditStepper

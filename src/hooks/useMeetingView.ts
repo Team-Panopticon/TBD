@@ -4,7 +4,7 @@ import { useRecoilValue } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
 import { UserListData } from '../components/UserList/UserList';
-import { VoteTableData, Votings } from '../components/VoteTable/VoteTable';
+import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
 
@@ -14,7 +14,7 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   const voteTableDataListValue = useRecoilValue(voteTableDataListState(meeting));
 
   const [userList, setUserList] = useState<UserListData[]>([]);
-  const [voteTableDataList, setVoteTableDataList] = useState<VoteTableData[]>([]);
+  const [voteTableDataList, setVoteTableDataList] = useState<VoteTableRowData[]>([]);
 
   useEffect(() => {
     setUserList(userListStateValue);
@@ -68,7 +68,7 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
     });
   };
 
-  const handleClickVoteTable = (checked: boolean, target: VoteTableData) => {
+  const handleClickVoteTable = (checked: boolean, target: VoteTableRowData) => {
     const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
 
     const usernames = Object.values(userMap)
@@ -105,7 +105,7 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
           ...voting,
           checked,
           focused: checked,
-        })) as Votings;
+        })) as [VoteTableVoting, VoteTableVoting] | [VoteTableVoting];
 
         return changeVoteTableData(newVoteTableDataList, {
           ...voteTableData,
@@ -132,7 +132,10 @@ const changeData = <T>(dataList: T[], newData: T, predicate: (data: T) => boolea
 const changeUser = (userList: UserListData[], newUser: UserListData) =>
   changeData(userList, newUser, (user) => user.username === newUser.username);
 
-const changeVoteTableData = (voteTableDatList: VoteTableData[], newVoteTableData: VoteTableData) =>
+const changeVoteTableData = (
+  voteTableDatList: VoteTableRowData[],
+  newVoteTableData: VoteTableRowData,
+) =>
   changeData(voteTableDatList, newVoteTableData, ({ date }) => date.isSame(newVoteTableData.date));
 
 const resolveUserList = (userList: UserListData[]) => {
@@ -143,7 +146,7 @@ const resolveUserList = (userList: UserListData[]) => {
   }));
 };
 
-const resolveVoteTableDataList = (voteTableDataList: VoteTableData[]) => {
+const resolveVoteTableDataList = (voteTableDataList: VoteTableRowData[]) => {
   return voteTableDataList.map((voteTableData) => {
     const { votings } = voteTableData;
 
@@ -153,17 +156,17 @@ const resolveVoteTableDataList = (voteTableDataList: VoteTableData[]) => {
       ...voteTableData,
       votings: newVotings,
     };
-  }) as VoteTableData[];
+  }) as VoteTableRowData[];
 };
 
-const checkVoteTableData = (voteTableData: VoteTableData) => {
+const checkVoteTableData = (voteTableData: VoteTableRowData) => {
   const { votings } = voteTableData;
   const newVotings = votings.map((voting) => ({ ...voting, checked: true, focused: false }));
 
   return {
     ...voteTableData,
     votings: newVotings,
-  } as VoteTableData;
+  } as VoteTableRowData;
 };
 
 const checkUser = (user: UserListData) => {
