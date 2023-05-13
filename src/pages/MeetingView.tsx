@@ -22,6 +22,9 @@ export function MeetingView() {
   const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
 
+  // const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
+  //   useMeetingView(meeting);
+
   const userList = useRecoilValue(userListState);
 
   const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
@@ -49,6 +52,7 @@ export function MeetingView() {
       </Header>
       <Contents>
         <div>toast message</div>
+
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable

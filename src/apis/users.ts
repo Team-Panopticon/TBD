@@ -4,19 +4,10 @@ import dayjs, { Dayjs } from 'dayjs';
 import { MealType } from '../constants/meeting';
 import { api } from './instance';
 
-interface GetUsersResponse {
+export interface GetUsersResponse {
   [username: string]: {
     name: string;
-    votings: {
-      date: {
-        date: string;
-        meal?: MealType;
-      }[];
-      meal: {
-        date: string;
-        meal?: MealType;
-      }[];
-    };
+    votings: UserVotings;
   };
 }
 
