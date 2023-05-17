@@ -28,6 +28,8 @@ export function MeetingVote() {
   const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const userList = useRecoilValue(userListState);
 
+  const navigate = useNavigate();
+
   const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
 
   useEffect(() => {
@@ -73,9 +75,7 @@ export function MeetingVote() {
           <Button
             color="secondary"
             onClick={() => {
-              /**
-               * @TODO viewmode로 변경
-               */
+              navigate(`/meetings/${meetingId}`);
             }}
           >
             다음에하기
