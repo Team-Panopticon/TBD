@@ -15,16 +15,10 @@ import { userListState, userMapState } from '../stores/voting';
 
 export function MeetingVote() {
   const currentUser = useRecoilValue(currentUserState);
-  const [isViewMode, setIsViewMode] = useState<boolean>(!!currentUser);
 
   const MEETING_ID = '1';
-
-  const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
-
-  // const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-  //   useMeetingView(meeting);
-
+  const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const userList = useRecoilValue(userListState);
 
   const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
@@ -37,7 +31,7 @@ export function MeetingVote() {
       const meetingData = await getMeeting(MEETING_ID);
       setMeeting(meetingData);
     })();
-  }, [setUserMap, isViewMode]);
+  }, [setUserMap]);
 
   if (!meeting || !voteTableDataList) {
     return null;
@@ -52,7 +46,6 @@ export function MeetingVote() {
       </Header>
       <Contents>
         <div>toast message</div>
-
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable
@@ -62,36 +55,32 @@ export function MeetingVote() {
         />
       </Contents>
       <Footer>
-        {isViewMode ? (
-          <div>다시 투표하러 가기</div>
-        ) : (
-          <FullHeightButtonGroup
-            fullWidth
-            disableElevation
-            variant="contained"
-            aria-label="Disabled elevation buttons"
+        <FullHeightButtonGroup
+          fullWidth
+          disableElevation
+          variant="contained"
+          aria-label="Disabled elevation buttons"
+        >
+          <Button
+            color="secondary"
+            onClick={() => {
+              /**
+               * @TODO viewmode로 변경
+               */
+            }}
           >
-            <Button
-              color="secondary"
-              onClick={() => {
-                /**
-                 * @TODO viewmode로 변경
-                 */
-              }}
-            >
-              다음에하기
-            </Button>
-            <Button
-              onClick={() => {
-                /**
-                 * @TODO 투표 api
-                 */
-              }}
-            >
-              투표하기
-            </Button>
-          </FullHeightButtonGroup>
-        )}
+            다음에하기
+          </Button>
+          <Button
+            onClick={() => {
+              /**
+               * @TODO 투표 api
+               */
+            }}
+          >
+            투표하기
+          </Button>
+        </FullHeightButtonGroup>
       </Footer>
     </Page>
   );
