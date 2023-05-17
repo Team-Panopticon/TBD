@@ -69,7 +69,14 @@ export function MeetingView() {
       </Contents>
       <Footer>
         {isViewMode ? (
-          <div>다시 투표하러 가기</div>
+          <FullHeightButtonGroup
+            fullWidth
+            disableElevation
+            variant="contained"
+            aria-label="Disabled elevation buttons"
+          >
+            <Button onClick={() => setIsViewMode(false)}>다시 투표하러 가기</Button>
+          </FullHeightButtonGroup>
         ) : (
           <FullHeightButtonGroup
             fullWidth
@@ -77,25 +84,10 @@ export function MeetingView() {
             variant="contained"
             aria-label="Disabled elevation buttons"
           >
-            <Button
-              color="secondary"
-              onClick={() => {
-                /**
-                 * @TODO viewmode로 변경
-                 */
-              }}
-            >
+            <Button color="secondary" onClick={() => setIsViewMode(true)}>
               다음에하기
             </Button>
-            <Button
-              onClick={() => {
-                /**
-                 * @TODO 투표 api
-                 */
-              }}
-            >
-              투표하기
-            </Button>
+            <Button onClick={() => setShowUsernameModal(true)}>투표하기</Button>
           </FullHeightButtonGroup>
         )}
       </Footer>
