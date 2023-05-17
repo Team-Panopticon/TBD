@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Alert, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
@@ -15,6 +15,7 @@ import { userListState, userMapState } from '../stores/voting';
 
 export function MeetingVote() {
   const currentUser = useRecoilValue(currentUserState);
+  const isNewUser = !currentUser;
 
   const MEETING_ID = '1';
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
@@ -41,11 +42,13 @@ export function MeetingVote() {
     <Page>
       <Header>
         <HeaderContainer>
-          <h1>모임 이름</h1>
+          <h1>{meeting.name}</h1>
         </HeaderContainer>
       </Header>
       <Contents>
-        <div>toast message</div>
+        {isNewUser && (
+          <Alert severity="warning">이미 투표한 적이 있으면 아이디를 눌러주세요.</Alert>
+        )}
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable
