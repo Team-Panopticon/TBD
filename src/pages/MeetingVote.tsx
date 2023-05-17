@@ -1,5 +1,6 @@
 import { Alert, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
@@ -13,11 +14,16 @@ import { useMeetingViewVoteMode } from '../hooks/useMeetingViewVoteMode';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, userMapState } from '../stores/voting';
 
+interface MeetingVoteRouteParams {
+  meetingId: string;
+}
+
 export function MeetingVote() {
+  const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
+
   const currentUser = useRecoilValue(currentUserState);
   const isNewUser = !currentUser;
 
-  const MEETING_ID = '1';
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
   const userList = useRecoilValue(userListState);
@@ -26,13 +32,13 @@ export function MeetingVote() {
 
   useEffect(() => {
     (async () => {
-      const data = await getUsers(1);
+      const data = await getUsers(meetingId);
       setUserMap(data);
 
-      const meetingData = await getMeeting(MEETING_ID);
+      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
-  }, [setUserMap]);
+  }, [meetingId, setUserMap]);
 
   if (!meeting || !voteTableDataList) {
     return null;

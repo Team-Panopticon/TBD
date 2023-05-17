@@ -31,7 +31,7 @@ export function MeetingView() {
 
   useEffect(() => {
     (async () => {
-      const data = await getUsers(1);
+      const data = await getUsers(MEETING_ID);
       setUserMap(data);
 
       const meetingData = await getMeeting(MEETING_ID);

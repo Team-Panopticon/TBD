@@ -41,7 +41,7 @@ const usersResponseToState = (response: GetUsersResponse): UserMap => {
   return responseCopy;
 };
 
-export const getUsers = async (meetingId: number) => {
+export const getUsers = async (meetingId: string) => {
   const response: AxiosResponse<GetUsersResponse> = await api.get(`/meetings/${meetingId}/users`);
 
   const userMap = usersResponseToState(response.data);
