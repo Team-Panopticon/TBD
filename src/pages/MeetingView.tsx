@@ -12,6 +12,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingViewVoteMode';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, userMapState } from '../stores/voting';
+import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
   const currentUser = useRecoilValue(currentUserState);
@@ -25,6 +26,15 @@ export function MeetingView() {
   const userList = useRecoilValue(userListState);
 
   const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
+
+  const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
+
+  const handlePasswordConfirm = (username: string) => {
+    /**
+     * @TODO
+     * 투표 반영 API
+     */
+  };
 
   useEffect(() => {
     (async () => {
@@ -89,6 +99,12 @@ export function MeetingView() {
           </FullHeightButtonGroup>
         )}
       </Footer>
+      <InputUsernameModal
+        show={showUsernameModal}
+        usernameList={userList.map((user) => user.username)}
+        onConfirm={handlePasswordConfirm}
+        onCancel={() => setShowUsernameModal(false)}
+      ></InputUsernameModal>
     </Page>
   );
 }
