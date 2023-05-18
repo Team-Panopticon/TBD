@@ -55,6 +55,6 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   };
 };
 
-const isSameSlot = (slot1: VotingSlot, slot2: VotingSlot) => {
+export const isSameSlot = (slot1: VotingSlot, slot2: VotingSlot) => {
   return slot1.date.isSame(slot2.date, 'day') && slot1.meal === slot2.meal;
 };
