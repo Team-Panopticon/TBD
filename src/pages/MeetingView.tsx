@@ -39,11 +39,10 @@ export function MeetingView() {
     <Page>
       <Header>
         <HeaderContainer>
-          <h1>모임 이름</h1>
+          <h1>{meeting.name}</h1>
         </HeaderContainer>
       </Header>
       <Contents>
-        <div>toast message</div>
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <UserList users={userList} onClick={handleClickUserList} />
         <VoteTable
