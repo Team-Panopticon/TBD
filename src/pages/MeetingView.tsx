@@ -1,5 +1,6 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
@@ -11,19 +12,30 @@ import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { userMapState } from '../stores/voting';
+import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
   const MEETING_ID = '1';
 
   const setUserMap = useSetRecoilState<UserMap>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
+  const navigate = useNavigate();
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
 
+  const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
+
+  const handlePasswordConfirm = (username: string) => {
+    /**
+     * @TODO
+     * 투표 반영 API
+     */
+  };
+
   useEffect(() => {
     (async () => {
-      const data = await getUsers(1);
+      const data = await getUsers(MEETING_ID);
       setUserMap(data);
 
       const meetingData = await getMeeting(MEETING_ID);
@@ -61,15 +73,19 @@ export function MeetingView() {
           <Button
             color="secondary"
             onClick={() => {
-              /**
-               * @TODO 투표모드로 변경
-               */
+              navigate(`/meetings/${meeting.id}/vote`);
             }}
           >
             다시 투표하러 가기
           </Button>
         </FullHeightButtonGroup>
       </Footer>
+      <InputUsernameModal
+        show={showUsernameModal}
+        usernameList={userList.map((user) => user.username)}
+        onConfirm={handlePasswordConfirm}
+        onCancel={() => setShowUsernameModal(false)}
+      ></InputUsernameModal>
     </Page>
   );
 }

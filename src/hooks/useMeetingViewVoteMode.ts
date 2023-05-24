@@ -11,7 +11,6 @@ import { getVotingCountByDay, userVotingsState } from '../stores/voting';
 export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   // userMap, currentUserVotings, lastClickedSlot, lastClickedUser 상태관리
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useState<VotingSlot[]>([]);
-  const [lastClickedSlot, setLastClickedSlot] = useState<VotingSlot>();
 
   const userVotingsValue = useRecoilValue(userVotingsState);
   const currentUserVotings: UserVotings = {
@@ -29,7 +28,7 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
         current: getVotingCountByDay(day, userVotingsWithCurrentUser),
         total: userVotingsValue.length,
         checked: currentUserVotingSlots.some((voting) => voting.date.isSame(day, 'day')),
-        focused: lastClickedSlot?.date.isSame(day, 'day') ?? false,
+        focused: false,
       },
     ],
   }));
@@ -46,7 +45,6 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
     } else {
       setCurrentUserVotingSlots((prev) => [...prev, slot]);
     }
-    setLastClickedSlot(slot);
   };
 
   return {
