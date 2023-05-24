@@ -1,12 +1,14 @@
-import dayjs from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
+import { VotingSlot } from '../apis/users';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
+import { isSameSlot } from './useMeetingViewVoteMode';
 
 export const useMeetingView = (meeting?: GetMeetingResponse) => {
   const userMap = useRecoilValue(userMapState);
@@ -34,12 +36,12 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
 
     const { votings } = userMap[user[0]];
 
-    const votedDates = votings[meetingType].map((voting) => dayjs(voting.date));
+    const votedDates = votings[meetingType];
 
     setVoteTableDataList((prev) => {
       if (checked) {
         return resolveVoteTableDataList(prev).map((voteTableData) => {
-          const isVoted = votedDates.some((votedDate) => votedDate.isSame(voteTableData.date));
+          const isVoted = votedDates.some((votedDate) => isSameSlot(votedDate, voteTableData));
           if (isVoted) {
             return checkVoteTableData(voteTableData);
           }
@@ -68,11 +70,18 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
     });
   };
 
-  const handleClickVoteTable = (checked: boolean, target: VoteTableRowData) => {
+  const handleClickVoteTable = (
+    date: Dayjs,
+    checked: boolean,
+    target: VoteTableVoting,
+    slot: VotingSlot,
+  ) => {
     const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
 
     const usernames = Object.values(userMap)
-      .filter((user) => user.votings[meetingType].some(({ date }) => target.date.isSame(date)))
+      .filter((user) =>
+        user.votings[meetingType].some((votingSlot) => isSameSlot(votingSlot, slot)),
+      )
       .map((user) => {
         return user.name;
       });
@@ -94,7 +103,7 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
     });
 
     setVoteTableDataList((prev) => {
-      const { date: targetDate } = target;
+      const { date: targetDate } = slot;
       const newVoteTableDataList = resolveVoteTableDataList(prev);
       const voteTableData = newVoteTableDataList.find(({ date }) => date.isSame(targetDate));
 
