@@ -1,11 +1,11 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getUsers, UserMap } from '../apis/users';
+import { getVotings, UserMap } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
@@ -15,11 +15,10 @@ import { userMapState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
-  const MEETING_ID = '1';
-
   const setUserMap = useSetRecoilState<UserMap>(userMapState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const navigate = useNavigate();
+  const { meetingId } = useParams();
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -35,13 +34,17 @@ export function MeetingView() {
 
   useEffect(() => {
     (async () => {
-      const data = await getUsers(MEETING_ID);
+      if (!meetingId) {
+        return;
+      }
+
+      const data = await getVotings(meetingId);
       setUserMap(data);
 
-      const meetingData = await getMeeting(MEETING_ID);
+      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
-  }, [setUserMap]);
+  }, [setUserMap, meetingId]);
 
   if (!meeting || !voteTableDataList) {
     return null;

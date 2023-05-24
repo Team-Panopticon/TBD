@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { atom, selector, selectorFamily } from 'recoil';
 
 import { GetMeetingResponse, ISODateTime } from '../apis/types';
-import { UserMap } from '../apis/users';
+import { UserMap } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData } from '../components/VoteTable/VoteTable';
 

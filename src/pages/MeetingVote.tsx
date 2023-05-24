@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getUsers, UserMap } from '../apis/users';
+import { getVotings, UserMap } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
@@ -34,7 +34,7 @@ export function MeetingVote() {
 
   useEffect(() => {
     (async () => {
-      const data = await getUsers(meetingId);
+      const data = await getVotings(meetingId);
       setUserMap(data);
 
       const meetingData = await getMeeting(meetingId);

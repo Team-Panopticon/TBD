@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
-import { UserVotings, VotingSlot } from '../apis/users';
+import { UserVotings, VotingSlot } from '../apis/votes';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { getVotingCountByDay, userVotingsState } from '../stores/voting';
