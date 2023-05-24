@@ -11,6 +11,7 @@ import { MeetingCreate } from './pages/MeetingCreate';
 import { MeetingModify } from './pages/MeetingModify';
 import { MeetingResult } from './pages/MeetingResult';
 import { MeetingView } from './pages/MeetingView';
+import { MeetingVote } from './pages/MeetingVote';
 import { showProgressState } from './stores/showProgress';
 import { theme } from './theme';
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: 'meetings/:meetingId',
     element: <MeetingView />,
+  },
+  {
+    path: 'meetings/:meetingId/vote',
+    element: <MeetingVote />,
   },
   {
     path: 'meetings/:meetingId/modify',
