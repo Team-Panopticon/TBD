@@ -12,6 +12,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingViewVoteMode';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, userMapState } from '../stores/voting';
+import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
   const currentUser = useRecoilValue(currentUserState);
@@ -28,6 +29,15 @@ export function MeetingView() {
   const userList = useRecoilValue(userListState);
 
   const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
+
+  const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
+
+  const handlePasswordConfirm = (username: string) => {
+    /**
+     * @TODO
+     * 투표 반영 API
+     */
+  };
 
   useEffect(() => {
     (async () => {
@@ -63,7 +73,14 @@ export function MeetingView() {
       </Contents>
       <Footer>
         {isViewMode ? (
-          <div>다시 투표하러 가기</div>
+          <FullHeightButtonGroup
+            fullWidth
+            disableElevation
+            variant="contained"
+            aria-label="Disabled elevation buttons"
+          >
+            <Button onClick={() => setIsViewMode(false)}>다시 투표하러 가기</Button>
+          </FullHeightButtonGroup>
         ) : (
           <FullHeightButtonGroup
             fullWidth
@@ -71,28 +88,19 @@ export function MeetingView() {
             variant="contained"
             aria-label="Disabled elevation buttons"
           >
-            <Button
-              color="secondary"
-              onClick={() => {
-                /**
-                 * @TODO viewmode로 변경
-                 */
-              }}
-            >
+            <Button color="secondary" onClick={() => setIsViewMode(true)}>
               다음에하기
             </Button>
-            <Button
-              onClick={() => {
-                /**
-                 * @TODO 투표 api
-                 */
-              }}
-            >
-              투표하기
-            </Button>
+            <Button onClick={() => setShowUsernameModal(true)}>투표하기</Button>
           </FullHeightButtonGroup>
         )}
       </Footer>
+      <InputUsernameModal
+        show={showUsernameModal}
+        usernameList={userList.map((user) => user.username)}
+        onConfirm={handlePasswordConfirm}
+        onCancel={() => setShowUsernameModal(false)}
+      ></InputUsernameModal>
     </Page>
   );
 }
