@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getVotings, UserMap } from '../apis/votes';
+import { createVoting, getVotings, UserMap } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
@@ -30,7 +30,8 @@ export function MeetingVote() {
 
   const navigate = useNavigate();
 
-  const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
+  const { voteTableDataList, currentUserVotingSlots, handleClickVoteTableSlot } =
+    useMeetingViewVoteMode(meeting);
 
   useEffect(() => {
     (async () => {
@@ -82,9 +83,10 @@ export function MeetingVote() {
           </Button>
           <Button
             onClick={() => {
-              /**
-               * @TODO 투표 api
-               */
+              createVoting(meetingId, {
+                username: '테스트유저1',
+                dateType: currentUserVotingSlots,
+              });
             }}
           >
             투표하기

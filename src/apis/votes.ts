@@ -4,25 +4,25 @@ import dayjs, { Dayjs } from 'dayjs';
 import { MealType } from '../constants/meeting';
 import { api } from './instance';
 
-export interface GetUsersResponse {
-  [username: string]: {
-    name: string;
-    votings: UserVotings;
-  };
+/** date가 string 타입인 서버 응답 타입 */
+interface VotingSlotResponse {
+  date: string;
+  meal?: MealType;
 }
 
-export interface UserMap {
-  [userId: string]: User;
+/** dateType / mealType의 date가 string 타입인 서버 응답 타입 */
+interface VotingResponse {
+  id: string;
+  username: string;
+  dateType?: VotingSlotResponse[];
+  mealType?: VotingSlotResponse[];
 }
 
-export interface User {
-  name: string;
-  votings: UserVotings;
-}
-
-export interface UserVotings {
-  date: VotingSlot[];
-  meal: VotingSlot[];
+export interface Voting {
+  id: string;
+  username: string;
+  dateType?: VotingSlot[];
+  mealType?: VotingSlot[];
 }
 
 export interface VotingSlot {
@@ -30,21 +30,37 @@ export interface VotingSlot {
   meal?: MealType;
 }
 
-const usersResponseToState = (response: GetUsersResponse): UserMap => {
-  const responseCopy = structuredClone(response) as unknown as UserMap;
-
-  const users = Object.values(responseCopy);
-  users.forEach((user) => {
-    Object.values(user.votings.date).forEach((date) => (date.date = dayjs(date.date)));
+const usersResponseToState = (response: VotingResponse[]): Voting[] => {
+  return [...response].map((vote) => {
+    return {
+      ...vote,
+      dateType: vote.dateType?.map((dateType) => ({
+        meal: dateType.meal,
+        date: dayjs(dateType.date),
+      })),
+      mealType: vote.mealType?.map((mealType) => ({
+        meal: mealType.meal,
+        date: dayjs(mealType.date),
+      })),
+    };
   });
-
-  return responseCopy;
 };
 
 export const getVotings = async (meetingId: string) => {
-  const response: AxiosResponse<GetUsersResponse> = await api.get(`/meetings/${meetingId}/votings`);
+  const response: AxiosResponse<VotingResponse[]> = await api.get(`/meetings/${meetingId}/votings`);
 
-  const userMap = usersResponseToState(response.data);
+  return usersResponseToState(response.data);
+};
 
-  return userMap;
+interface CreateVoteRequest {
+  username: string;
+  dateType?: VotingSlot[];
+  mealType?: VotingSlot[];
+}
+
+export const createVoting = async (meetingId: string, data: CreateVoteRequest) => {
+  /** @TODO */
+  const response: AxiosResponse<any> = await api.post(`/meetings/${meetingId}/voting`, data);
+
+  return response;
 };

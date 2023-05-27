@@ -49,6 +49,7 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
 
   return {
     voteTableDataList,
+    currentUserVotingSlots,
     handleClickVoteTableSlot,
   };
 };
