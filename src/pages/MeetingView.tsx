@@ -5,17 +5,17 @@ import { useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getVotings, UserMap } from '../apis/votes';
+import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
-import { userMapState } from '../stores/voting';
+import { votingsState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
-  const setUserMap = useSetRecoilState<UserMap>(userMapState);
+  const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const navigate = useNavigate();
   const { meetingId } = useParams();
@@ -38,13 +38,13 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings(meetingId);
-      setUserMap(data);
+      const data = await getVotings('2');
+      setVotings(data);
 
-      const meetingData = await getMeeting(meetingId);
+      const meetingData = await getMeeting('2');
       setMeeting(meetingData);
     })();
-  }, [setUserMap, meetingId]);
+  }, [setVotings, meetingId]);
 
   if (!meeting || !voteTableDataList) {
     return null;
