@@ -3,22 +3,24 @@ import { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
-import { UserVotings, VotingSlot } from '../apis/votes';
+import { Voting, VotingSlot } from '../apis/votes';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
-import { getVotingCountByDay, userVotingsState } from '../stores/voting';
+import { getVotingCountByDay, votingsState } from '../stores/voting';
 
 export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   // userMap, currentUserVotings, lastClickedSlot, lastClickedUser 상태관리
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useState<VotingSlot[]>([]);
 
-  const userVotingsValue = useRecoilValue(userVotingsState);
-  const currentUserVotings: UserVotings = {
-    date: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
-    meal: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
+  const votings = useRecoilValue(votingsState);
+  const currentVoting: Voting = {
+    id: 'newUser',
+    username: 'newUser',
+    dateType: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
+    mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
 
-  const userVotingsWithCurrentUser = [...userVotingsValue, currentUserVotings];
+  const userVotingsWithCurrentUser = [...votings, currentVoting];
 
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
@@ -26,7 +28,7 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
     votings: [
       {
         current: getVotingCountByDay(day, userVotingsWithCurrentUser),
-        total: userVotingsValue.length,
+        total: userVotingsWithCurrentUser.length,
         checked: currentUserVotingSlots.some((voting) => voting.date.isSame(day, 'day')),
         focused: false,
       },
