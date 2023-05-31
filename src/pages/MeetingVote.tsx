@@ -10,7 +10,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { useMeetingViewVoteMode } from '../hooks/useMeetingViewVoteMode';
+import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
 import { currentUserState } from '../stores/currentUser';
 import { userListState, votingsState } from '../stores/voting';
 
