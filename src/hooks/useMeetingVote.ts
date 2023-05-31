@@ -13,14 +13,14 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useState<VotingSlot[]>([]);
 
   const votings = useRecoilValue(votingsState);
-  const currentUserVoting: Voting = {
+  const currentVoting: Voting = {
     id: 'newUser',
     username: 'newUser',
     dateType: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
     mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
 
-  const userVotingsWithCurrentUser = [...votings, currentUserVoting];
+  const userVotingsWithCurrentUser = [...votings, currentVoting];
 
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
