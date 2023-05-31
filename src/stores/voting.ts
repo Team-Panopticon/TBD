@@ -35,7 +35,7 @@ export const getVotingCountByDay = (day: Dayjs, votings: Voting[]) => {
 };
 
 export const votingsState = atom<Voting[]>({
-  key: 'Voting',
+  key: 'votings',
   default: [],
 });
 
