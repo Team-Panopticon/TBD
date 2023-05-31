@@ -8,7 +8,7 @@ import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { userListState, voteTableDataListState, votingsState } from '../stores/voting';
-import { isSameSlot } from './useMeetingViewVoteMode';
+import { isSameSlot } from './useMeetingVote';
 
 export const useMeetingView = (meeting?: GetMeetingResponse) => {
   const votings = useRecoilValue(votingsState);
