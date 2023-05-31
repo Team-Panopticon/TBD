@@ -58,6 +58,7 @@ export function MeetingVote() {
         {isNewUser && (
           <Alert severity="warning">이미 투표한 적이 있으면 아이디를 눌러주세요.</Alert>
         )}
+        {/* TODO: 유저 목록에서 기존유저 클릭 시 로직 반영 */}
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable

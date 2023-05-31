@@ -13,6 +13,7 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useState<VotingSlot[]>([]);
 
   const votings = useRecoilValue(votingsState);
+  // TODO: 신규 유저 외에 기존 유저 선택 시 로직 반영
   const currentVoting: Voting = {
     id: 'newUser',
     username: 'newUser',
