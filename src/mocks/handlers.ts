@@ -5,7 +5,7 @@ import { mockDateVotingsData, mockMealVotingsData } from './votingsData';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL as string;
 export const handlers = [
-  rest.get(`${baseURL}meetings/:meetingId/users`, (req, res, ctx) => {
+  rest.get(`${baseURL}meetings/:meetingId/votings`, (req, res, ctx) => {
     const meetingId = req.params.meetingId;
     if (meetingId === '1') {
       return res(ctx.status(200), ctx.json(mockDateVotingsData));
