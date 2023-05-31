@@ -7,11 +7,11 @@ import { VotingSlot } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
-import { userListState, userMapState, voteTableDataListState } from '../stores/voting';
-import { isSameSlot } from './useMeetingViewVoteMode';
+import { userListState, voteTableDataListState, votingsState } from '../stores/voting';
+import { isSameSlot } from './useMeetingVote';
 
 export const useMeetingView = (meeting?: GetMeetingResponse) => {
-  const userMap = useRecoilValue(userMapState);
+  const votings = useRecoilValue(votingsState);
   const userListStateValue = useRecoilValue(userListState);
   const voteTableDataListValue = useRecoilValue(voteTableDataListState(meeting));
 
@@ -28,15 +28,19 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   const handleClickUserList = (checked: boolean, target: UserListData) => {
     const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
 
-    const user = Object.entries(userMap).find(([, value]) => value.name === target.username);
+    const targetVoting = votings.find((voting) => voting.username === target.username);
 
-    if (!user) {
+    if (!targetVoting) {
       return;
     }
 
-    const { votings } = userMap[user[0]];
+    // const { votings } = userMap[user[0]];
 
-    const votedDates = votings[meetingType];
+    const votedDates = targetVoting[meetingType];
+
+    if (!votedDates) {
+      return;
+    }
 
     setVoteTableDataList((prev) => {
       if (checked) {
@@ -78,12 +82,10 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
   ) => {
     const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
 
-    const usernames = Object.values(userMap)
-      .filter((user) =>
-        user.votings[meetingType].some((votingSlot) => isSameSlot(votingSlot, slot)),
-      )
-      .map((user) => {
-        return user.name;
+    const usernames = votings
+      .filter((voting) => voting[meetingType]?.some((votingSlot) => isSameSlot(votingSlot, slot)))
+      .map((voting) => {
+        return voting.username;
       });
 
     setUserList((prev) => {
