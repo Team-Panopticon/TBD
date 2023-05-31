@@ -9,7 +9,7 @@ type IUser =
     }
   | undefined;
 export const currentUserState = atom({
-  key: 'CurrentUserID',
+  key: 'currentUserID',
   default: undefined,
   effects: [localstorageEffect<IUser>('current_user')],
 });
