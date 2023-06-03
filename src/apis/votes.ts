@@ -3,15 +3,16 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import { MealType } from '../constants/meeting';
 import { api } from './instance';
+import { ISODateTime } from './types';
 
 /** date가 string 타입인 서버 응답 타입 */
 interface VotingSlotResponse {
-  date: string;
+  date: ISODateTime;
   meal?: MealType;
 }
 
 /** dateType / mealType의 date가 string 타입인 서버 응답 타입 */
-interface VotingResponse {
+export interface VotingResponse {
   id: string;
   username: string;
   dateType?: VotingSlotResponse[];

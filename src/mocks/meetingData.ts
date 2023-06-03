@@ -1,4 +1,7 @@
-export const mockDateTypeMeeting = {
+import { GetMeetingResponse } from '../apis/types';
+import { MeetingType } from '../constants/meeting';
+
+export const mockDateTypeMeeting: GetMeetingResponse = {
   id: '1',
   name: 'mockDateTypeMeeting',
   dates: [
@@ -9,11 +12,11 @@ export const mockDateTypeMeeting = {
     '2022-11-29T01:44:39.114Z',
     '2022-11-30T01:44:39.114Z',
   ], // ISO date string with timezone
-  type: 'date',
+  type: MeetingType.date,
   deadline: '2022-11-26T01:44:39.114Z', // ISO date string
 };
 
-export const mockMealTypeMeeting = {
+export const mockMealTypeMeeting: GetMeetingResponse = {
   id: '2',
   name: 'mockMealTypeMeeting',
   dates: [
@@ -23,6 +26,7 @@ export const mockMealTypeMeeting = {
     '2022-11-28T01:44:39.114Z',
     '2022-11-29T01:44:39.114Z',
     '2022-11-30T01:44:39.114Z',
-  ], // ISO date string with timezone  type: 'date',
+  ], // ISO date string with timezone
+  type: MeetingType.date,
   deadline: '2022-11-26T01:44:39.114Z', // ISO date string
 };
