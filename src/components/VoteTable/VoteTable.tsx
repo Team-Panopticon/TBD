@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
 
-import { VotingSlot } from '../../apis/users';
+import { VotingSlot } from '../../apis/votes';
 import { UserListVoteData } from '../UserList/UserList';
 import {
   ContentBox,
@@ -81,7 +81,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             focus={focused}
             checked={checked}
             onClick={() => onClick?.(date, !checked, vote, { date })}
-          >{`${current}/${total} (${((current / total) * 100).toFixed(0)}%)`}</ContentBox>
+          >{`${current}/${total} (${((current / total || 0) * 100).toFixed(0)}%)`}</ContentBox>
         );
       })}
     </Wrapper>

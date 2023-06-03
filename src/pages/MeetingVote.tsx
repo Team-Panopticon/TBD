@@ -1,18 +1,18 @@
 import { Alert, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { getUsers, UserMap } from '../apis/users';
+import { createVoting, getVotings } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { useMeetingViewVoteMode } from '../hooks/useMeetingViewVoteMode';
+import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
 import { currentUserState } from '../stores/currentUser';
-import { userListState, userMapState } from '../stores/voting';
+import { userListState, votingsState } from '../stores/voting';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
@@ -25,22 +25,23 @@ export function MeetingVote() {
   const isNewUser = !currentUser;
 
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
-  const [userMap, setUserMap] = useRecoilState<UserMap>(userMapState);
+  const setVotings = useSetRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
 
   const navigate = useNavigate();
 
-  const { voteTableDataList, handleClickVoteTableSlot } = useMeetingViewVoteMode(meeting);
+  const { voteTableDataList, currentUserVotingSlots, handleClickVoteTableSlot } =
+    useMeetingViewVoteMode(meeting);
 
   useEffect(() => {
     (async () => {
-      const data = await getUsers(meetingId);
-      setUserMap(data);
+      const data = await getVotings(meetingId);
+      setVotings(data);
 
       const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
-  }, [meetingId, setUserMap]);
+  }, [meetingId, setVotings]);
 
   if (!meeting || !voteTableDataList) {
     return null;
@@ -57,6 +58,7 @@ export function MeetingVote() {
         {isNewUser && (
           <Alert severity="warning">이미 투표한 적이 있으면 아이디를 눌러주세요.</Alert>
         )}
+        {/* TODO: 유저 목록에서 기존유저 클릭 시 로직 반영 */}
         <UserList users={userList} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable
@@ -82,9 +84,10 @@ export function MeetingVote() {
           </Button>
           <Button
             onClick={() => {
-              /**
-               * @TODO 투표 api
-               */
+              createVoting(meetingId, {
+                username: '테스트유저1',
+                dateType: currentUserVotingSlots,
+              });
             }}
           >
             투표하기

@@ -1,6 +1,6 @@
 export enum MeetingType {
-  date = 'date',
-  meal = 'meal',
+  date = 'dateType',
+  meal = 'mealType',
 }
 
 export enum MealType {

@@ -1,8 +1,9 @@
 import { MealType } from '../constants/meeting';
 
-export const mockDateUserData = {
-  user1: {
-    name: '재빠른 표범',
+export const mockDateVotingsData = [
+  {
+    id: 'user1',
+    username: '재빠른 표범',
     votings: {
       /**
        * date와 meal을 항상 가지고 있음
@@ -28,8 +29,9 @@ export const mockDateUserData = {
       ],
     },
   },
-  user2: {
-    name: '사나운 하마',
+  {
+    id: 'user2',
+    username: '사나운 하마',
     votings: {
       date: [
         {
@@ -51,8 +53,9 @@ export const mockDateUserData = {
       ],
     },
   },
-  user3: {
-    name: '상냥한 기린',
+  {
+    id: 'user3',
+    username: '상냥한 기린',
     votings: {
       date: [
         {
@@ -74,11 +77,12 @@ export const mockDateUserData = {
       ],
     },
   },
-};
+];
 
-export const mockMealUserData = {
-  user1: {
-    name: '재빠른 표범',
+export const mockMealVotingsData = [
+  {
+    id: 'user1',
+    username: '재빠른 표범',
     votings: {
       date: [
         {
@@ -104,8 +108,9 @@ export const mockMealUserData = {
       ],
     },
   },
-  user2: {
-    name: '사나운 하마',
+  {
+    id: 'user2',
+    username: '사나운 하마',
     votings: {
       date: [
         {
@@ -127,8 +132,9 @@ export const mockMealUserData = {
       ],
     },
   },
-  user3: {
-    name: '상냥한 기린',
+  {
+    id: 'user3',
+    username: '상냥한 기린',
     votings: {
       date: [
         {
@@ -150,4 +156,4 @@ export const mockMealUserData = {
       ],
     },
   },
-};
+];
