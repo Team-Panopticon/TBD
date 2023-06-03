@@ -7,7 +7,7 @@ import { RecoilRoot } from 'recoil';
 
 import { App } from './app';
 
-if (import.meta.env.VITE_USE_MSW) {
+if (process.env.NODE_ENV === 'development' && import.meta.env.VITE_USE_MSW) {
   const { worker } = await import('./mocks/browser');
   worker.start();
 }
