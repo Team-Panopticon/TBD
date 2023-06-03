@@ -34,8 +34,6 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
       return;
     }
 
-    // const { votings } = userMap[user[0]];
-
     const votedDates = targetVoting[meetingType];
 
     if (!votedDates) {

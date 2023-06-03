@@ -78,9 +78,3 @@ export const userListState = selector({
     });
   },
 });
-
-/**
- * @TODOS
- * 1. 이 파일에서 변경된 상태를 기준으로 컴포넌트에서 사용하는 코드 변경하기
- * 2. votings.ts에 mealtype인지 datetype인지 판별해서 보여주기 (mealType도 보여줄 수 있도록)
- */
