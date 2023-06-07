@@ -8,6 +8,10 @@ declare module 'styled-components' {
       secondary: {
         main: string;
       };
+      transPrimary: {
+        main: string;
+        contrastText: string;
+      };
     };
   }
 }
