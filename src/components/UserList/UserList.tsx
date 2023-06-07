@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react';
 
+import { User } from '../../stores/currentUser';
 import { Chip } from '../Chip/Chip';
 import { UserListContainer } from './styled';
 
@@ -10,9 +11,7 @@ export interface UserListVoteData {
   focused: boolean;
 }
 
-export interface UserListData extends UserListVoteData {
-  username: string;
-}
+export interface UserListData extends UserListVoteData, User {}
 
 interface Props {
   className?: string;
