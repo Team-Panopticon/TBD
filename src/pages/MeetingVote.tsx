@@ -45,23 +45,25 @@ export function MeetingVote() {
     })();
   }, [meetingId, setVotings]);
 
-  const handleClickUser = (checked: boolean, userListData: UserListData) => {
+  const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
     if (!meeting) {
       return;
     }
 
-    setCurrentUser({
-      id: userListData.id,
-      username: userListData.username,
-    });
-
-    const previousVoting = votings.find((voting) => voting.username === userListData.username);
-    if (!previousVoting) {
+    const isCurrentUserClicked = currentUser?.id === clickedUser.id;
+    if (isCurrentUserClicked) {
+      setCurrentUser(undefined);
       setCurrentUserVotingSlots([]);
       return;
     }
 
-    const previousVotingSlots = previousVoting[meeting.type];
+    setCurrentUser({
+      id: clickedUser.id,
+      username: clickedUser.username,
+    });
+
+    const previousVoting = votings.find((voting) => voting.username === clickedUser.username);
+    const previousVotingSlots = previousVoting?.[meeting.type];
     setCurrentUserVotingSlots(previousVotingSlots ?? []);
   };
 
