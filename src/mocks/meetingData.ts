@@ -26,5 +26,5 @@ export const mockMealTypeMeeting: GetMeetingResponse = {
     '2022-11-29T01:44:39.114Z',
     '2022-11-30T01:44:39.114Z',
   ], // ISO date string with timezone
-  type: MeetingType.date,
+  type: MeetingType.meal,
 };
