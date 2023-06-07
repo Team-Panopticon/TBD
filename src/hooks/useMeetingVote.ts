@@ -9,8 +9,9 @@ import { MeetingType } from '../constants/meeting';
 import { getVotingCountByDay, votingsState } from '../stores/voting';
 
 export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
-  // userMap, currentUserVotings, lastClickedSlot, lastClickedUser 상태관리
-  const [currentUserVotingSlots, setCurrentUserVotingSlots] = useState<VotingSlot[]>([]);
+  const [currentUserVotingSlots, setCurrentUserVotingSlots] = useRecoilState(
+    currentUserVotingSlotsState,
+  );
 
   const votings = useRecoilValue(votingsState);
   // TODO: 신규 유저 외에 기존 유저 선택 시 로직 반영
