@@ -18,11 +18,17 @@ export const Header = styled.header`
 
 export const HeaderContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
   height: 100%;
-  gap: 16px;
+  gap: 8px;
   padding: 32px;
+
+  h1 {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+  }
 `;
 
 export const Contents = styled.div`
