@@ -12,6 +12,7 @@ import { UserList, UserListData } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
 import { currentUserState } from '../stores/currentUser';
+import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { userListState, votingsState } from '../stores/voting';
 
 interface MeetingVoteRouteParams {
@@ -22,10 +23,11 @@ export function MeetingVote() {
   const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
+  const setCurrentUserVotingSlots = useSetRecoilState(currentUserVotingSlotsState);
   const isNewUser = !currentUser;
 
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
-  const setVotings = useSetRecoilState(votingsState);
+  const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
 
   const navigate = useNavigate();
@@ -44,10 +46,23 @@ export function MeetingVote() {
   }, [meetingId, setVotings]);
 
   const handleClickUser = (checked: boolean, userListData: UserListData) => {
+    if (!meeting) {
+      return;
+    }
+
     setCurrentUser({
       id: userListData.id,
       username: userListData.username,
     });
+
+    const previousVoting = votings.find((voting) => voting.username === userListData.username);
+    if (!previousVoting) {
+      setCurrentUserVotingSlots([]);
+      return;
+    }
+
+    const previousVotingSlots = previousVoting[meeting.type];
+    setCurrentUserVotingSlots(previousVotingSlots ?? []);
   };
 
   if (!meeting || !voteTableDataList) {
