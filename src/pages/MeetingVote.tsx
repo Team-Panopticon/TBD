@@ -5,7 +5,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
-import { createVoting, getVotings } from '../apis/votes';
+import { createVoting, getVotings, updateVoting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList, UserListData } from '../components/UserList/UserList';
@@ -76,15 +76,25 @@ export function MeetingVote() {
       return;
     }
 
-    // TODO: 기존유저 투표수정 로직 구현
+    // Old user
+    await updateVoting({
+      meetingId,
+      votingId: currentUser.id,
+      data: {
+        username: currentUser.username,
+        dateType: currentUserVotingSlots,
+      },
+    });
+    setShowUsernameModal(false);
+    navigate(`/meetings/${meetingId}`);
   };
 
   const handleUsernameConfirm = async (username: string) => {
     await createVoting({
       meetingId,
       data: {
-      username,
-      dateType: currentUserVotingSlots,
+        username,
+        dateType: currentUserVotingSlots,
       },
     });
     setShowUsernameModal(false);
