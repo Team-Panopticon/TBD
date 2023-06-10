@@ -14,6 +14,7 @@ import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
 import { currentUserState } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { userListState, votingsState } from '../stores/voting';
+import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
@@ -29,6 +30,7 @@ export function MeetingVote() {
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
+  const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -67,6 +69,25 @@ export function MeetingVote() {
     setCurrentUserVotingSlots(previousVotingSlots ?? []);
   };
 
+  // eslint-disable-next-line @typescript-eslint/require-await
+  const handleClickVote = async () => {
+    if (isNewUser) {
+      setShowUsernameModal(true);
+      return;
+    }
+
+    // TODO: 기존유저 투표수정 로직 구현
+  };
+
+  const handleUsernameConfirm = async (username: string) => {
+    await createVoting(meetingId, {
+      username,
+      dateType: currentUserVotingSlots,
+    });
+    setShowUsernameModal(false);
+    navigate(`/meetings/${meetingId}`);
+  };
+
   if (!meeting || !voteTableDataList) {
     return null;
   }
@@ -85,7 +106,6 @@ export function MeetingVote() {
         {!isNewUser && (
           <Alert severity="warning">{`${currentUser.username}님의 투표를 수정합니다`}</Alert>
         )}
-        {/* TODO: 유저 목록에서 기존유저 클릭 시 로직 반영 */}
         <UserList users={userList} onClick={handleClickUser} />
         {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable
@@ -111,16 +131,19 @@ export function MeetingVote() {
           </Button>
           <Button
             onClick={() => {
-              createVoting(meetingId, {
-                username: '테스트유저1',
-                dateType: currentUserVotingSlots,
-              });
+              handleClickVote();
             }}
           >
             투표하기
           </Button>
         </FullHeightButtonGroup>
       </Footer>
+      <InputUsernameModal
+        show={showUsernameModal}
+        usernameList={userList.map((user) => user.username)}
+        onConfirm={handleUsernameConfirm}
+        onCancel={() => setShowUsernameModal(false)}
+      />
     </Page>
   );
 }
