@@ -142,3 +142,17 @@ export const mockMealVotingsData: VotingResponse[] = [
     ],
   },
 ];
+
+export const mockDateVoting: VotingResponse = {
+  id: '9fb3146a-9329-46e9-bd29-bc9e06799e1a',
+  username: 'joker',
+  dateType: [
+    {
+      date: '2023-01-25T00:00:00.000Z',
+    },
+    {
+      date: '2023-01-26T00:00:00.000Z',
+    },
+  ],
+  mealType: [],
+};

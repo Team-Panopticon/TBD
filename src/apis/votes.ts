@@ -61,7 +61,7 @@ interface CreateVoteRequest {
 
 export const createVoting = async (meetingId: string, data: CreateVoteRequest) => {
   /** @TODO */
-  const response: AxiosResponse<any> = await api.post(`/meetings/${meetingId}/voting`, data);
+  const response: AxiosResponse<any> = await api.post(`/meetings/${meetingId}/votings`, data);
 
   return response;
 };
