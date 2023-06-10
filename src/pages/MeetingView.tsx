@@ -12,7 +12,6 @@ import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { votingsState } from '../stores/voting';
-import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
@@ -22,8 +21,6 @@ export function MeetingView() {
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
-
-  const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
   const handlePasswordConfirm = (username: string) => {
     /**
@@ -83,12 +80,6 @@ export function MeetingView() {
           </Button>
         </FullHeightButtonGroup>
       </Footer>
-      <InputUsernameModal
-        show={showUsernameModal}
-        usernameList={userList.map((user) => user.username)}
-        onConfirm={handlePasswordConfirm}
-        onCancel={() => setShowUsernameModal(false)}
-      ></InputUsernameModal>
     </Page>
   );
 }
