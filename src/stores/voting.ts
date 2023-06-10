@@ -22,7 +22,7 @@ type SelectorMapper<Type> = {
   [Property in keyof Type]: Type[Property];
 };
 
-export const getVotingCountByDay = (
+const getVotingCountByDay = (
   day: Dayjs,
   meetingType: MeetingType,
   votings: Voting[],
@@ -50,21 +50,23 @@ export const getVotingCountByDay = (
   }, 0);
 };
 
-const getVotings = (votings: Voting[], meetingType: MeetingType, day: Dayjs) => {
-  const total = votings.length;
+type VoteTableWithoutCurrent = Omit<VoteTableVoting, 'current'>;
+
+export const getVotings = (
+  votings: Voting[],
+  meetingType: MeetingType,
+  day: Dayjs,
+  voteTableWithoutCurrent: VoteTableWithoutCurrent,
+) => {
   if (meetingType === MeetingType.meal) {
     const votingList: [VoteTableVoting, VoteTableVoting] = [
       {
+        ...voteTableWithoutCurrent,
         current: getVotingCountByDay(day, meetingType, votings, MealType.lunch),
-        total,
-        checked: false,
-        focused: false,
       },
       {
+        ...voteTableWithoutCurrent,
         current: getVotingCountByDay(day, meetingType, votings, MealType.dinner),
-        total,
-        checked: false,
-        focused: false,
       },
     ];
     return votingList;
@@ -72,10 +74,8 @@ const getVotings = (votings: Voting[], meetingType: MeetingType, day: Dayjs) => 
   if (meetingType === MeetingType.date) {
     const votingList: [VoteTableVoting] = [
       {
+        ...voteTableWithoutCurrent,
         current: getVotingCountByDay(day, meetingType, votings),
-        total,
-        checked: false,
-        focused: false,
       },
     ];
     return votingList;
@@ -102,9 +102,15 @@ export const voteTableDataListState = selectorFamily<
 
       const votings = get(votingsState);
 
+      const voteTableWithoutCurrent = {
+        total: votings.length,
+        checked: false,
+        focused: false,
+      };
+
       const tableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
         date: day,
-        votings: getVotings(votings, meeting.type, day),
+        votings: getVotings(votings, meeting.type, day, voteTableWithoutCurrent),
       }));
 
       return tableDataList;

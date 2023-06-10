@@ -7,7 +7,7 @@ import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteT
 import { MeetingType } from '../constants/meeting';
 import { currentUserState } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
-import { getVotingCountByDay, votingsState } from '../stores/voting';
+import { getVotings, votingsState } from '../stores/voting';
 
 export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   const currentUser = useRecoilValue(currentUserState);
@@ -29,14 +29,11 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
     date: day,
-    votings: [
-      {
-        current: getVotingCountByDay(day, userVotingsWithCurrentUser),
-        total: userVotingsWithCurrentUser.length,
-        checked: currentUserVotingSlots.some((voting) => voting.date.isSame(day, 'day')),
-        focused: false,
-      },
-    ],
+    votings: getVotings(userVotingsWithCurrentUser, meeting.type, day, {
+      total: userVotingsWithCurrentUser.length,
+      checked: currentUserVotingSlots.some((voting) => voting.date.isSame(day, 'day')),
+      focused: false,
+    }),
   }));
 
   const handleClickVoteTableSlot = (
