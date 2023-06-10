@@ -13,7 +13,6 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
-import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
 export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
@@ -24,25 +23,16 @@ export function MeetingView() {
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
 
-  const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
-
-  const handlePasswordConfirm = (username: string) => {
-    /**
-     * @TODO
-     * 투표 반영 API
-     */
-  };
-
   useEffect(() => {
     (async () => {
       if (!meetingId) {
         return;
       }
 
-      const data = await getVotings('2');
+      const data = await getVotings(meetingId);
       setVotings(data);
 
-      const meetingData = await getMeeting('2');
+      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
   }, [setVotings, meetingId]);
@@ -92,12 +82,6 @@ export function MeetingView() {
           </Button>
         </FullHeightButtonGroup>
       </Footer>
-      <InputUsernameModal
-        show={showUsernameModal}
-        usernameList={userList.map((user) => user.username)}
-        onConfirm={handlePasswordConfirm}
-        onCancel={() => setShowUsernameModal(false)}
-      ></InputUsernameModal>
     </Page>
   );
 }

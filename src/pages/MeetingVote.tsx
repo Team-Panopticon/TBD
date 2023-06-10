@@ -47,6 +47,19 @@ export function MeetingVote() {
     return null;
   }
 
+  const handleCreateVoting = async () => {
+    try {
+      await createVoting(meetingId, {
+        username: '테스트유저1',
+        dateType: currentUserVotingSlots,
+      });
+
+      navigate(`/meetings/${meetingId}`);
+    } catch {
+      // TODO: toast 띄우기
+    }
+  };
+
   return (
     <Page>
       <Header>
@@ -84,10 +97,7 @@ export function MeetingVote() {
           </Button>
           <Button
             onClick={() => {
-              createVoting(meetingId, {
-                username: '테스트유저1',
-                dateType: currentUserVotingSlots,
-              });
+              handleCreateVoting();
             }}
           >
             투표하기
