@@ -80,9 +80,12 @@ export function MeetingVote() {
   };
 
   const handleUsernameConfirm = async (username: string) => {
-    await createVoting(meetingId, {
+    await createVoting({
+      meetingId,
+      data: {
       username,
       dateType: currentUserVotingSlots,
+      },
     });
     setShowUsernameModal(false);
     navigate(`/meetings/${meetingId}`);

@@ -53,15 +53,33 @@ export const getVotings = async (meetingId: string) => {
   return usersResponseToState(response.data);
 };
 
-interface CreateVoteRequest {
+interface CreateVoteRequestBody {
   username: string;
   dateType?: VotingSlot[];
   mealType?: VotingSlot[];
 }
 
-export const createVoting = async (meetingId: string, data: CreateVoteRequest) => {
+interface CreateVotingProps {
+  meetingId: string;
+  data: CreateVoteRequestBody;
+}
+
+export const createVoting = async ({ meetingId, data }: CreateVotingProps) => {
   /** @TODO */
   const response: AxiosResponse<any> = await api.post(`/meetings/${meetingId}/votings`, data);
+
+  return response;
+};
+
+interface UpdateVotingProps extends CreateVotingProps {
+  votingId: string;
+}
+
+export const updateVoting = async ({ meetingId, votingId, data }: UpdateVotingProps) => {
+  const response: AxiosResponse<any> = await api.put(
+    `/meetings/${meetingId}/votings/${votingId}`,
+    data,
+  );
 
   return response;
 };
