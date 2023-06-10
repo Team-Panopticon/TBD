@@ -10,6 +10,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
+import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { currentUserState } from '../stores/currentUser';
 import { votingsState } from '../stores/voting';
@@ -59,12 +60,11 @@ export function MeetingView() {
         </HeaderContainer>
       </Header>
       <Contents>
-        {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <UserList users={userList} onClick={handleClickUserList} />
         <VoteTable
           onClick={handleClickVoteTable}
           data={voteTableDataList}
-          headers={['투표 현황']}
+          headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
         />
       </Contents>
       <Footer>
