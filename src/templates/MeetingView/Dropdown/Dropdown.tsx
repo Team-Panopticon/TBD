@@ -14,13 +14,12 @@ export function Dropdown(props: Props) {
   const [isShow, setShow] = useState(false);
 
   useEffect(() => {
+    if (isShow) {
+      return;
+    }
     const handleCloseDropdown = () => setShow(false);
 
-    if (isShow) {
-      document.body.addEventListener('click', handleCloseDropdown);
-    } else {
-      document.body.removeEventListener('click', handleCloseDropdown);
-    }
+    document.body.addEventListener('click', handleCloseDropdown);
 
     return () => {
       document.body.removeEventListener('click', handleCloseDropdown);
