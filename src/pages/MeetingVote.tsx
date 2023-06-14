@@ -13,6 +13,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
 import { currentUserState } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
+import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { userListState, votingsState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
 
@@ -25,6 +26,7 @@ export function MeetingVote() {
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
   const setCurrentUserVotingSlots = useSetRecoilState(currentUserVotingSlotsState);
+  const setShowVoteSuccessPopup = useSetRecoilState(showVoteSuccessPopupState);
   const isNewUser = !currentUser;
 
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
@@ -86,6 +88,7 @@ export function MeetingVote() {
       },
     });
     setShowUsernameModal(false);
+    setShowVoteSuccessPopup(true);
     navigate(`/meetings/${meetingId}`);
   };
 
@@ -98,6 +101,7 @@ export function MeetingVote() {
       },
     });
     setShowUsernameModal(false);
+    setShowVoteSuccessPopup(true);
     navigate(`/meetings/${meetingId}`);
   };
 

@@ -1,7 +1,8 @@
-import { Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, IconButton, Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
@@ -11,10 +12,12 @@ import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
+import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 
 export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
+  const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const navigate = useNavigate();
   const { meetingId } = useParams();
@@ -80,6 +83,26 @@ export function MeetingView() {
           </Button>
         </FullHeightButtonGroup>
       </Footer>
+      <Snackbar
+        open={showVoteSuccessPopup}
+        autoHideDuration={5000}
+        onClose={() => {
+          setShowVoteSuccessPopup(false);
+        }}
+        message="투표해주셔서 감사합니다!"
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => {
+              setShowVoteSuccessPopup(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </Page>
   );
 }
