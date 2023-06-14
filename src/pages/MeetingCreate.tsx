@@ -44,6 +44,7 @@ export function MeetingCreate() {
       const response = await createMeeting(meeting as ValidCreateMeetingState, setPassword);
       navigate(`/meetings/${response.id}`);
     } catch (e: unknown) {
+      console.debug(e);
       if (e instanceof AxiosError) {
         alert(e.message);
       } else {

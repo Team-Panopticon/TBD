@@ -7,8 +7,6 @@ export interface ModifyMeetingState {
   /** 투표 가능 날짜, ISO date string with timezone */
   dates: string[];
   type: MeetingType;
-  /** ISO date string with timezone */
-  deadline: string;
   status: MeetingStatus;
   password: string;
 }
@@ -17,7 +15,6 @@ export const initialState: ModifyMeetingState = {
   name: '',
   dates: [],
   type: MeetingType.date,
-  deadline: '',
   status: MeetingStatus.inProgress,
   password: '',
 };
