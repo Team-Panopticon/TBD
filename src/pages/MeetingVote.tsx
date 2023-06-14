@@ -93,12 +93,17 @@ export function MeetingVote() {
   };
 
   const handleUsernameConfirm = async (username: string) => {
-    await createVoting({
+    const voting = await createVoting({
       meetingId,
       data: {
         username,
         dateType: currentUserVotingSlots,
       },
+    });
+
+    setCurrentUser({
+      id: voting.id,
+      username: voting.username,
     });
     setShowUsernameModal(false);
     setShowVoteSuccessPopup(true);

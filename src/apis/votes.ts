@@ -65,10 +65,9 @@ interface CreateVotingProps {
 }
 
 export const createVoting = async ({ meetingId, data }: CreateVotingProps) => {
-  /** @TODO */
-  const response: AxiosResponse<any> = await api.post(`/meetings/${meetingId}/votings`, data);
+  const response = await api.post<VotingResponse>(`/meetings/${meetingId}/votings`, data);
 
-  return response;
+  return response.data;
 };
 
 interface UpdateVotingProps extends CreateVotingProps {
