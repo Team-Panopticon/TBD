@@ -1,7 +1,6 @@
 import React, { CSSProperties } from 'react';
 
-import { Chip } from '../Chip/Chip';
-import { UserListContainer } from './styled';
+import { ChipInnerText, StyledChip, UserListContainer } from './styled';
 
 export interface UserListVoteData {
   /** 투표 여부 */
@@ -27,7 +26,7 @@ export const UserList: React.FC<Props> = (props) => {
   return (
     <UserListContainer className={className} style={style}>
       {users.map((targetUser, index) => (
-        <Chip
+        <StyledChip
           key={index}
           checked={targetUser.checked}
           focus={targetUser.focused}
@@ -35,8 +34,8 @@ export const UserList: React.FC<Props> = (props) => {
             onClick?.(checked, targetUser);
           }}
         >
-          {targetUser.username}
-        </Chip>
+          <ChipInnerText>{targetUser.username}</ChipInnerText>
+        </StyledChip>
       ))}
     </UserListContainer>
   );

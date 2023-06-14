@@ -14,16 +14,16 @@ export function Chip(props: PropsWithChildren<Props>) {
   const { className, style, checked, focus, children, onClick } = props;
 
   return (
-    <div className={className} style={style}>
-      <ChipContainer
-        onClick={() => {
-          onClick?.(!checked);
-        }}
-        checked={checked}
-        focus={focus}
-      >
-        {children}
-      </ChipContainer>
-    </div>
+    <ChipContainer
+      onClick={() => {
+        onClick?.(!checked);
+      }}
+      checked={checked}
+      focus={focus}
+      className={className}
+      style={style}
+    >
+      {children}
+    </ChipContainer>
   );
 }
