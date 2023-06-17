@@ -1,5 +1,5 @@
+import { css, styled } from '@mui/material';
 import { useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components';
 
 interface DotProps {
   filled: boolean;

@@ -1,5 +1,4 @@
-import { Button, LinearProgress, ToggleButtonGroup } from '@mui/material';
-import styled from 'styled-components';
+import { Button, LinearProgress, styled, ToggleButtonGroup } from '@mui/material';
 
 export const InputContainer = styled.div`
   display: flex;

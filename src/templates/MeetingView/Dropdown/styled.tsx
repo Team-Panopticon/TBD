@@ -1,5 +1,4 @@
-import { Button } from '@mui/material';
-import styled from 'styled-components';
+import { Button, styled } from '@mui/material';
 
 export const DropdownContainer = styled.div`
   position: relative;

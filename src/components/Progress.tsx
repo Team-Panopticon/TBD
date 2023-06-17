@@ -1,6 +1,5 @@
-import { CircularProgress, Modal } from '@mui/material';
+import { CircularProgress, Modal, styled } from '@mui/material';
 import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
 
 import { showProgressState } from '../stores/showProgress';
 

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import { css, styled } from '@mui/material';
 
 export const VoteTableContainer = styled.div``;
 
