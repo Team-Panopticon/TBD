@@ -14,7 +14,7 @@ export function Dropdown(props: Props) {
   const [isShow, setShow] = useState(false);
 
   useEffect(() => {
-    if (isShow) {
+    if (!isShow) {
       return;
     }
     const handleCloseDropdown = () => setShow(false);
