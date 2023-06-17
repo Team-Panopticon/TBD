@@ -3,12 +3,12 @@ import { useRecoilState } from 'recoil';
 
 import { showProgressState } from '../stores/showProgress';
 
-const ProgressContainer = styled.div`
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
+const ProgressContainer = styled('div')({
+  display: 'flex',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
 
 export function Progress() {
   const [showProgress] = useRecoilState(showProgressState);

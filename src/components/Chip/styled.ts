@@ -1,33 +1,19 @@
-import { css, styled } from '@mui/material';
+import { styled } from '@mui/material';
 
-export const ChipContainer = styled.div<{ checked?: boolean; focus?: boolean }>`
-  display: inline-flex;
-  height: 22px;
-  padding: 0 4px;
-  align-items: center;
-  box-shadow: ${({ focus }) => (focus ? `inset 0 0 0 2px #009568` : `none`)};
+export const ChipContainer = styled('div')<{ checked?: boolean; focus?: boolean }>((props) => ({
+  display: 'inline-flex',
+  height: '22px',
+  padding: '0 4px',
+  alignItems: 'center',
+  boxShadow: `${props.focus ? `inset 0 0 0 2px #009568` : `none`}`,
 
-  &:hover {
-    cursor: pointer;
-  }
+  '&:hover': {
+    cursor: 'pointer',
+  },
 
-  ${(props) => {
-    const {
-      checked,
-      theme: {
-        palette: { primary, secondary },
-      },
-    } = props;
+  backgroundColor: props.checked
+    ? props.theme.palette.primary.main
+    : props.theme.palette.secondary.main,
 
-    if (checked) {
-      return css`
-        background-color: ${primary.main};
-        color: white;
-      `;
-    }
-
-    return css`
-      background-color: ${secondary.main};
-    `;
-  }};
-`;
+  color: props.checked ? 'white' : 'inherit',
+}));
