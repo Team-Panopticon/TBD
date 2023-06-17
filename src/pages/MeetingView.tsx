@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
@@ -11,10 +11,13 @@ import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
+import { currentUserState } from '../stores/currentUser';
 import { votingsState } from '../stores/voting';
+import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 
 export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
+  const currentUser = useRecoilValue(currentUserState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const navigate = useNavigate();
   const { meetingId } = useParams();
@@ -45,6 +48,14 @@ export function MeetingView() {
       <Header>
         <HeaderContainer>
           <h1>{meeting.name}</h1>
+          <Dropdown
+            onClickConfirmButton={() => {
+              // TODO: 확정하기 api 연결
+            }}
+            onClickEditButton={() => {
+              // TODO: 수정하기 api 연결
+            }}
+          />
         </HeaderContainer>
       </Header>
       <Contents>
@@ -69,7 +80,7 @@ export function MeetingView() {
               navigate(`/meetings/${meeting.id}/vote`);
             }}
           >
-            다시 투표하러 가기
+            {currentUser?.name ? '다시 투표하러 가기' : '투표하러 가기'}
           </Button>
         </FullHeightButtonGroup>
       </Footer>

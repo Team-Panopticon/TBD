@@ -32,12 +32,24 @@ export const DateContentBox = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.secondary.main};
 `;
 
-export const ContentBox = styled.button<{ checked?: boolean; focus?: boolean }>`
+export const ContentBox = styled.button<{
+  checked?: boolean;
+  focus?: boolean;
+  progress: number;
+  isHideVotingStatus: boolean;
+}>`
+  position: relative;
+  color: ${({ progress, isHideVotingStatus }) =>
+    progress >= 80 && !isHideVotingStatus ? 'white' : 'black'};
   ${commonStyle}
   background-color: white;
   border: 1px solid ${({ theme }) => theme.palette.secondary.main};
   cursor: pointer;
   box-shadow: ${({ focus }) => (focus ? `inset 0 0 0 2px #009568` : `none`)};
+
+  > span {
+    z-index: 10;
+  }
 
   ${(props) => {
     const {
@@ -71,4 +83,16 @@ export const Wrapper = styled.div`
 
 export const Divider = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.secondary.main};
+`;
+
+export const OpacityProgress = styled.div<{ progress: number; isHide: boolean }>`
+  display: ${({ isHide }) => (isHide ? 'none' : 'block')};
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  background-color: ${({ theme }) => theme.palette.primary.main};
+  opacity: ${({ progress }) => `${progress}%`};
+  width: 100%;
+  height: 100%;
 `;

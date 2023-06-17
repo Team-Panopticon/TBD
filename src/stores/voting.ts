@@ -71,6 +71,7 @@ export const userListState = selector({
 
     return votings.map<UserListData>((user) => {
       return {
+        id: user.id,
         username: user.username,
         checked: false,
         focused: false,

@@ -1,22 +1,25 @@
 import dayjs, { Dayjs } from 'dayjs';
-import { useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
 import { Voting, VotingSlot } from '../apis/votes';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
+import { currentUserState } from '../stores/currentUser';
+import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { getVotingCountByDay, votingsState } from '../stores/voting';
 
 export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
-  // userMap, currentUserVotings, lastClickedSlot, lastClickedUser 상태관리
-  const [currentUserVotingSlots, setCurrentUserVotingSlots] = useState<VotingSlot[]>([]);
+  const currentUser = useRecoilValue(currentUserState);
+  const [currentUserVotingSlots, setCurrentUserVotingSlots] = useRecoilState(
+    currentUserVotingSlotsState,
+  );
 
   const votings = useRecoilValue(votingsState);
   // TODO: 신규 유저 외에 기존 유저 선택 시 로직 반영
   const currentVoting: Voting = {
-    id: 'newUser',
-    username: 'newUser',
+    id: currentUser?.id ?? 'newUser',
+    username: currentUser?.username ?? 'newUser',
     dateType: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
     mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
@@ -53,6 +56,7 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   return {
     voteTableDataList,
     currentUserVotingSlots,
+    setCurrentUserVotingSlots,
     handleClickVoteTableSlot,
   };
 };

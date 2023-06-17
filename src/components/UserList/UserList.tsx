@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react';
 
+import { User } from '../../stores/currentUser';
 import { ChipInnerText, StyledChip, UserListContainer } from './styled';
 
 export interface UserListVoteData {
@@ -9,9 +10,7 @@ export interface UserListVoteData {
   focused: boolean;
 }
 
-export interface UserListData extends UserListVoteData {
-  username: string;
-}
+export interface UserListData extends UserListVoteData, User {}
 
 interface Props {
   className?: string;
