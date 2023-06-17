@@ -6,7 +6,7 @@ import { api } from './instance';
 import { ISODateTime } from './types';
 
 /** date가 string 타입인 서버 응답 타입 */
-interface VotingSlotResponse {
+export interface VotingSlotResponse {
   date: ISODateTime;
   meal?: MealType;
 }

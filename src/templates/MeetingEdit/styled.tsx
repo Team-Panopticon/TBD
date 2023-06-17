@@ -48,7 +48,7 @@ export const StepBox = styled.div<StepBox>`
   flex-grow: 0;
 `;
 export const StepBoxContainer = styled.div`
-  padding: 0 32px;
+  /* padding: 0 32px; */
   height: 100%;
   overflow: scroll;
   padding-bottom: 4px;
