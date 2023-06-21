@@ -76,6 +76,7 @@ export const getVotings = (
           currentVoting?.[MeetingType.meal]?.some(
             (votingSlot) => day.isSame(votingSlot.date) && votingSlot.meal === MealType.lunch,
           ) ?? false,
+        mealType: MealType.lunch,
       },
       {
         total,
@@ -85,6 +86,7 @@ export const getVotings = (
           currentVoting?.[MeetingType.meal]?.some(
             (votingSlot) => day.isSame(votingSlot.date) && votingSlot.meal === MealType.dinner,
           ) ?? false,
+        mealType: MealType.dinner,
       },
     ];
     return votingList;

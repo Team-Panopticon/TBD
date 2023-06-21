@@ -110,11 +110,23 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
       if (voteTableData) {
         const { votings } = voteTableData;
 
-        const newVotings = votings.map((voting) => ({
-          ...voting,
-          checked,
-          focused: checked,
-        })) as [VoteTableVoting, VoteTableVoting] | [VoteTableVoting];
+        const newVotings = votings.map((voting) => {
+          // MeetingType이 date이거나 mealType이 slot의 meal과 동일할 때만 checked를 반영
+          if (meetingType === MeetingType.date || voting.mealType === slot.meal) {
+            return {
+              ...voting,
+              checked,
+              focused: checked,
+            };
+          } else {
+            // 위 조건에 만족하지 않으면 클릭되지 않은 슬롯이므로 checked & focused가 false (ex. dinner가 클릭됬고 현재 voting은 lunch인 경우)
+            return {
+              ...voting,
+              checked: false,
+              focused: false,
+            };
+          }
+        }) as [VoteTableVoting, VoteTableVoting] | [VoteTableVoting];
 
         return changeVoteTableData(newVoteTableDataList, {
           ...voteTableData,
