@@ -21,7 +21,7 @@ export const useMeetingResult = (meeting?: GetMeetingResponse) => {
     setConfirmedUserList([]);
     setMissedUserList([]);
     votings.forEach((voting) => {
-      const { username, dateType, mealType } = voting;
+      const { username, dateType, mealType, id } = voting;
 
       let isConfirmed = false;
       // mealType 이면
@@ -37,6 +37,7 @@ export const useMeetingResult = (meeting?: GetMeetingResponse) => {
       }
 
       const newUser = {
+        id,
         username,
         checked: false,
         focused: false,
