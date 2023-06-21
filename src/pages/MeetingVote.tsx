@@ -1,7 +1,7 @@
 import { Alert, Button } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
@@ -25,6 +25,7 @@ export function MeetingVote() {
   const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserState);
+  const resetCurrentUser = useResetRecoilState(currentUserState);
   const setCurrentUserVotingSlots = useSetRecoilState(currentUserVotingSlotsState);
   const setShowVoteSuccessPopup = useSetRecoilState(showVoteSuccessPopupState);
   const isNewUser = !currentUser;
@@ -57,6 +58,7 @@ export function MeetingVote() {
     const isCurrentUserClicked = currentUser?.id === clickedUser.id;
     if (isCurrentUserClicked) {
       setCurrentUser(undefined);
+      resetCurrentUser();
       setCurrentUserVotingSlots([]);
       return;
     }

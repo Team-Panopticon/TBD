@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Button, IconButton, Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
@@ -12,12 +12,15 @@ import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
+import { currentUserState } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
+import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 
 export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
+  const currentUser = useRecoilValue(currentUserState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const navigate = useNavigate();
   const { meetingId } = useParams();
@@ -25,23 +28,16 @@ export function MeetingView() {
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
 
-  const handlePasswordConfirm = (username: string) => {
-    /**
-     * @TODO
-     * 투표 반영 API
-     */
-  };
-
   useEffect(() => {
     (async () => {
       if (!meetingId) {
         return;
       }
 
-      const data = await getVotings('2');
+      const data = await getVotings(meetingId);
       setVotings(data);
 
-      const meetingData = await getMeeting('2');
+      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
   }, [setVotings, meetingId]);
@@ -55,6 +51,14 @@ export function MeetingView() {
       <Header>
         <HeaderContainer>
           <h1>{meeting.name}</h1>
+          <Dropdown
+            onClickConfirmButton={() => {
+              // TODO: 확정하기 api 연결
+            }}
+            onClickEditButton={() => {
+              // TODO: 수정하기 api 연결
+            }}
+          />
         </HeaderContainer>
       </Header>
       <Contents>
@@ -79,7 +83,7 @@ export function MeetingView() {
               navigate(`/meetings/${meeting.id}/vote`);
             }}
           >
-            다시 투표하러 가기
+            {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
           </Button>
         </FullHeightButtonGroup>
       </Footer>

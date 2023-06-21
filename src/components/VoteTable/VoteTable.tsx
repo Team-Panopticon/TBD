@@ -10,6 +10,7 @@ import {
   Divider,
   Header,
   HeaderBox,
+  OpacityProgress,
   VoteTableContainer,
   Wrapper,
 } from './styled';
@@ -42,6 +43,8 @@ interface Props {
 export const VoteTable: React.FC<Props> = (props) => {
   const { data, onClick, style, className, headers } = props;
 
+  const isHideVotingStatus = data.some((item) => item.votings.some((vote) => vote.checked));
+
   return (
     <VoteTableContainer className={className} style={style}>
       <Header>
@@ -53,7 +56,12 @@ export const VoteTable: React.FC<Props> = (props) => {
       </Header>
       <ContentWrapper>
         {data.map((item, idx) => (
-          <VoteTableContent onClick={onClick} key={`vote-item-${idx}`} item={item} />
+          <VoteTableContent
+            isHideVotingStatus={isHideVotingStatus}
+            onClick={onClick}
+            key={`vote-item-${idx}`}
+            item={item}
+          />
         ))}
       </ContentWrapper>
     </VoteTableContainer>
@@ -63,10 +71,11 @@ export const VoteTable: React.FC<Props> = (props) => {
 interface VoteTableContentProps {
   item: VoteTableRowData;
   onClick?: onClickHandler;
+  isHideVotingStatus: boolean;
 }
 
 const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
-  const { item, onClick } = props;
+  const { item, onClick, isHideVotingStatus } = props;
   const { date, votings } = item;
 
   return (
@@ -75,13 +84,20 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
       <Divider />
       {votings.map((vote, idx) => {
         const { current, total, focused, checked } = vote;
+        const progress = Number(((current / total || 0) * 100).toFixed(0));
+
         return (
           <ContentBox
+            progress={progress}
+            isHideVotingStatus={isHideVotingStatus}
             key={`vote-content-${idx}`}
             focus={focused}
             checked={checked}
             onClick={() => onClick?.(date, !checked, vote, { date })}
-          >{`${current}/${total} (${((current / total || 0) * 100).toFixed(0)}%)`}</ContentBox>
+          >
+            <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
+            <span>{`${current}/${total} (${progress}%)`}</span>
+          </ContentBox>
         );
       })}
     </Wrapper>
