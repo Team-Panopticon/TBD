@@ -1,4 +1,5 @@
 import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { VotingSlotResponse } from './votes';
 
 export type ISODateTime = string;
 
@@ -21,4 +22,5 @@ export interface GetMeetingResponse {
   dates: ISODateTime[];
   type: MeetingType;
   deadline: ISODateTime;
+  confirmedDateType?: VotingSlotResponse;
 }

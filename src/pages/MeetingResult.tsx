@@ -42,30 +42,34 @@ export function MeetingResult() {
         <FlexVertical gap={1}>
           <Header>
             <HeaderContainer>
-              <Typography variant="h5" fontWeight={300} align="center">
-                {'congratulations!'}
-              </Typography>
-              <FlexVertical alignItems={'center'}>
-                <HifiveIcon width={100} height={100}></HifiveIcon>
+              <FlexVertical flex={1} alignItems={'center'} gap={1}>
+                <FlexVertical flex={1} gap={1}>
+                  <Typography variant="h5" fontWeight={300}>
+                    {'congratulations!'}
+                  </Typography>
+                  <FlexVertical alignItems={'center'}>
+                    <HifiveIcon width={100} height={100}></HifiveIcon>
+                  </FlexVertical>
+                  <Typography variant="h5" fontWeight={300} align="center">
+                    <Typography variant="body1" fontWeight={300} align="center">
+                      {meeting?.name && `${meeting?.name}의`}
+                    </Typography>
+                    <Typography variant="body1" fontWeight={500} align="center">
+                      날짜가 정해졌어요
+                    </Typography>
+                  </Typography>
+                </FlexVertical>
+                <FlexVertical>
+                  <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
+                    {'11/4'}
+                  </Typography>
+                  <Typography variant="h5" color={'primary'} align="center">
+                    {'[화요일]'}
+                  </Typography>
+                </FlexVertical>
               </FlexVertical>
-              <Typography variant="h5" fontWeight={300} align="center">
-                <Typography variant="body1" fontWeight={300} align="center">
-                  {'부캠 연말 모임의'}
-                </Typography>
-                <Typography variant="body1" fontWeight={500} align="center">
-                  날짜가 정해졌어요
-                </Typography>
-              </Typography>
             </HeaderContainer>
           </Header>
-          <FlexVertical>
-            <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
-              {'11/4'}
-            </Typography>
-            <Typography variant="h3" color={'primary'} align="center">
-              {'화요일'}
-            </Typography>
-          </FlexVertical>
 
           <FlexVertical gap={1}>
             <FlexVertical>
@@ -95,17 +99,17 @@ export function MeetingResult() {
           <Button
             color="secondary"
             onClick={() => {
-              navigate(`/meetings/1`);
+              meeting?.id && navigate(`/meetings/${meeting?.id}`);
             }}
           >
-            다음에하기
+            상세보기
           </Button>
           <Button
             onClick={() => {
               //
             }}
           >
-            투표하기
+            공유하기
           </Button>
         </FullHeightButtonGroup>
       </Footer>
