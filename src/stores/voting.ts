@@ -22,9 +22,14 @@ type SelectorMapper<Type> = {
   [Property in keyof Type]: Type[Property];
 };
 
+/**
+ * 입력된 day 또는 day의 mealType에 대해 votings에서 투표 수를 찾아서 반환
+ * meetingType이 date일 경우 날짜만 비교
+ * meetingType이 meal일 경우 mealType을 함께 전달받아 mealType도 함께 비교
+ */
 const getVotingCountByDay = (
-  day: Dayjs,
   meetingType: MeetingType,
+  day: Dayjs,
   votings: Voting[],
   mealType?: MealType,
 ) => {
@@ -50,37 +55,52 @@ const getVotingCountByDay = (
   }, 0);
 };
 
-type VoteTableWithoutCurrent = Omit<VoteTableVoting, 'current'>;
-
+/** VoteTableRowData 타입의 votings를 생성 */
 export const getVotings = (
-  votings: Voting[],
   meetingType: MeetingType,
   day: Dayjs,
-  voteTableWithoutCurrent: VoteTableWithoutCurrent,
+  votings: Voting[],
+  currentVoting?: Voting,
 ) => {
+  const total = currentVoting ? votings.length + 1 : votings.length;
+  const focused = false; // focused는 false로 고정됨
+  const votingsWithCurrentVoting = currentVoting ? [...votings, currentVoting] : votings;
+
   if (meetingType === MeetingType.meal) {
     const votingList: [VoteTableVoting, VoteTableVoting] = [
       {
-        ...voteTableWithoutCurrent,
-        current: getVotingCountByDay(day, meetingType, votings, MealType.lunch),
+        total,
+        focused,
+        current: getVotingCountByDay(meetingType, day, votingsWithCurrentVoting, MealType.lunch),
+        checked:
+          currentVoting?.[MeetingType.meal]?.some(
+            (votingSlot) => day.isSame(votingSlot.date) && votingSlot.meal === MealType.lunch,
+          ) ?? false,
       },
       {
-        ...voteTableWithoutCurrent,
-        current: getVotingCountByDay(day, meetingType, votings, MealType.dinner),
+        total,
+        focused,
+        current: getVotingCountByDay(meetingType, day, votingsWithCurrentVoting, MealType.dinner),
+        checked:
+          currentVoting?.[MeetingType.meal]?.some(
+            (votingSlot) => day.isSame(votingSlot.date) && votingSlot.meal === MealType.dinner,
+          ) ?? false,
       },
     ];
     return votingList;
-  }
-  if (meetingType === MeetingType.date) {
+  } else {
+    const checked =
+      currentVoting?.[MeetingType.date]?.some((voting) => voting.date.isSame(day, 'day')) ?? false;
     const votingList: [VoteTableVoting] = [
       {
-        ...voteTableWithoutCurrent,
-        current: getVotingCountByDay(day, meetingType, votings),
+        total,
+        focused,
+        current: getVotingCountByDay(meetingType, day, votingsWithCurrentVoting),
+        checked,
       },
     ];
     return votingList;
   }
-  throw Error('invalid meetingType');
 };
 
 export const votingsState = atom<Voting[]>({
@@ -102,15 +122,9 @@ export const voteTableDataListState = selectorFamily<
 
       const votings = get(votingsState);
 
-      const voteTableWithoutCurrent = {
-        total: votings.length,
-        checked: false,
-        focused: false,
-      };
-
       const tableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
         date: day,
-        votings: getVotings(votings, meeting.type, day, voteTableWithoutCurrent),
+        votings: getVotings(meeting.type, day, votings),
       }));
 
       return tableDataList;

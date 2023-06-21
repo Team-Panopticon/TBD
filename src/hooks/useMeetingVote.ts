@@ -24,16 +24,10 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
     mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
 
-  const userVotingsWithCurrentUser = [...votings, currentVoting];
-
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
     date: day,
-    votings: getVotings(userVotingsWithCurrentUser, meeting.type, day, {
-      total: userVotingsWithCurrentUser.length,
-      checked: currentUserVotingSlots.some((voting) => voting.date.isSame(day, 'day')),
-      focused: false,
-    }),
+    votings: getVotings(meeting.type, day, votings, currentVoting),
   }));
 
   const handleClickVoteTableSlot = (

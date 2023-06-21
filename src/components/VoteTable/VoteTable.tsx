@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
 
 import { VotingSlot } from '../../apis/votes';
+import { MealType } from '../../constants/meeting';
 import { UserListVoteData } from '../UserList/UserList';
 import {
   ContentBox,
@@ -78,6 +79,13 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
   const { item, onClick, isHideVotingStatus } = props;
   const { date, votings } = item;
 
+  const handleClick = (checked: boolean, vote: VoteTableVoting, idx: number) => {
+    /** @TODO mealType을 idx가 아닌 명시적인 방법으로 판별 */
+    const mealType = idx === 0 ? MealType.lunch : MealType.dinner;
+    const slot: VotingSlot = { date, meal: mealType };
+    onClick?.(date, !checked, vote, slot);
+  };
+
   return (
     <Wrapper>
       <DateContentBox>{date.format('M/D (dd)')}</DateContentBox>
@@ -93,7 +101,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             key={`vote-content-${idx}`}
             focus={focused}
             checked={checked}
-            onClick={() => onClick?.(date, !checked, vote, { date })}
+            onClick={() => handleClick(checked, vote, idx)}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>
