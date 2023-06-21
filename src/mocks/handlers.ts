@@ -32,4 +32,7 @@ export const handlers = [
   rest.post(`${baseURL}meetings/:meetingId/votings`, (req, res, ctx) => {
     return res(ctx.delay(500), ctx.json(mockDateVoting));
   }),
+  rest.put(`${baseURL}meetings/:meetingId/votings/:votingId`, (req, res, ctx) => {
+    return res(ctx.delay(500), ctx.json(mockDateVoting));
+  }),
 ];
