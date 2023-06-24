@@ -12,7 +12,7 @@ export const Content = styled('div')<{ width: number; height: number }>((props) 
   left: '50%',
   transform: 'translate(-50%, -50%)',
 
-  bacgroundColor: 'white',
+  backgroundColor: 'white',
   width: `${props.width}px`,
   height: `${props.height}px`,
 
