@@ -1,7 +1,7 @@
+import { styled } from '@mui/material';
 import { ReactNode } from 'react';
-import styled from 'styled-components';
 
-export const Page = styled.div`
+export const Page = styled('div')`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -10,7 +10,7 @@ export const Page = styled.div`
   overflow: hidden;
 `;
 
-export const Header = styled.header`
+export const Header = styled('header')`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -18,27 +18,27 @@ export const Header = styled.header`
   flex: 0;
 `;
 
-export const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  gap: 8px;
-  padding: 32px;
+export const HeaderContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'row',
+  height: '100%',
+  gap: '8px',
+  padding: '32px',
 
-  h1 {
-    display: flex;
-    align-items: center;
-    font-size: 24px;
-    font-weight: 700;
-  }
-`;
+  h1: {
+    display: 'flex',
+    alignItems: 'center',
+    fontSize: '24px',
+    fontWeight: '700',
+  },
+});
 
-export const ContentsWrapper = styled.div`
+export const ContentsWrapper = styled('div')`
   overflow: auto;
   padding: 16px 32px;
   height: 100%;
 `;
-export const ContentsBox = styled.div`
+export const ContentsBox = styled('div')`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -53,7 +53,7 @@ export const Contents = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const Footer = styled.footer`
-  height: 56px;
-  flex-shrink: 0;
-`;
+export const Footer = styled('footer')({
+  height: '56px',
+  flexShrink: 0,
+});

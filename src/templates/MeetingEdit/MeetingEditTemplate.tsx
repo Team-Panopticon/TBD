@@ -3,14 +3,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
 import { SetterOrUpdater } from 'recoil';
 
-import { DateInput } from '../../components/DateInput';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { FullHeightButtonGroup } from '../../components/styled';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import {
   CreateMeetingState,
-  validateDeadline,
   validateMeeting,
   validateMeetingName,
   validateSelectedDates,
@@ -160,19 +158,6 @@ const getMeetingEditContent = (
           }}
         />
       );
-    case 'deadline':
-      return (
-        <DateInput
-          selectedDate={meeting.deadline}
-          onChange={(v) => {
-            setValue((prev) => ({
-              ...prev,
-              deadline: v,
-            }));
-          }}
-          minDate={dayjs()}
-        />
-      );
     default:
       return <></>;
   }
@@ -190,10 +175,6 @@ const getIsCurrentStepValid = (type: IMeetingEditStep['type'], meeting: CreateMe
       );
     case 'type':
       return meeting.type !== undefined;
-    case 'deadline':
-      return (
-        meeting.deadline !== undefined && validateDeadline({ deadline: meeting.deadline, today })
-      );
     default:
       return false;
   }

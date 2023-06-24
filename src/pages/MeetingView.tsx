@@ -31,10 +31,10 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings(meetingId);
+      const data = await getVotings('2');
       setVotings(data);
 
-      const meetingData = await getMeeting(meetingId);
+      const meetingData = await getMeeting('2');
       setMeeting(meetingData);
     })();
   }, [setVotings, meetingId]);
@@ -80,7 +80,7 @@ export function MeetingView() {
               navigate(`/meetings/${meeting.id}/vote`);
             }}
           >
-            {currentUser?.name ? '다시 투표하러 가기' : '투표하러 가기'}
+            {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
           </Button>
         </FullHeightButtonGroup>
       </Footer>

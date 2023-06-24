@@ -1,24 +1,8 @@
-import 'styled-components';
-declare module 'styled-components' {
-  export interface DefaultTheme {
-    palette: {
-      primary: {
-        main: string;
-      };
-      secondary: {
-        main: string;
-      };
-      transPrimary: {
-        main: string;
-        contrastText: string;
-      };
-    };
-  }
-}
+import { PaletteColor } from '@mui/material/styles';
 
 declare module '@mui/material/styles' {
   interface CustomPalette {
-    transPrimary: PaletteColorOptions;
+    transPrimary: Omit<PaletteColor, 'light' | 'dark'>;
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Palette extends CustomPalette {}

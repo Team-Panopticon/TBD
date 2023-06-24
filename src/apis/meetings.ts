@@ -12,7 +12,6 @@ const meetingStateToRequest = (
     ...state,
     password: setPassword ? state.password : undefined,
     dates: state.dates.map((date) => date.toISOString()),
-    deadline: state.deadline.toISOString(),
   };
 };
 

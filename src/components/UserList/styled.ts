@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import { styled } from '@mui/material';
 
 import { Chip } from '../Chip/Chip';
-export const UserListContainer = styled.div`
+export const UserListContainer = styled('div')`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

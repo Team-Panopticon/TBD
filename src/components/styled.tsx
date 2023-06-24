@@ -1,5 +1,4 @@
-import { Box, ButtonGroup } from '@mui/material';
-import styled from 'styled-components';
+import { Box, ButtonGroup, styled } from '@mui/material';
 
 export const FullHeightButtonGroup = styled(ButtonGroup)`
   height: 100%;

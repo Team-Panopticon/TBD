@@ -1,15 +1,14 @@
-import { CircularProgress, Modal } from '@mui/material';
+import { CircularProgress, Modal, styled } from '@mui/material';
 import { useRecoilState } from 'recoil';
-import styled from 'styled-components';
 
 import { showProgressState } from '../stores/showProgress';
 
-const ProgressContainer = styled.div`
-  display: flex;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-`;
+const ProgressContainer = styled('div')({
+  display: 'flex',
+  height: '100%',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
 
 export function Progress() {
   const [showProgress] = useRecoilState(showProgressState);

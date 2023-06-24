@@ -7,7 +7,6 @@ export interface CreateMeetingRequest {
   name: string;
   dates: ISODateTime[];
   type: MeetingType;
-  deadline: ISODateTime;
   password?: string;
 }
 
@@ -21,6 +20,5 @@ export interface GetMeetingResponse {
   name: string;
   dates: ISODateTime[];
   type: MeetingType;
-  deadline: ISODateTime;
   confirmedDateType?: VotingSlotResponse;
 }
