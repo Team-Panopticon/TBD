@@ -30,6 +30,7 @@ export interface VotingSlot {
   date: Dayjs;
   meal?: MealType;
 }
+export type DateVotingSlot = Pick<VotingSlot, 'date'>;
 
 const usersResponseToState = (response: VotingResponse[]): Voting[] => {
   return [...response].map((vote) => {
