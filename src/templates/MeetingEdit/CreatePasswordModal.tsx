@@ -20,7 +20,7 @@ interface Props {
  * - 비밀번호 유효성 검증과 표시
  * - 버튼 클릭에 따라서 비밀번호를 인자로 onConfirm handler 호출
  */
-export function InputPasswordModal({
+export function CreatePasswordModal({
   show,
   password,
   onChange,

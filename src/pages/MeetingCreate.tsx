@@ -7,7 +7,7 @@ import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
-import { InputPasswordModal } from '../templates/MeetingEdit/InputPasswordModal';
+import { CreatePasswordModal } from '../templates/MeetingEdit/CreatePasswordModal';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 /**
@@ -70,7 +70,7 @@ export function MeetingCreate() {
         onChange={setMeeting}
         onSubmit={handleMeetingEditComplete}
       ></MeetingEditTemplate>
-      <InputPasswordModal
+      <CreatePasswordModal
         show={showPasswordModal}
         password={meeting.password}
         onChange={handlePasswordChange}
