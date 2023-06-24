@@ -33,22 +33,16 @@ const getVotingCountByDay = (
   votings: Voting[],
   mealType?: MealType,
 ) => {
-  /** TODO: dateType인지 meatType인지 뽑아서 비교해야함 */
   return votings.reduce((acc, voting) => {
-    if (meetingType === MeetingType.date) {
-      const hasVotedForGivenDay = voting[meetingType]?.some((d) =>
-        day.isSame(dayjs(d.date), 'day'),
-      );
-      if (hasVotedForGivenDay) {
-        return acc + 1;
-      }
-    } else {
-      const hasVotedForGivenDay = voting[meetingType]?.some(
-        (d) => d.meal === mealType && day.isSame(dayjs(d.date), 'day'),
-      );
-      if (hasVotedForGivenDay) {
-        return acc + 1;
-      }
+    const hasVotedForGivenDay = voting[meetingType]?.some((d) => {
+      const isVotedDay = day.isSame(dayjs(d.date), 'day');
+      // mealType이 있을 경우 mealType을 비교, 없으면 true
+      const isSameMealType = mealType ? d.meal === mealType : true;
+
+      return isVotedDay && isSameMealType;
+    });
+    if (hasVotedForGivenDay) {
+      return acc + 1;
     }
 
     return acc;
@@ -66,39 +60,43 @@ export const getVotings = (
   const focused = false; // focused는 false로 고정됨
   const votingsWithCurrentVoting = currentVoting ? [...votings, currentVoting] : votings;
 
+  const getChecked = (mealType?: MealType) => {
+    const checked =
+      currentVoting?.[meetingType]?.some((votingSlot) => {
+        const isVotedDay = day.isSame(dayjs(votingSlot.date), 'day');
+        const isSameMealType = mealType ? votingSlot.meal === mealType : true;
+
+        return isVotedDay && isSameMealType;
+      }) ?? false;
+
+    return checked;
+  };
+
   if (meetingType === MeetingType.meal) {
     const votingList: [VoteTableVoting, VoteTableVoting] = [
       {
         total,
         focused,
         current: getVotingCountByDay(meetingType, day, votingsWithCurrentVoting, MealType.lunch),
-        checked:
-          currentVoting?.[MeetingType.meal]?.some(
-            (votingSlot) => day.isSame(votingSlot.date) && votingSlot.meal === MealType.lunch,
-          ) ?? false,
+        checked: getChecked(MealType.lunch),
         mealType: MealType.lunch,
       },
       {
         total,
         focused,
         current: getVotingCountByDay(meetingType, day, votingsWithCurrentVoting, MealType.dinner),
-        checked:
-          currentVoting?.[MeetingType.meal]?.some(
-            (votingSlot) => day.isSame(votingSlot.date) && votingSlot.meal === MealType.dinner,
-          ) ?? false,
+        checked: getChecked(MealType.dinner),
         mealType: MealType.dinner,
       },
     ];
     return votingList;
   } else {
-    const checked =
-      currentVoting?.[MeetingType.date]?.some((voting) => voting.date.isSame(day, 'day')) ?? false;
     const votingList: [VoteTableVoting] = [
       {
         total,
         focused,
         current: getVotingCountByDay(meetingType, day, votingsWithCurrentVoting),
-        checked,
+        checked: getChecked(),
       },
     ];
     return votingList;
