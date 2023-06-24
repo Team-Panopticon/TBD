@@ -1,46 +1,40 @@
+import { styled } from '@mui/material';
 import { useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components';
 
 interface DotProps {
   filled: boolean;
   size: number;
 }
-const Flex = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  background-color: #fff;
-  font-size: 16px;
-  color: #000;
-  cursor: pointer;
-`;
-const Dot = styled.div<DotProps>`
-  ${({ size }) =>
-    css`
-      width: ${size}px;
-      height: ${size}px;
-    `}
-  border-radius: 50%;
-  background-color: #d9d9d9;
-  ${({ filled, theme }) =>
-    filled &&
-    css`
-      background-color: ${theme.palette.primary.main};
-    `}
-  margin-right: 8px;
-`;
+const Flex = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  boxSizing: 'border-box',
+  backgroundColor: '#fff',
+  fontSize: '16px',
+  color: '#000',
+  cursor: 'pointer',
+});
 
-const HiddenInput = styled.input`
-  opacity: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 0;
-  height: 0;
-  margin: 0;
-  padding: 0;
-`;
+const Dot = styled('div')<DotProps>((props) => ({
+  width: `${props.size}px`,
+  height: `${props.size}px`,
+  borderRadius: '50%',
+  backgroundColor: props.filled ? props.theme.palette.primary.main : '#d9d9d9',
+  marginRight: '8px',
+}));
+
+const HiddenInput = styled('input')({
+  opacity: 0,
+  position: 'absolute',
+  left: 0,
+  top: 0,
+  width: 0,
+  height: 0,
+  margin: 0,
+  padding: 0,
+});
+
 interface MaskingInputProps {
   style?: React.CSSProperties;
   length: number;

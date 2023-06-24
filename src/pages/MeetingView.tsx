@@ -31,10 +31,10 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings(meetingId);
+      const data = await getVotings('2');
       setVotings(data);
 
-      const meetingData = await getMeeting(meetingId);
+      const meetingData = await getMeeting('2');
       setMeeting(meetingData);
     })();
   }, [setVotings, meetingId]);

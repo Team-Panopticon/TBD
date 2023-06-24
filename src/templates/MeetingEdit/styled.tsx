@@ -1,22 +1,20 @@
-import { Button, LinearProgress, ToggleButtonGroup } from '@mui/material';
-import styled from 'styled-components';
+import { Button, LinearProgress, styled, ToggleButtonGroup } from '@mui/material';
 
-export const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-`;
+export const InputContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '16px',
+});
 
-export const InputLabel = styled.label`
-  padding-bottom: 4px;
-`;
+export const InputLabel = styled('label')({
+  paddingBottom: '4px',
+});
 
-export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)`
-  display: flex;
-  justify-content: space-between;
-
-  gap: 25px;
-`;
+export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  gap: '25px',
+});
 
 export const customButtonStyle: React.CSSProperties = {
   border: '1px solid #D9D9D9',
@@ -24,57 +22,56 @@ export const customButtonStyle: React.CSSProperties = {
 };
 
 // StyledComponent for MeetingEditTemplate
-export const BorderLinearProgress = styled(LinearProgress)`
-  height: 8;
-  border-radius: 4;
-`;
+export const BorderLinearProgress = styled(LinearProgress)({
+  height: 8,
+  borderRadius: 4,
+});
 
 // StyledComponent for MeetingEditStepper
 export interface StepBox {
   show: boolean;
 }
-export const StepBox = styled.div<StepBox>`
-  display: flex;
-  flex-direction: column;
 
-  transition: all 0.8s ease-in-out;
+export const StepBox = styled('div')<StepBox>((props) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  transition: 'all 0.8s ease-in-out',
+  maxHeight: props.show ? '100%' : '0',
+  paddingBottom: props.show ? '20px' : '0',
 
-  max-height: ${({ show }) => (show ? '100%' : '0')};
+  overflow: 'hidden',
+  flexShrink: 0,
+  flexGrow: 0,
+}));
 
-  padding-bottom: ${({ show }) => (show ? '20px' : '0')};
+export const StepBoxContainer = styled('div')({
+  padding: '0 32px',
+  height: '100%',
+  overflow: 'scroll',
+  paddingBottom: '4px',
+  display: 'flex',
+  flexDirection: 'column',
+});
 
-  overflow: hidden;
-  flex-shrink: 0;
-  flex-grow: 0;
-`;
-export const StepBoxContainer = styled.div`
-  padding: 0 32px;
-  height: 100%;
-  overflow: scroll;
-  padding-bottom: 4px;
-  display: flex;
-  flex-direction: column;
-`;
+export const PasswordInput = styled('div')({
+  padding: '25px 35px',
 
-export const PasswordInput = styled.div`
-  padding: 25px 35px;
+  display: 'flex',
+  flexDirection: 'column',
 
-  display: flex;
-  flex-direction: column;
+  flexGrow: 1,
+});
 
-  flex-grow: 1;
-`;
+export const MaskingInputContainer = styled('div')({
+  height: '100%',
 
-export const MaskingInputContainer = styled.div`
-  height: 100%;
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+});
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-export const PasswordSkipBtn = styled(Button)`
-  position: absolute;
-  right: 5px;
-  top: 5px;
-`;
+export const PasswordSkipBtn = styled(Button)({
+  position: 'absolute',
+  right: '5px',
+  top: '5px',
+});

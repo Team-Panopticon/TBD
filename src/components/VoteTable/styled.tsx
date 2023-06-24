@@ -1,98 +1,103 @@
-import styled, { css } from 'styled-components';
+import { styled } from '@mui/material';
 
-export const VoteTableContainer = styled.div``;
+export const VoteTableContainer = styled('div')({});
 
-export const Header = styled.div`
-  display: flex;
-  gap: 8px;
-`;
+export const Header = styled('div')({ display: 'flex', gap: '8px' });
 
-export const ContentWrapper = styled.div``;
+export const ContentWrapper = styled('div')({});
 
-const commonStyle = css`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 105px;
-  height: 30px;
-  font-size: 12px;
-  margin-bottom: 8px;
-`;
+const commonStyle = {
+  flex: 1,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '105px',
+  height: '30px',
+  fontSize: '12px',
+  marginBottom: '8px',
+};
 
-export const HeaderBox = styled.div`
-  ${commonStyle}
-  font-weight: 700;
-  background-color: ${({ theme }) => theme.palette.secondary.main};
-`;
+export const HeaderBox = styled('div')((props) => ({
+  ...commonStyle,
+  fontWeight: 700,
+  backgroundColor: props.theme.palette.secondary.main,
+}));
 
-export const DateContentBox = styled.div`
-  ${commonStyle}
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.palette.secondary.main};
-`;
+export const DateContentBox = styled('div')((props) => ({
+  ...commonStyle,
+  backgroundColor: 'white',
+  border: `1px solid ${props.theme.palette.secondary.main}`,
+}));
 
-export const ContentBox = styled.button<{
+export const ContentBox = styled('button')<{
   checked?: boolean;
   focus?: boolean;
   progress: number;
   isHideVotingStatus: boolean;
-}>`
-  position: relative;
-  color: ${({ progress, isHideVotingStatus }) =>
-    progress >= 80 && !isHideVotingStatus ? 'white' : 'black'};
-  ${commonStyle}
-  background-color: white;
-  border: 1px solid ${({ theme }) => theme.palette.secondary.main};
-  cursor: pointer;
-  box-shadow: ${({ focus }) => (focus ? `inset 0 0 0 2px #009568` : `none`)};
+}>((props) => {
+  const getColor = () => {
+    const { progress, isHideVotingStatus, checked } = props;
 
-  > span {
-    z-index: 10;
-  }
+    if (checked) {
+      return 'white';
+    }
 
-  ${(props) => {
+    if (progress >= 80 && !isHideVotingStatus) {
+      return 'white';
+    }
+
+    return 'black';
+  };
+
+  const getBackgroundColor = () => {
     const {
-      checked,
       theme: {
         palette: { primary },
       },
+      checked,
     } = props;
+    return checked ? primary.main : 'white';
+  };
 
-    if (checked) {
-      return css`
-        background-color: ${primary.main};
-        border: 1px solid ${primary.main};
-        color: white;
-      `;
-    }
-  }};
-`;
+  return {
+    position: 'relative',
+    ...commonStyle,
+    backgroundColor: getBackgroundColor(),
+    border: props.checked
+      ? `1px solid ${props.theme.palette.primary.main}`
+      : `1px solid ${props.theme.palette.secondary.main}`,
+    cursor: 'pointer',
+    boxShadow: props.focus ? 'inset 0 0 0 2px #009568' : 'none',
+    color: getColor(),
+  };
+});
 
-export const Wrapper = styled.div`
-  display: flex;
-  gap: 8px;
+export const Wrapper = styled('div')({
+  display: 'flex',
+  gap: '8px',
 
-  &:last-child {
-    button,
-    div {
-      margin-bottom: 0;
-    }
-  }
-`;
+  '&:last-child': {
+    button: {
+      marginBotton: 0,
+    },
+    div: {
+      marginBotton: 0,
+    },
+  },
+});
 
-export const Divider = styled.div`
-  border: 1px solid ${({ theme }) => theme.palette.secondary.main};
-`;
+export const Divider = styled('div')((props) => ({
+  border: `1px solid ${props.theme.palette.secondary.main}`,
+}));
 
-export const OpacityProgress = styled.div<{ progress: number; isHide: boolean }>`
-  display: ${({ isHide }) => (isHide ? 'none' : 'block')};
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  background-color: ${({ theme }) => theme.palette.primary.main};
-  opacity: ${({ progress }) => `${progress}%`};
-  width: 100%;
-  height: 100%;
-`;
+export const OpacityProgress = styled('div')<{ progress: number; isHide: boolean }>((props) => ({
+  display: props.isHide ? 'none' : 'block',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  zIndex: 0,
+  backgroundColor: props.theme.palette.primary.main,
+  opacity: `${props.progress}%`,
+  width: '100%',
+  height: '100%',
+}));
