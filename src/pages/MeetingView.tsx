@@ -14,13 +14,16 @@ import { useMeetingView } from '../hooks/useMeetingView';
 import { currentUserState } from '../stores/currentUser';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
+import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 
 export function MeetingView() {
-  const setVotings = useSetRecoilState<Voting[]>(votingsState);
-  const currentUser = useRecoilValue(currentUserState);
-  const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const navigate = useNavigate();
   const { meetingId } = useParams();
+  const currentUser = useRecoilValue(currentUserState);
+
+  const setVotings = useSetRecoilState<Voting[]>(votingsState);
+  const [meeting, setMeeting] = useState<GetMeetingResponse>();
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -39,6 +42,13 @@ export function MeetingView() {
     })();
   }, [setVotings, meetingId]);
 
+  const handleClickConfirmButton = () => {
+    // TODO: localstorage에 값이 없는 경우
+    setShowPasswordModal(true);
+
+    // TODO: localstorage에 이미 값이 있는 경우
+  };
+
   if (!meeting || !voteTableDataList) {
     return null;
   }
@@ -49,9 +59,7 @@ export function MeetingView() {
         <HeaderContainer>
           <h1>{meeting.name}</h1>
           <Dropdown
-            onClickConfirmButton={() => {
-              // TODO: 확정하기 api 연결
-            }}
+            onClickConfirmButton={handleClickConfirmButton}
             onClickEditButton={() => {
               // TODO: 수정하기 api 연결
             }}
@@ -84,6 +92,13 @@ export function MeetingView() {
           </Button>
         </FullHeightButtonGroup>
       </Footer>
+      <InputPasswordModal
+        show={showPasswordModal}
+        onConfirm={handleClickConfirmButton}
+        onCancel={() => {
+          setShowPasswordModal(false);
+        }}
+      />
     </Page>
   );
 }
