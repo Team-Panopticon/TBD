@@ -1,4 +1,4 @@
-import { ReactComponent as Hifive } from '../../assets/hifive.svg';
+import Hifive from '../../assets/hifive.svg';
 
 interface IIconProps {
   fill?: string;
@@ -14,5 +14,17 @@ export const HifiveIcon: React.FC<IIconProps> = ({
   style,
   width,
 }: IIconProps) => {
-  return <Hifive width={width} height={height} fill={fill} style={style} />;
+  return (
+    <img
+      src={Hifive}
+      alt="드롭다운 버튼"
+      style={{
+        width: width,
+        height: height,
+        fill: fill,
+        stroke: stroke,
+        ...style,
+      }}
+    />
+  );
 };
