@@ -6,7 +6,7 @@ export interface IMeetingEditStep {
   progress: number;
   title?: string;
   component?: React.ReactNode;
-  type: 'name' | 'date' | 'type' | 'deadline' | 'confirm';
+  type: 'name' | 'date' | 'type' | 'confirm';
 }
 
 export default function useMeetingEdit() {
@@ -33,14 +33,6 @@ export default function useMeetingEdit() {
         title: '모임 유형',
         type: 'type',
       },
-      {
-        index: 3,
-        description: '언제까지 투표하시나요?',
-        progress: 100,
-        title: '투표 마감',
-        type: 'deadline',
-      },
-
       {
         index: 4,
         description: '모임을 만들 준비가 되었나요?',

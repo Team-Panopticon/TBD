@@ -13,7 +13,6 @@ export const mockDateTypeMeeting: GetMeetingResponse = {
     '2022-11-30T01:44:39.114Z',
   ], // ISO date string with timezone
   type: MeetingType.date,
-  deadline: '2022-11-26T01:44:39.114Z', // ISO date string
 };
 
 export const mockMealTypeMeeting: GetMeetingResponse = {
@@ -28,5 +27,4 @@ export const mockMealTypeMeeting: GetMeetingResponse = {
     '2022-11-30T01:44:39.114Z',
   ], // ISO date string with timezone
   type: MeetingType.date,
-  deadline: '2022-11-26T01:44:39.114Z', // ISO date string
 };

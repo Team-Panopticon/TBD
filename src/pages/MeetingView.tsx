@@ -80,7 +80,7 @@ export function MeetingView() {
               navigate(`/meetings/${meeting.id}/vote`);
             }}
           >
-            {currentUser?.name ? '다시 투표하러 가기' : '투표하러 가기'}
+            {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
           </Button>
         </FullHeightButtonGroup>
       </Footer>

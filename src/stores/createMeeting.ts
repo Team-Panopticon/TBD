@@ -8,22 +8,18 @@ export interface CreateMeetingState {
   /** 투표 가능 날짜, Dayjs */
   dates: Dayjs[];
   type: MeetingType;
-  /** ISO date string with timezone */
-  deadline?: Dayjs;
   status: MeetingStatus;
   password?: string;
 }
 
 export interface ValidCreateMeetingState extends CreateMeetingState {
   name: string;
-  deadline: Dayjs;
 }
 
 export const initialState: CreateMeetingState = {
   name: undefined,
   dates: [],
   type: MeetingType.date,
-  deadline: undefined,
   status: MeetingStatus.inProgress,
   password: undefined,
 };
@@ -52,16 +48,6 @@ export const validateSelectedDates = ({ selectedDates, today }: ValidateSelected
   return isSameOrAfterToday;
 };
 
-interface ValidateDeadlineProps {
-  deadline: Dayjs;
-  today: Dayjs;
-}
-
-export const validateDeadline = ({ deadline, today }: ValidateDeadlineProps) => {
-  const isSameOrAfterToday = deadline.isSame(today) || deadline.isAfter(today);
-  return isSameOrAfterToday;
-};
-
 export const validatePassword = (password: string) => {
   if (password.length !== 4) {
     return false;
@@ -74,10 +60,9 @@ export const validatePassword = (password: string) => {
 };
 
 export const validateMeeting = (state: CreateMeetingState, today: Dayjs) => {
-  const { name, dates, deadline } = state;
+  const { name, dates } = state;
   const isNameValid = name !== undefined && validateMeetingName(name);
   const isDatesValid = validateSelectedDates({ selectedDates: dates, today });
-  const isDeadlineValid = deadline !== undefined && validateDeadline({ deadline, today });
 
-  return isNameValid && isDatesValid && isDeadlineValid;
+  return isNameValid && isDatesValid;
 };
