@@ -34,21 +34,40 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
       return;
     }
 
-    const votedDates = targetVoting[meetingType];
+    const votedSlots = targetVoting[meetingType];
 
-    if (!votedDates) {
+    if (!votedSlots) {
       return;
     }
 
     setVoteTableDataList((prev) => {
       if (checked) {
-        return resolveVoteTableDataList(prev).map((voteTableData) => {
-          const isVoted = votedDates.some((votedDate) => isSameSlot(votedDate, voteTableData));
-          if (isVoted) {
-            return checkVoteTableData(voteTableData);
-          }
+        return resolveVoteTableDataList(prev).map((voteTableRowData) => {
+          const newVotings = voteTableRowData.votings.map((voteTableVoting: VoteTableVoting) => {
+            // 사용자가 투표한 슬롯이 voteTableRowData.votings의 VoteTableVoting과 일치하는지 확인
+            const isVoted = votedSlots.some((votedSlot) =>
+              isSameSlot(votedSlot, {
+                date: voteTableRowData.date,
+                meal: voteTableVoting.mealType,
+              }),
+            );
 
-          return voteTableData;
+            // 일치한다면 checked true
+            if (isVoted) {
+              return {
+                ...voteTableVoting,
+                checked: true,
+                focused: false,
+              };
+            }
+
+            return voteTableVoting;
+          }) as VoteTableRowData['votings'];
+
+          return {
+            ...voteTableRowData,
+            votings: newVotings,
+          };
         });
       }
 
