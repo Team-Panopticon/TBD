@@ -10,8 +10,9 @@ interface Props {
   show: boolean;
   password?: string;
   onChange: (newPassword: string) => void;
-  onConfirm: (setPassword: boolean) => Promise<void>;
+  onConfirm: () => void;
   onCancel: () => void;
+  onSkip?: () => void;
 }
 
 /**
@@ -19,16 +20,15 @@ interface Props {
  * - 비밀번호 유효성 검증과 표시
  * - 버튼 클릭에 따라서 비밀번호를 인자로 onConfirm handler 호출
  */
-export function InputPasswordModal({ show, password, onChange, onConfirm, onCancel }: Props) {
+export function InputPasswordModal({
+  show,
+  password,
+  onChange,
+  onConfirm,
+  onCancel,
+  onSkip,
+}: Props) {
   const isPasswordValid = password !== undefined && validatePassword(password);
-
-  const handleSkip = () => {
-    onConfirm(false);
-  };
-
-  const handleSubmit = () => {
-    onConfirm(true);
-  };
 
   return (
     <CenterContentModal open={show} width={330} height={230}>
@@ -63,7 +63,7 @@ export function InputPasswordModal({ show, password, onChange, onConfirm, onCanc
           <Button color="secondary" onClick={onCancel}>
             취소하기
           </Button>
-          <Button onClick={handleSubmit} disabled={!isPasswordValid}>
+          <Button onClick={onConfirm} disabled={!isPasswordValid}>
             설정하기
           </Button>
         </FullHeightButtonGroup>
@@ -72,7 +72,7 @@ export function InputPasswordModal({ show, password, onChange, onConfirm, onCanc
         color="primary"
         variant="text"
         size="small"
-        onClick={handleSkip}
+        onClick={onSkip}
         style={{ borderRight: 0 }}
       >
         생략하기
