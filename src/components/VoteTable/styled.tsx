@@ -29,16 +29,48 @@ export const DateContentBox = styled('div')((props) => ({
   border: `1px solid ${props.theme.palette.secondary.main}`,
 }));
 
-export const ContentBox = styled('button')<{ checked?: boolean; focus?: boolean }>((props) => ({
-  ...commonStyle,
-  backgroundColor: props.checked ? props.theme.palette.primary.main : 'white',
-  border: props.checked
-    ? `1px solid ${props.theme.palette.primary.main}`
-    : `1px solid ${props.theme.palette.secondary.main}`,
-  cursor: 'pointer',
-  boxShadow: props.focus ? 'inset 0 0 0 2px #009568' : 'none',
-  color: props.checked ? 'white' : 'inherit',
-}));
+export const ContentBox = styled('button')<{
+  checked?: boolean;
+  focus?: boolean;
+  progress: number;
+  isHideVotingStatus: boolean;
+}>((props) => {
+  const getColor = () => {
+    const { progress, isHideVotingStatus, checked } = props;
+
+    if (checked) {
+      return 'white';
+    }
+
+    if (progress >= 80 && !isHideVotingStatus) {
+      return 'white';
+    }
+
+    return 'black';
+  };
+
+  const getBackgroundColor = () => {
+    const {
+      theme: {
+        palette: { primary },
+      },
+      checked,
+    } = props;
+    return checked ? primary.main : 'white';
+  };
+
+  return {
+    position: 'relative',
+    ...commonStyle,
+    backgroundColor: getBackgroundColor(),
+    border: props.checked
+      ? `1px solid ${props.theme.palette.primary.main}`
+      : `1px solid ${props.theme.palette.secondary.main}`,
+    cursor: 'pointer',
+    boxShadow: props.focus ? 'inset 0 0 0 2px #009568' : 'none',
+    color: getColor(),
+  };
+});
 
 export const Wrapper = styled('div')({
   display: 'flex',
@@ -56,4 +88,16 @@ export const Wrapper = styled('div')({
 
 export const Divider = styled('div')((props) => ({
   border: `1px solid ${props.theme.palette.secondary.main}`,
+}));
+
+export const OpacityProgress = styled('div')<{ progress: number; isHide: boolean }>((props) => ({
+  display: props.isHide ? 'none' : 'block',
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  zIndex: 0,
+  backgroundColor: props.theme.palette.primary.main,
+  opacity: `${props.progress}%`,
+  width: '100%',
+  height: '100%',
 }));

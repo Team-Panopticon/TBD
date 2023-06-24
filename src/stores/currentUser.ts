@@ -2,14 +2,13 @@ import { atom } from 'recoil';
 
 import { localstorageEffect } from './localstorageEffect';
 
-type IUser =
-  | {
-      id: number;
-      name: string;
-    }
-  | undefined;
+export interface User {
+  id: string;
+  username: string;
+}
+
 export const currentUserState = atom({
-  key: 'currentUserID',
+  key: 'currentUser',
   default: undefined,
-  effects: [localstorageEffect<IUser>('current_user')],
+  effects: [localstorageEffect<User | undefined>('current_user')],
 });
