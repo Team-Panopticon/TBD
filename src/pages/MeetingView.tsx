@@ -11,6 +11,7 @@ import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
+import { adminTokenState } from '../stores/adminToken';
 import { currentUserState } from '../stores/currentUser';
 import { votingsState } from '../stores/voting';
 import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
@@ -26,6 +27,7 @@ export function MeetingView() {
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const adminToken = useRecoilValue(adminTokenState);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -45,11 +47,12 @@ export function MeetingView() {
   }, [setVotings, meetingId]);
 
   const handleClickConfirmButton = () => {
-    // TODO: localstorage에 값이 없는 경우
-    // setShowPasswordModal(true);
-
-    // TODO: localstorage에 이미 값이 있는 경우
-    setShowConfirmModal(true);
+    const isLoggedInAsAdmin = adminToken !== undefined;
+    if (isLoggedInAsAdmin) {
+      setShowConfirmModal(true);
+    } else {
+      setShowPasswordModal(true);
+    }
   };
 
   if (!meeting || !voteTableDataList) {
@@ -97,7 +100,9 @@ export function MeetingView() {
       </Footer>
       <InputPasswordModal
         show={showPasswordModal}
-        onConfirm={handleClickConfirmButton}
+        onConfirm={() => {
+          setShowPasswordModal(false);
+        }}
         onCancel={() => {
           setShowPasswordModal(false);
         }}

@@ -1,9 +1,11 @@
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 import { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 import { CenterContentModal } from '../../components/CenterContentModal';
 import { MaskingInput } from '../../components/MaskingInput';
+import { adminTokenState } from '../../stores/adminToken';
 import { validatePassword } from '../../stores/createMeeting';
 import { MaskingInputContainer, PasswordInput } from '../MeetingEdit/styled';
 import { ModalTopRightButton } from './styled';
@@ -21,9 +23,10 @@ interface Props {
  */
 export function InputPasswordModal({ show, onConfirm, onCancel }: Props) {
   const [password, setPassword] = useState<string>('');
+  const setAdminToken = useSetRecoilState(adminTokenState);
 
   const handlePasswordChange = (newPassword: string) => {
-    if (password.length >= 4) {
+    if (newPassword.length >= 4) {
       const isPasswordValid = validatePassword(newPassword);
       if (!isPasswordValid) {
         // TODO: password 틀림을 표시 UI 효과
@@ -32,6 +35,8 @@ export function InputPasswordModal({ show, onConfirm, onCancel }: Props) {
       }
 
       // TODO: token 발급 API 호출
+      const sampleToken = 'sampleToken';
+      setAdminToken(sampleToken);
       // TODO: token 발급 성공 시 onConfirm 호출
       onConfirm();
       // TODO: token 발급 실패 시 password 틀림을 표시 UI 효과
