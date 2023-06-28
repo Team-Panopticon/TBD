@@ -56,7 +56,7 @@ export const useMeetingView = (meeting?: GetMeetingResponse) => {
             if (isVoted) {
               return {
                 ...voteTableVoting,
-                checked: true,
+                checked: isVoted,
                 focused: false,
               };
             }
