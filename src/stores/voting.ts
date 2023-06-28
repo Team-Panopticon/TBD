@@ -116,7 +116,7 @@ export const voteTableDataListState = selectorFamily<
   get:
     (meeting: GetMeetingResponse | undefined) =>
     ({ get }) => {
-      if (!meeting || !meeting.type) {
+      if (!meeting) {
         return;
       }
 
