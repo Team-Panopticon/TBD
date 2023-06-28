@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 import { mockDateTypeMeeting, mockMealTypeMeeting } from './meetingData';
-import { mockDateVotingsData, mockMealVotingsData } from './votingsData';
+import { mockDateVoting, mockDateVotingsData, mockMealVotingsData } from './votingsData';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL as string;
 export const handlers = [
@@ -28,5 +28,11 @@ export const handlers = [
     }
 
     return res(ctx.status(404));
+  }),
+  rest.post(`${baseURL}meetings/:meetingId/votings`, (req, res, ctx) => {
+    return res(ctx.delay(500), ctx.json(mockDateVoting));
+  }),
+  rest.put(`${baseURL}meetings/:meetingId/votings/:votingId`, (req, res, ctx) => {
+    return res(ctx.delay(500), ctx.json(mockDateVoting));
   }),
 ];
