@@ -13,6 +13,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { currentUserState } from '../stores/currentUser';
 import { votingsState } from '../stores/voting';
+import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 
@@ -24,6 +25,7 @@ export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -44,9 +46,10 @@ export function MeetingView() {
 
   const handleClickConfirmButton = () => {
     // TODO: localstorage에 값이 없는 경우
-    setShowPasswordModal(true);
+    // setShowPasswordModal(true);
 
     // TODO: localstorage에 이미 값이 있는 경우
+    setShowConfirmModal(true);
   };
 
   if (!meeting || !voteTableDataList) {
@@ -97,6 +100,16 @@ export function MeetingView() {
         onConfirm={handleClickConfirmButton}
         onCancel={() => {
           setShowPasswordModal(false);
+        }}
+      />
+      <CheckConfirmModal
+        show={showConfirmModal}
+        onConfirm={() => {
+          console.log('확정');
+          setShowConfirmModal(false);
+        }}
+        onCancel={() => {
+          setShowConfirmModal(false);
         }}
       />
     </Page>
