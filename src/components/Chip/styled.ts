@@ -1,10 +1,8 @@
 import { styled } from '@mui/material';
 
 export const ChipContainer = styled('div')<{ checked?: boolean; focus?: boolean }>((props) => ({
-  display: 'inline-flex',
-  height: '22px',
-  padding: '0 4px',
-  alignItems: 'center',
+  height: '24px',
+  padding: '6px 8px',
   boxShadow: `${props.focus ? `inset 0 0 0 2px #009568` : `none`}`,
 
   '&:hover': {
