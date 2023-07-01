@@ -1,20 +1,22 @@
 import { styled } from '@mui/material';
+import { ReactNode } from 'react';
 
-export const Page = styled('div')({
-  position: 'relative',
-  display: 'flex',
-  flexDirection: 'column',
-  flexWrap: 'nowrap',
-  height: '100vh',
-});
+export const Page = styled('div')`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 100vh;
+  overflow: hidden;
+`;
 
-export const Header = styled('header')({
-  display: 'flex',
-  flexDirection: 'column',
-  flexWrap: 'nowrap',
-  height: '144px',
-  flex: 0,
-});
+export const Header = styled('header')`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 144px;
+  flex: 0;
+`;
 
 export const HeaderContainer = styled('div')({
   display: 'flex',
@@ -31,13 +33,25 @@ export const HeaderContainer = styled('div')({
   },
 });
 
-export const Contents = styled('div')({
-  display: 'flex',
-  flexDirection: 'column',
-  flexWrap: 'nowrap',
-  flexGrow: 1,
-  overflowY: 'auto',
-});
+const ContentsWrapper = styled('div')`
+  overflow: auto;
+  padding: 16px 32px;
+  height: 100%;
+`;
+const ContentsBox = styled('div')`
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  overflow-y: auto;
+`;
+export const Contents = ({ children }: { children: ReactNode }) => {
+  return (
+    <ContentsWrapper>
+      <ContentsBox>{children}</ContentsBox>
+    </ContentsWrapper>
+  );
+};
 
 export const Footer = styled('footer')({
   height: '56px',

@@ -14,7 +14,7 @@ export const UserListLabel = styled('div')({
 });
 
 export const VoteTableWrapper = styled('div')({
-  marginTom: '36px',
+  marginTop: '36px',
   '.vote-table': {
     marginBottom: '8px',
   },

@@ -1,4 +1,4 @@
-import { ButtonGroup, styled } from '@mui/material';
+import { Box, ButtonGroup, styled } from '@mui/material';
 
 export const FullHeightButtonGroup = styled(ButtonGroup)`
   height: 100%;
@@ -12,4 +12,13 @@ export const FullHeightButtonGroup = styled(ButtonGroup)`
   & :not(:last-child) {
     border-right: 0 !important;
   }
+`;
+
+export const Flex = styled(Box)`
+  display: flex;
+`;
+
+export const FlexVertical = styled(Box)`
+  display: flex;
+  flex-direction: column;
 `;

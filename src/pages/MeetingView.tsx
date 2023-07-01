@@ -11,6 +11,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
+import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { currentUserState } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
@@ -69,14 +70,14 @@ export function MeetingView() {
       </Header>
       <Contents>
         <UserListWrapper>
-          <UserListLabel style={{ marginBottom: '8px' }}>참석자 목록</UserListLabel>
+          <UserListLabel>참석자 목록</UserListLabel>
           <UserList className="user-list" users={userList} onClick={handleClickUserList} />
         </UserListWrapper>
-        <VoteTableWrapper style={{ marginTop: '36px' }}>
+        <VoteTableWrapper>
           <VoteTable
             onClick={handleClickVoteTable}
             data={voteTableDataList}
-            headers={['투표 현황']}
+            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
             className="vote-table"
           />
           <ShareButtonWrapper>
