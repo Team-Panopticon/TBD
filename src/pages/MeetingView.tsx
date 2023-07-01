@@ -14,19 +14,21 @@ import { useMeetingView } from '../hooks/useMeetingView';
 import { adminTokenState } from '../stores/adminToken';
 import { currentUserState } from '../stores/currentUser';
 import { votingsState } from '../stores/voting';
-import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 
+interface MeetingViewPathParams {
+  meetingId: string;
+}
+
 export function MeetingView() {
   const navigate = useNavigate();
-  const { meetingId } = useParams();
+  const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const currentUser = useRecoilValue(currentUserState);
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const adminToken = useRecoilValue(adminTokenState);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
@@ -49,10 +51,16 @@ export function MeetingView() {
   const handleClickConfirmButton = () => {
     const isLoggedInAsAdmin = adminToken !== undefined;
     if (isLoggedInAsAdmin) {
-      setShowConfirmModal(true);
-    } else {
-      setShowPasswordModal(true);
+      navigate(`/meetings/${meetingId}/confirm`);
+      return;
     }
+
+    // Not yet logged in as admin
+    setShowPasswordModal(true);
+  };
+
+  const handlePasswordModalConfirm = () => {
+    navigate(`/meetings/${meetingId}/confirm`);
   };
 
   if (!meeting || !voteTableDataList) {
@@ -100,21 +108,9 @@ export function MeetingView() {
       </Footer>
       <InputPasswordModal
         show={showPasswordModal}
-        onConfirm={() => {
-          setShowPasswordModal(false);
-        }}
+        onConfirm={handlePasswordModalConfirm}
         onCancel={() => {
           setShowPasswordModal(false);
-        }}
-      />
-      <CheckConfirmModal
-        show={showConfirmModal}
-        onConfirm={() => {
-          console.log('확정');
-          setShowConfirmModal(false);
-        }}
-        onCancel={() => {
-          setShowConfirmModal(false);
         }}
       />
     </Page>
