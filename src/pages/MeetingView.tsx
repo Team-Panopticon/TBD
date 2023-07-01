@@ -16,6 +16,12 @@ import { currentUserState } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
+import {
+  ShareButtonWrapper,
+  UserListLabel,
+  UserListWrapper,
+  VoteTableWrapper,
+} from '../templates/MeetingView/styled';
 
 export function MeetingView() {
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
@@ -62,13 +68,28 @@ export function MeetingView() {
         </HeaderContainer>
       </Header>
       <Contents>
-        {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
-        <UserList users={userList} onClick={handleClickUserList} />
-        <VoteTable
-          onClick={handleClickVoteTable}
-          data={voteTableDataList}
-          headers={['투표 현황']}
-        />
+        <UserListWrapper>
+          <UserListLabel style={{ marginBottom: '8px' }}>참석자 목록</UserListLabel>
+          <UserList className="user-list" users={userList} onClick={handleClickUserList} />
+        </UserListWrapper>
+        <VoteTableWrapper style={{ marginTop: '36px' }}>
+          <VoteTable
+            onClick={handleClickVoteTable}
+            data={voteTableDataList}
+            headers={['투표 현황']}
+            className="vote-table"
+          />
+          <ShareButtonWrapper>
+            <Button
+              color="primary"
+              variant="contained"
+              disableElevation
+              style={{ borderRadius: 0 }}
+            >
+              공유하기
+            </Button>
+          </ShareButtonWrapper>
+        </VoteTableWrapper>
       </Contents>
       <Footer>
         <FullHeightButtonGroup
