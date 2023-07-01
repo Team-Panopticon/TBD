@@ -96,7 +96,7 @@ export const missedUserListSelector = selector({
     return votings
       .filter((voting) => {
         const { mealType } = voting;
-        return !!mealType?.find((meal: VotingSlot) => {
+        return !mealType?.find((meal: VotingSlot) => {
           return meal.date.isSame(dayjs(TempConfirmedVoting.date), 'day');
         });
       })
@@ -106,7 +106,7 @@ export const missedUserListSelector = selector({
         return {
           id,
           username,
-          checked: true,
+          checked: false,
           focused: false,
         };
       });
@@ -121,13 +121,12 @@ export const confiremdUserListSelector = selector({
     return votings
       .filter((voting) => {
         const { mealType } = voting;
-        return !mealType?.find((meal: VotingSlot) => {
+        return !!mealType?.find((meal: VotingSlot) => {
           return meal.date.isSame(dayjs(TempConfirmedVoting.date), 'day');
         });
       })
       .map<UserListData>((voting) => {
         const { username, id } = voting;
-
         return {
           id,
           username,
