@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, IconButton, Snackbar } from '@mui/material';
+import { Box, Button, IconButton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -8,16 +8,18 @@ import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FullHeightButtonGroup } from '../components/styled';
+import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
+import GreetingHands from '../images/greeting-hands.png';
 import { currentUserState } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import {
+  PrimaryBold,
   ShareButtonWrapper,
   UserListLabel,
   UserListWrapper,
@@ -57,15 +59,32 @@ export function MeetingView() {
     <Page>
       <Header>
         <HeaderContainer>
-          <h1>{meeting.name}</h1>
-          <Dropdown
-            onClickConfirmButton={() => {
-              // TODO: 확정하기 api 연결
-            }}
-            onClickEditButton={() => {
-              // TODO: 수정하기 api 연결
-            }}
-          />
+          <FlexVertical flex={1} alignItems={'center'} gap={1}>
+            <FlexVertical flex={1} gap={1}>
+              <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
+                <Typography variant="h5" fontWeight={300}>
+                  {meeting.name}
+                </Typography>
+                <Dropdown
+                  onClickConfirmButton={() => {
+                    // TODO: 확정하기 api 연결
+                  }}
+                  onClickEditButton={() => {
+                    // TODO: 수정하기 api 연결
+                  }}
+                />
+              </Box>
+              <FlexVertical alignItems={'center'}>
+                <img height={110} src={GreetingHands} alt="" />
+              </FlexVertical>
+              {currentUser ? (
+                <Typography variant="h5" fontWeight={500} align="center">
+                  <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님
+                  안녕하세요
+                </Typography>
+              ) : null}
+            </FlexVertical>
+          </FlexVertical>
         </HeaderContainer>
       </Header>
       <Contents>

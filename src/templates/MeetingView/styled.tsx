@@ -1,7 +1,5 @@
 import { styled } from '@mui/material';
 
-export const Container = styled('div')({});
-
 export const UserListWrapper = styled('div')({
   '.user-list': {
     border: '1px solid #d9d9d9',
@@ -27,3 +25,8 @@ export const ShareButtonWrapper = styled('div')({
     borderRadius: 0,
   },
 });
+
+export const PrimaryBold = styled('span')((props) => ({
+  color: props.theme.palette.primary.main,
+  fontWeight: 700,
+}));
