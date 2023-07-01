@@ -29,4 +29,7 @@ export const handlers = [
 
     return res(ctx.status(404));
   }),
+  rest.post(`${baseURL}meetings/:meetingId/confirm`, (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
 ];
