@@ -2,6 +2,7 @@ import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
 
 import { VotingSlot } from '../../apis/votes';
+import { MealType } from '../../constants/meeting';
 import { UserListVoteData } from '../UserList/UserList';
 import {
   ContentBox,
@@ -18,6 +19,7 @@ import {
 export interface VoteTableVoting extends UserListVoteData {
   total: number;
   current: number;
+  mealType?: MealType;
 }
 
 export interface VoteTableRowData {
@@ -78,12 +80,17 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
   const { item, onClick, isHideVotingStatus } = props;
   const { date, votings } = item;
 
+  const handleClick = (checked: boolean, vote: VoteTableVoting, mealType?: MealType) => {
+    const slot: VotingSlot = { date, meal: mealType };
+    onClick?.(date, !checked, vote, slot);
+  };
+
   return (
     <Wrapper>
       <DateContentBox>{date.format('M/D (dd)')}</DateContentBox>
       <Divider />
       {votings.map((vote, idx) => {
-        const { current, total, focused, checked } = vote;
+        const { current, total, focused, checked, mealType } = vote;
         const progress = Number(((current / total || 0) * 100).toFixed(0));
 
         return (
@@ -93,7 +100,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             key={`vote-content-${idx}`}
             focus={focused}
             checked={checked}
-            onClick={() => onClick?.(date, !checked, vote, { date })}
+            onClick={() => handleClick(checked, vote, mealType)}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>

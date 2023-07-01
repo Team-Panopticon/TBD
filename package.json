@@ -12,6 +12,7 @@
     "lint": "yarn eslint ./src/**/*.{ts,tsx}"
   },
   "dependencies": {
+    "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.11.3",
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "^5.11.0",

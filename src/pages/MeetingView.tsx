@@ -1,7 +1,8 @@
-import { Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, IconButton, Snackbar } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
@@ -10,9 +11,11 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
+import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { adminTokenState } from '../stores/adminToken';
 import { currentUserState } from '../stores/currentUser';
+import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
@@ -24,9 +27,10 @@ interface MeetingViewPathParams {
 export function MeetingView() {
   const navigate = useNavigate();
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
+  const setVotings = useSetRecoilState<Voting[]>(votingsState);
+  const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
   const currentUser = useRecoilValue(currentUserState);
 
-  const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const adminToken = useRecoilValue(adminTokenState);
@@ -81,12 +85,11 @@ export function MeetingView() {
         </HeaderContainer>
       </Header>
       <Contents>
-        {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <UserList users={userList} onClick={handleClickUserList} />
         <VoteTable
           onClick={handleClickVoteTable}
           data={voteTableDataList}
-          headers={['투표 현황']}
+          headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
         />
       </Contents>
       <Footer>
@@ -112,6 +115,26 @@ export function MeetingView() {
         onCancel={() => {
           setShowPasswordModal(false);
         }}
+      />
+      <Snackbar
+        open={showVoteSuccessPopup}
+        autoHideDuration={5000}
+        onClose={() => {
+          setShowVoteSuccessPopup(false);
+        }}
+        message="투표해주셔서 감사합니다!"
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => {
+              setShowVoteSuccessPopup(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
       />
     </Page>
   );

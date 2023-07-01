@@ -12,7 +12,7 @@ enum InvalidText {
 interface Props {
   show: boolean;
   usernameList: string[];
-  onConfirm: (username: string) => void;
+  onConfirm: (username: string) => Promise<void>;
   onCancel: () => void;
 }
 
@@ -61,7 +61,13 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
             <Button color="secondary" onClick={onCancel}>
               다음에
             </Button>
-            <Button onClick={() => onConfirm(username)}>완료</Button>
+            <Button
+              onClick={() => {
+                onConfirm(username);
+              }}
+            >
+              완료
+            </Button>
           </FullHeightButtonGroup>
         </div>
       </CenterContentModal>
