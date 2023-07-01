@@ -10,6 +10,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FullHeightButtonGroup } from '../components/styled';
 import { UserList, UserListData } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
+import { MeetingType } from '../constants/meeting';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
 import { currentUserState } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
@@ -131,11 +132,10 @@ export function MeetingVote() {
           <Alert severity="warning">{`${currentUser.username}님의 투표를 수정합니다`}</Alert>
         )}
         <UserList users={userList} onClick={handleClickUser} />
-        {/* <VoteTable data={mockData} headers={['점심', '저녁']} /> */}
         <VoteTable
           onClick={handleClickVoteTableSlot}
           data={voteTableDataList}
-          headers={['투표 현황']}
+          headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
         />
       </Contents>
       <Footer>
