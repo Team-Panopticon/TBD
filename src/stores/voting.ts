@@ -2,7 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { atom, selector, selectorFamily } from 'recoil';
 
 import { GetMeetingResponse } from '../apis/types';
-import { Voting } from '../apis/votes';
+import { Voting, VotingSlot, VotingSlotResponse } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MealType, MeetingType } from '../constants/meeting';
@@ -19,7 +19,11 @@ import { MealType, MeetingType } from '../constants/meeting';
  *  https://www.typescriptlang.org/docs/handbook/2/mapped-types.html
  */
 type SelectorMapper<Type> = {
-  [Property in keyof Type]: Type[Property];
+  [Property in keyof Type]: Type[Property] extends import('recoil').SerializableParam
+    ? Type[Property]
+    : Type[Property] extends Record<string, any> | undefined | null
+    ? SelectorMapper<Type[Property]>
+    : Type[Property];
 };
 
 /**
@@ -144,5 +148,58 @@ export const userListState = selector({
         focused: false,
       };
     });
+  },
+});
+
+// todo: meeting respose 에서 가져오기
+const TempConfirmedVoting: VotingSlotResponse = {
+  date: '2023-06-08T15:00:00.000Z',
+};
+export const missedUserListSelector = selector({
+  key: 'missedUserListSelector',
+  get: ({ get }) => {
+    const votings = get(votingsState);
+
+    return votings
+      .filter((voting) => {
+        const { mealType } = voting;
+        return !mealType?.find((meal: VotingSlot) => {
+          return meal.date.isSame(dayjs(TempConfirmedVoting.date), 'day');
+        });
+      })
+      .map<UserListData>((voting) => {
+        const { username, id } = voting;
+
+        return {
+          id,
+          username,
+          checked: false,
+          focused: false,
+        };
+      });
+  },
+});
+
+export const confiremdUserListSelector = selector({
+  key: 'confiremdUserListSelector',
+  get: ({ get }) => {
+    const votings = get(votingsState);
+
+    return votings
+      .filter((voting) => {
+        const { mealType } = voting;
+        return !!mealType?.find((meal: VotingSlot) => {
+          return meal.date.isSame(dayjs(TempConfirmedVoting.date), 'day');
+        });
+      })
+      .map<UserListData>((voting) => {
+        const { username, id } = voting;
+        return {
+          id,
+          username,
+          checked: true,
+          focused: false,
+        };
+      });
   },
 });

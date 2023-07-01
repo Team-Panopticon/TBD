@@ -6,7 +6,8 @@ export const ChipContainer = styled('div')<{ checked?: boolean; focus?: boolean 
   padding: '0 4px',
   alignItems: 'center',
   boxShadow: `${props.focus ? `inset 0 0 0 2px #009568` : `none`}`,
-
+  borderRadius: '2px',
+  fontSize: '12px',
   '&:hover': {
     cursor: 'pointer',
   },
