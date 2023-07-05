@@ -31,7 +31,7 @@ export function CreatePasswordModal({
   const isPasswordValid = password !== undefined && validatePassword(password);
 
   return (
-    <CenterContentModal open={show} width={330} height={230}>
+    <CenterContentModal open={show} width={320} height={230}>
       <PasswordInput>
         <Typography variant="subtitle1" fontWeight={300}>
           비밀번호를 설정할 수 있어요.
