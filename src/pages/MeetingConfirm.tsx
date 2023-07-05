@@ -15,6 +15,7 @@ import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { isSameSlot } from '../hooks/useMeetingVote';
 import { votingsState } from '../stores/voting';
+import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
 
 interface MeetingConfirmPathParams {
   meetingId: string;
@@ -41,6 +42,7 @@ export function MeetingConfirm() {
   } = useMeetingView(meeting);
 
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   // TODO: Recoil로 비동기 데이터 가져오는 것 대체
   useEffect(() => {
@@ -72,7 +74,7 @@ export function MeetingConfirm() {
     handleVoteTableClickHightlight(date, checked, target, slot);
   };
 
-  const handleClickConfirmButton = () => {
+  const handleConfirm = () => {
     // TODO: 모임시간 확정 API 호출
     navigate(`/meetings/${meetingId}/result`);
   };
@@ -107,11 +109,24 @@ export function MeetingConfirm() {
           >
             취소하기
           </Button>
-          <Button color="primary" disabled={!selectedSlot} onClick={handleClickConfirmButton}>
+          <Button
+            color="primary"
+            disabled={!selectedSlot}
+            onClick={() => {
+              setShowConfirmModal(true);
+            }}
+          >
             모임시간 확정
           </Button>
         </FullHeightButtonGroup>
       </Footer>
+      <CheckConfirmModal
+        show={showConfirmModal}
+        onConfirm={handleConfirm}
+        onCancel={() => {
+          setShowConfirmModal(false);
+        }}
+      />
     </Page>
   );
 }
