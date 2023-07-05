@@ -2,7 +2,7 @@ import { Button } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
@@ -21,6 +21,8 @@ interface MeetingConfirmPathParams {
 }
 
 export function MeetingConfirm() {
+  const navigate = useNavigate();
+
   const { meetingId } = useParams<keyof MeetingConfirmPathParams>() as MeetingConfirmPathParams;
   const {
     data: meeting,
@@ -70,6 +72,11 @@ export function MeetingConfirm() {
     handleVoteTableClickHightlight(date, checked, target, slot);
   };
 
+  const handleClickConfirmButton = () => {
+    // TODO: 모임시간 확정 API 호출
+    navigate(`/meetings/${meetingId}/result`);
+  };
+
   return (
     <Page>
       <Header>
@@ -95,18 +102,12 @@ export function MeetingConfirm() {
           <Button
             color="secondary"
             onClick={() => {
-              console.log('취소하기');
+              navigate(`/meetings/${meetingId}`);
             }}
           >
             취소하기
           </Button>
-          <Button
-            color="primary"
-            disabled={!selectedSlot}
-            onClick={() => {
-              console.log('모임시간 확정');
-            }}
-          >
+          <Button color="primary" disabled={!selectedSlot} onClick={handleClickConfirmButton}>
             모임시간 확정
           </Button>
         </FullHeightButtonGroup>
