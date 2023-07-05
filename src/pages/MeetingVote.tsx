@@ -157,6 +157,7 @@ export function MeetingVote() {
             onClick={() => {
               handleClickVote();
             }}
+            disabled={currentUserVotingSlots.length === 0}
           >
             투표하기
           </Button>
