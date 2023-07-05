@@ -6,6 +6,7 @@ import { useSetRecoilState } from 'recoil';
 
 import { initializeProgressInterceptor } from './apis/instance';
 import { Progress } from './components/Progress';
+import { ProtectedAdminRoute } from './components/ProtectedAdminRoute';
 import { GlobalStyle } from './GlobalStyle';
 import { MeetingConfirm } from './pages/MeetingConfirm';
 import { MeetingCreate } from './pages/MeetingCreate';
@@ -37,7 +38,11 @@ const router = createBrowserRouter([
   },
   {
     path: 'meetings/:meetingId/vote',
-    element: <MeetingVote />,
+    element: (
+      <ProtectedAdminRoute>
+        <MeetingVote />
+      </ProtectedAdminRoute>
+    ),
   },
   {
     path: 'meetings/:meetingId/modify',
@@ -49,7 +54,11 @@ const router = createBrowserRouter([
   },
   {
     path: 'meetings/:meetingId/confirm',
-    element: <MeetingConfirm />,
+    element: (
+      <ProtectedAdminRoute>
+        <MeetingConfirm />
+      </ProtectedAdminRoute>
+    ),
   },
 ]);
 
