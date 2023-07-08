@@ -5,13 +5,20 @@ import { CenterContentModal } from '../../components/CenterContentModal';
 import { CenteredButtonContainer, ConfirmModalContainer } from '../MeetingEdit/styled';
 import { ModalTopRightButton } from './styled';
 
+type VoidCallback = () => void;
+type VoidPromiseCallback = () => Promise<void>;
+
 interface Props {
   show: boolean;
-  onConfirm: () => void;
-  onCancel: () => void;
+  onConfirm: VoidCallback | VoidPromiseCallback;
+  onCancel: VoidCallback;
 }
 
 export function CheckConfirmModal({ show, onConfirm, onCancel }: Props) {
+  const handleClickConfirmButton = () => {
+    onConfirm();
+  };
+
   return (
     <CenterContentModal open={show} width={330} height={230}>
       <ConfirmModalContainer>
@@ -27,7 +34,11 @@ export function CheckConfirmModal({ show, onConfirm, onCancel }: Props) {
           <CloseIcon />
         </ModalTopRightButton>
         <CenteredButtonContainer>
-          <Button variant="contained" style={{ width: 200, height: 48 }} onClick={onConfirm}>
+          <Button
+            variant="contained"
+            style={{ width: 200, height: 48 }}
+            onClick={handleClickConfirmButton}
+          >
             확인
           </Button>
         </CenteredButtonContainer>
