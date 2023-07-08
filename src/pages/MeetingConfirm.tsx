@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
+import { confirmMeeting, getMeeting } from '../apis/meetings';
 import { getVotings, Voting, VotingSlot } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FullHeightButtonGroup } from '../components/styled';
@@ -74,9 +74,20 @@ export function MeetingConfirm() {
     handleVoteTableClickHightlight(date, checked, target, slot);
   };
 
-  const handleConfirm = () => {
-    // TODO: 모임시간 확정 API 호출
-    navigate(`/meetings/${meetingId}/result`);
+  const handleConfirm = async () => {
+    if (!selectedSlot) {
+      return;
+    }
+
+    try {
+      await confirmMeeting(meetingId, selectedSlot);
+      navigate(`/meetings/${meetingId}/result`);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : '정상적으로 처리되지 못했습니다.';
+      alert(errorMessage);
+      setShowConfirmModal(false);
+    }
   };
 
   return (
