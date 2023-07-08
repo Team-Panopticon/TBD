@@ -9,11 +9,17 @@ import * as React from 'react';
 
 type CustomPickerDayProps = PickersDayProps<Dayjs>;
 
+const StyledDatePicker = styled(StaticDatePicker)`
+  .MuiDayPicker-slideTransition {
+    min-height: calc(44 * 6px);
+  }
+`;
+
 const CustomPickersDay = styled(PickersDay, {
   shouldForwardProp: (prop) => prop !== 'selected',
 })<CustomPickerDayProps>(({ theme, selected }) => {
   const style: React.CSSProperties = {
-    borderRadius: 0,
+    borderRadius: 2,
     width: 28,
     height: 28,
     margin: 6,
@@ -71,17 +77,20 @@ export function SelectDates(props: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <StaticDatePicker
-        displayStaticWrapperAs="desktop"
-        value={dates}
-        // onChange는 처음 클릭한 날짜에 대해 다시 클릭했을 때 이벤트가 발생하지 않으므로 사용하지 않음, PickersDay의 onClick으로 클릭 처리
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onChange={() => {}}
-        renderDay={renderWeekPickerDay}
-        renderInput={(params) => <TextField {...params} />}
-        disableHighlightToday={true}
-        disablePast={true}
-      />
+      <div className="date-picker-wrapper">
+        <StyledDatePicker
+          displayStaticWrapperAs="desktop"
+          value={dates}
+          className="date-picker"
+          // onChange는 처음 클릭한 날짜에 대해 다시 클릭했을 때 이벤트가 발생하지 않으므로 사용하지 않음, PickersDay의 onClick으로 클릭 처리
+          // eslint-disable-next-line @typescript-eslint/no-empty-function, prettier/prettier
+          onChange={() => { }}
+          renderDay={renderWeekPickerDay}
+          renderInput={(params) => <TextField {...params} />}
+          disableHighlightToday={true}
+          disablePast={true}
+        />
+      </div>
     </LocalizationProvider>
   );
 }
