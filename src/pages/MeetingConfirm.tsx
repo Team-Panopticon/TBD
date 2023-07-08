@@ -94,7 +94,10 @@ export function MeetingConfirm() {
     <Page>
       <Header>
         <HeaderContainer>
-          <h1>{meeting.name}</h1>
+          <div>
+            <h1>{meeting.name}</h1>
+            <h2>모임시간을 골라서 확정해주세요.</h2>
+          </div>
         </HeaderContainer>
       </Header>
       <Contents>
