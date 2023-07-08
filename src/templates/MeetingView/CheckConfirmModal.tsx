@@ -1,6 +1,7 @@
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Box, Button, Typography } from '@mui/material';
 
+import { VotingSlot } from '../../apis/votes';
 import { CenterContentModal } from '../../components/CenterContentModal';
 import { CenteredButtonContainer, ConfirmModalContainer } from '../MeetingEdit/styled';
 import { ModalTopRightButton } from './styled';
@@ -10,11 +11,16 @@ type VoidPromiseCallback = () => Promise<void>;
 
 interface Props {
   show: boolean;
+  slot?: VotingSlot;
   onConfirm: VoidCallback | VoidPromiseCallback;
   onCancel: VoidCallback;
 }
 
-export function CheckConfirmModal({ show, onConfirm, onCancel }: Props) {
+export function CheckConfirmModal({ show, slot, onConfirm, onCancel }: Props) {
+  const slotDateText = slot?.date.format('YYYY년 MM월 DD일') ?? '';
+  const slotMealText = slot?.meal ? getMealLabel(slot.meal) : '';
+  const slotDescription = `${slotDateText} ${slotMealText}`;
+
   const handleClickConfirmButton = () => {
     onConfirm();
   };
@@ -30,9 +36,9 @@ export function CheckConfirmModal({ show, onConfirm, onCancel }: Props) {
             확정한 날짜는 돌이킬 수 없습니다.
           </Typography>
         </Box>
-        <ModalTopRightButton onClick={onCancel}>
-          <CloseIcon />
-        </ModalTopRightButton>
+        <Box style={{ textAlign: 'center', paddingBottom: '8px' }}>
+          <Typography variant="h6">{slotDescription}</Typography>
+        </Box>
         <CenteredButtonContainer>
           <Button
             variant="contained"
@@ -42,7 +48,21 @@ export function CheckConfirmModal({ show, onConfirm, onCancel }: Props) {
             확인
           </Button>
         </CenteredButtonContainer>
+        <ModalTopRightButton onClick={onCancel}>
+          <CloseIcon />
+        </ModalTopRightButton>
       </ConfirmModalContainer>
     </CenterContentModal>
   );
+}
+
+function getMealLabel(meal: 'lunch' | 'dinner') {
+  if (meal === 'lunch') {
+    return '점심';
+  }
+  if (meal === 'dinner') {
+    return '저녁';
+  }
+
+  return '';
 }

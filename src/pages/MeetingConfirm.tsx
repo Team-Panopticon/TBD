@@ -136,6 +136,7 @@ export function MeetingConfirm() {
       </Footer>
       <CheckConfirmModal
         show={showConfirmModal}
+        slot={selectedSlot}
         onConfirm={handleConfirm}
         onCancel={() => {
           setShowConfirmModal(false);
