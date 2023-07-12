@@ -29,6 +29,9 @@ export const handlers = [
 
     return res(ctx.status(404));
   }),
+  rest.post(`${baseURL}meetings/:meetingId/confirm`, (req, res, ctx) => {
+    return res(ctx.status(200));
+  }),
   rest.post(`${baseURL}meetings/:meetingId/votings`, (req, res, ctx) => {
     return res(ctx.delay(500), ctx.json(mockDateVoting));
   }),

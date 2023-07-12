@@ -9,6 +9,7 @@ import { GetMeetingResponse } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { ShareDialog } from '../components/ShareDialog';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { useMeetingResult } from '../hooks/useMeetingResult';
@@ -19,7 +20,10 @@ export function MeetingResult() {
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const { meetingId } = useParams();
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
-
+  const [openShareDialog, setOpenShareDialog] = useState(false);
+  const handleShareDialogClose = () => {
+    setOpenShareDialog(false);
+  };
   useEffect(() => {
     (async () => {
       if (!meetingId) {
@@ -38,6 +42,7 @@ export function MeetingResult() {
 
   return (
     <Page>
+      <ShareDialog open={openShareDialog} onClose={handleShareDialogClose}></ShareDialog>
       <Contents>
         <FlexVertical gap={1}>
           <Header>
@@ -106,7 +111,7 @@ export function MeetingResult() {
           </Button>
           <Button
             onClick={() => {
-              //
+              setOpenShareDialog(true);
             }}
           >
             공유하기

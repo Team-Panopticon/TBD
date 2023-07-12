@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { IconButton, styled } from '@mui/material';
 
 export const UserListWrapper = styled('div')({
   '.user-list': {
@@ -30,3 +30,9 @@ export const PrimaryBold = styled('span')((props) => ({
   color: props.theme.palette.primary.main,
   fontWeight: 700,
 }));
+
+export const ModalTopRightButton = styled(IconButton)({
+  position: 'absolute',
+  top: 16,
+  right: 16,
+});

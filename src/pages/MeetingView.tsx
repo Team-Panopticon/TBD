@@ -14,10 +14,12 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
+import { adminTokenState } from '../stores/adminToken';
 import { currentUserState } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
+import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 import {
   PrimaryBold,
   ShareButtonWrapper,
@@ -26,13 +28,20 @@ import {
   VoteTableWrapper,
 } from '../templates/MeetingView/styled';
 
+interface MeetingViewPathParams {
+  meetingId: string;
+}
+
 export function MeetingView() {
+  const navigate = useNavigate();
+  const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
   const currentUser = useRecoilValue(currentUserState);
+
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
-  const navigate = useNavigate();
-  const { meetingId } = useParams();
+  const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
+  const adminToken = useRecoilValue(adminTokenState);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -43,13 +52,28 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings('2');
+      const data = await getVotings(meetingId);
       setVotings(data);
 
-      const meetingData = await getMeeting('2');
+      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
   }, [setVotings, meetingId]);
+
+  const handleClickConfirmButton = () => {
+    const isLoggedInAsAdmin = adminToken !== undefined;
+    if (isLoggedInAsAdmin) {
+      navigate(`/meetings/${meetingId}/confirm`);
+      return;
+    }
+
+    // Not yet logged in as admin
+    setShowPasswordModal(true);
+  };
+
+  const handlePasswordModalConfirm = () => {
+    navigate(`/meetings/${meetingId}/confirm`);
+  };
 
   if (!meeting || !voteTableDataList) {
     return null;
@@ -128,6 +152,13 @@ export function MeetingView() {
           </Button>
         </FullHeightButtonGroup>
       </Footer>
+      <InputPasswordModal
+        show={showPasswordModal}
+        onConfirm={handlePasswordModalConfirm}
+        onCancel={() => {
+          setShowPasswordModal(false);
+        }}
+      />
       <Snackbar
         open={showVoteSuccessPopup}
         autoHideDuration={5000}
