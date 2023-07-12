@@ -13,7 +13,7 @@ interface Props {
 
 export function CheckConfirmModal({ show, onConfirm, onCancel }: Props) {
   return (
-    <CenterContentModal open={show} width={330} height={230}>
+    <CenterContentModal open={show} width={320} height={230}>
       <ConfirmModalContainer>
         <Box>
           <Typography variant="subtitle1" fontWeight={300}>

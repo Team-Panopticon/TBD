@@ -38,7 +38,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
 
   return (
     <>
-      <CenterContentModal open={show} width={330} height={170}>
+      <CenterContentModal open={show} width={320} height={170}>
         <div style={{ position: 'relative', height: '100%' }}>
           <div style={{ padding: 25 }}>
             <InputLabel shrink>참석자 이름</InputLabel>
@@ -65,6 +65,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               onClick={() => {
                 onConfirm(username);
               }}
+              disabled={invalidText !== ''}
             >
               완료
             </Button>
