@@ -1,4 +1,4 @@
-import { IconButton, styled } from '@mui/material';
+import { Button, IconButton, styled } from '@mui/material';
 
 export const UserListWrapper = styled('div')({
   '.user-list': {
@@ -18,13 +18,13 @@ export const VoteTableWrapper = styled('div')({
   },
 });
 
-export const ShareButtonWrapper = styled('div')({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  button: {
-    borderRadius: 0,
+export const ShareButton = styled(Button)((props) => ({
+  color: props.theme.palette.transPrimary.contrastText,
+
+  '&:hover': {
+    backgroundColor: props.theme.palette.transPrimary.main,
   },
-});
+}));
 
 export const PrimaryBold = styled('span')((props) => ({
   color: props.theme.palette.primary.main,
