@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { ValidCreateMeetingState } from '../stores/createMeeting';
 import { api } from './instance';
 import { CreateMeetingRequest, CreateMeetingResponse, GetMeetingResponse } from './types';
+import { VotingSlot } from './votes';
 
 const meetingStateToRequest = (
   state: ValidCreateMeetingState,
@@ -30,4 +31,21 @@ export const getMeeting = async (meetingId: string) => {
   const response: AxiosResponse<GetMeetingResponse> = await api.get(`/meetings/${meetingId}`);
 
   return response.data;
+};
+
+export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
+  const adminToken = localStorage.getItem('adminToken');
+  if (!adminToken) {
+    throw new Error('adminToken is not set');
+  }
+
+  await api.post(
+    `/meetings/${meetingId}/confirm`,
+    { slot },
+    {
+      headers: {
+        Authorization: `Bearer ${adminToken}`,
+      },
+    },
+  );
 };

@@ -75,3 +75,16 @@ export const PasswordSkipBtn = styled(Button)({
   right: '5px',
   top: '5px',
 });
+
+export const ConfirmModalContainer = styled('div')({
+  padding: '25px 35px',
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+  justifyContent: 'space-between',
+});
+
+export const CenteredButtonContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+});

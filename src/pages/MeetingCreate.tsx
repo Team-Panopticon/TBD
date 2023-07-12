@@ -7,7 +7,7 @@ import { createMeeting } from '../apis/meetings';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
-import { InputPasswordModal } from '../templates/MeetingEdit/InputPasswordModal';
+import { CreatePasswordModal } from '../templates/MeetingEdit/CreatePasswordModal';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 /**
@@ -39,9 +39,9 @@ export function MeetingCreate() {
     }));
   };
 
-  const handlePasswordConfirm = async (setPassword: boolean) => {
+  const createMeetingAndNavigate = async ({ usePassword }: { usePassword: boolean }) => {
     try {
-      const response = await createMeeting(meeting as ValidCreateMeetingState, setPassword);
+      const response = await createMeeting(meeting as ValidCreateMeetingState, usePassword);
       navigate(`/meetings/${response.id}`);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
@@ -50,6 +50,14 @@ export function MeetingCreate() {
         alert('알수 없는 에러가 발생했습니다');
       }
     }
+  };
+
+  const handlePasswordConfirm = () => {
+    createMeetingAndNavigate({ usePassword: true });
+  };
+
+  const handlePasswordSkip = () => {
+    createMeetingAndNavigate({ usePassword: false });
   };
 
   return (
@@ -62,12 +70,13 @@ export function MeetingCreate() {
         onChange={setMeeting}
         onSubmit={handleMeetingEditComplete}
       ></MeetingEditTemplate>
-      <InputPasswordModal
+      <CreatePasswordModal
         show={showPasswordModal}
         password={meeting.password}
         onChange={handlePasswordChange}
         onConfirm={handlePasswordConfirm}
         onCancel={() => setShowPasswordModal(false)}
+        onSkip={handlePasswordSkip}
       />
     </Page>
   );
