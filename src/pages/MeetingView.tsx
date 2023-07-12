@@ -35,10 +35,10 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings('2');
+      const data = await getVotings(meetingId);
       setVotings(data);
 
-      const meetingData = await getMeeting('2');
+      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
     })();
   }, [setVotings, meetingId]);
