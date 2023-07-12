@@ -1,5 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, IconButton, Snackbar } from '@mui/material';
+import { Box, Button, IconButton, Snackbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -8,17 +8,25 @@ import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FullHeightButtonGroup } from '../components/styled';
+import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
+import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenState } from '../stores/adminToken';
 import { currentUserState } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
+import {
+  PrimaryBold,
+  ShareButtonWrapper,
+  UserListLabel,
+  UserListWrapper,
+  VoteTableWrapper,
+} from '../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -75,22 +83,57 @@ export function MeetingView() {
     <Page>
       <Header>
         <HeaderContainer>
-          <h1>{meeting.name}</h1>
-          <Dropdown
-            onClickConfirmButton={handleClickConfirmButton}
-            onClickEditButton={() => {
-              // TODO: 수정하기 api 연결
-            }}
-          />
+          <FlexVertical flex={1} alignItems={'center'} gap={1}>
+            <FlexVertical flex={1} gap={1}>
+              <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
+                <Typography variant="h5" fontWeight={300}>
+                  {meeting.name}
+                </Typography>
+                <Dropdown
+                  onClickConfirmButton={() => {
+                    // TODO: 확정하기 api 연결
+                  }}
+                  onClickEditButton={() => {
+                    // TODO: 수정하기 api 연결
+                  }}
+                />
+              </Box>
+              <FlexVertical alignItems={'center'}>
+                <img height={110} src={GreetingHands} alt="" />
+              </FlexVertical>
+              {currentUser ? (
+                <Typography variant="h5" fontWeight={500} align="center">
+                  <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님
+                  안녕하세요
+                </Typography>
+              ) : null}
+            </FlexVertical>
+          </FlexVertical>
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserList users={userList} onClick={handleClickUserList} />
-        <VoteTable
-          onClick={handleClickVoteTable}
-          data={voteTableDataList}
-          headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
-        />
+        <UserListWrapper>
+          <UserListLabel>참석자 목록</UserListLabel>
+          <UserList className="user-list" users={userList} onClick={handleClickUserList} />
+        </UserListWrapper>
+        <VoteTableWrapper>
+          <VoteTable
+            onClick={handleClickVoteTable}
+            data={voteTableDataList}
+            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            className="vote-table"
+          />
+          <ShareButtonWrapper>
+            <Button
+              color="primary"
+              variant="contained"
+              disableElevation
+              style={{ borderRadius: 0 }}
+            >
+              공유하기
+            </Button>
+          </ShareButtonWrapper>
+        </VoteTableWrapper>
       </Contents>
       <Footer>
         <FullHeightButtonGroup

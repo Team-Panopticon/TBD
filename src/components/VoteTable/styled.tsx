@@ -14,13 +14,14 @@ const commonStyle = {
   width: '105px',
   height: '30px',
   fontSize: '12px',
-  marginBottom: '8px',
+  marginTop: '8px',
 };
 
 export const HeaderBox = styled('div')((props) => ({
   ...commonStyle,
   fontWeight: 700,
   backgroundColor: props.theme.palette.secondary.main,
+  marginTop: 0,
 }));
 
 export const DateContentBox = styled('div')((props) => ({
@@ -87,7 +88,7 @@ export const Wrapper = styled('div')({
 });
 
 export const Divider = styled('div')((props) => ({
-  border: `1px solid ${props.theme.palette.secondary.main}`,
+  borderRight: `1px solid ${props.theme.palette.secondary.main}`,
 }));
 
 export const OpacityProgress = styled('div')<{ progress: number; isHide: boolean }>((props) => ({
