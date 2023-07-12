@@ -132,16 +132,14 @@ export function MeetingView() {
           aria-label="Disabled elevation buttons"
         >
           <Button
-            color="secondary"
+            color="primary"
             onClick={() => {
               navigate(`/meetings/${meeting.id}/vote`);
             }}
           >
             {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
           </Button>
-          <Button color="primary" variant="contained" disableElevation style={{ borderRadius: 0 }}>
-            공유하기
-          </Button>
+          <Button color="transPrimary">공유하기</Button>
         </FullHeightButtonGroup>
       </Footer>
       <InputPasswordModal
