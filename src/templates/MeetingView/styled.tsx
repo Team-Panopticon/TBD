@@ -18,14 +18,6 @@ export const VoteTableWrapper = styled('div')({
   },
 });
 
-export const ShareButtonWrapper = styled('div')({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  button: {
-    borderRadius: 0,
-  },
-});
-
 export const PrimaryBold = styled('span')((props) => ({
   color: props.theme.palette.primary.main,
   fontWeight: 700,
