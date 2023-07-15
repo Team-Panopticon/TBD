@@ -47,6 +47,8 @@ export const VoteTable: React.FC<Props> = (props) => {
 
   const isHideVotingStatus = data.some((item) => item.votings.some((vote) => vote.checked));
 
+  console.debug(isHideVotingStatus);
+
   return (
     <VoteTableContainer className={className} style={style}>
       <Header>
