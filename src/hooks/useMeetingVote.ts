@@ -16,19 +16,28 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   );
 
   const votings = useRecoilValue(votingsState);
+  const otherUserVotings = votings.filter((voting) => voting.id !== currentUser?.id);
+
   // TODO: 신규 유저 외에 기존 유저 선택 시 로직 반영
-  const newUserVoting: Voting = {
+  const currentVoting: Voting = {
     id: currentUser?.id ?? 'newUser',
     username: currentUser?.username ?? 'newUser',
     dateType: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
     mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
-  const currentVoting = currentUserVotingSlots.length > 0 ? newUserVoting : undefined;
+
+  const isNewUser = currentUser === undefined;
+  const hasNewUserNotVoted = isNewUser && currentUserVotingSlots.length === 0;
 
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
     date: day,
-    votings: getVotings(meeting.type, day, votings, currentVoting),
+    votings: getVotings(
+      meeting.type,
+      day,
+      otherUserVotings,
+      hasNewUserNotVoted ? undefined : currentVoting,
+    ),
   }));
 
   const handleClickVoteTableSlot = (
