@@ -65,7 +65,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               onClick={() => {
                 onConfirm(username);
               }}
-              disabled={invalidText !== ''}
+              disabled={username.length === 0 || invalidText !== ''}
             >
               완료
             </Button>
