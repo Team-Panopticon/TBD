@@ -30,6 +30,10 @@ export const HeaderContainer = styled('div')({
     fontSize: '24px',
     fontWeight: '700',
   },
+
+  h2: {
+    marginTop: '4px',
+  },
 });
 
 const ContentsWrapper = styled(Box)`
