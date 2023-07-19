@@ -77,19 +77,13 @@ export function MeetingResult() {
           </Header>
 
           <FlexVertical gap={1}>
-            <FlexVertical>
-              <Typography variant="caption" fontWeight={500} color={'primary'}>
-                올 수 있는 사람들
-              </Typography>
-              <UserList users={confirmedUserList} />
-            </FlexVertical>
+            <UserList users={confirmedUserList}>
+              <UserList.Title> 올 수 있는 사람들</UserList.Title>
+            </UserList>
 
-            <FlexVertical>
-              <Typography variant="caption" fontWeight={500}>
-                아쉽지만 못오는 사람들
-              </Typography>
-              <UserList users={missedUserList} />
-            </FlexVertical>
+            <UserList users={missedUserList}>
+              <UserList.Title color="secondary"> 아쉽지만 못오는 사람들</UserList.Title>
+            </UserList>
           </FlexVertical>
         </FlexVertical>
       </Contents>
