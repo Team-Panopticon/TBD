@@ -21,6 +21,7 @@ import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 import {
+  NoUserList,
   PrimaryBold,
   UserListLabel,
   UserListWrapper,
@@ -113,7 +114,11 @@ export function MeetingView() {
       <Contents>
         <UserListWrapper>
           <UserListLabel>참석자 목록</UserListLabel>
-          <UserList className="user-list" users={userList} onClick={handleClickUserList} />
+          {userList.length ? (
+            <UserList className="user-list" users={userList} onClick={handleClickUserList} />
+          ) : (
+            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요. 🥲</NoUserList>
+          )}
         </UserListWrapper>
         <VoteTableWrapper>
           <VoteTable
