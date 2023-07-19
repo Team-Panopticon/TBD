@@ -50,7 +50,7 @@ export function MeetingResult() {
               <FlexVertical flex={1} alignItems={'center'} gap={1}>
                 <FlexVertical flex={1} gap={1}>
                   <Typography variant="h5" fontWeight={300}>
-                    {'congratulations!'}
+                    축하합니다!
                   </Typography>
                   <FlexVertical alignItems={'center'}>
                     <HifiveIcon width={100} height={100}></HifiveIcon>
@@ -79,10 +79,12 @@ export function MeetingResult() {
           <FlexVertical gap={1}>
             <UserList users={confirmedUserList}>
               <UserList.Title> 올 수 있는 사람들</UserList.Title>
+              <UserList.Placeholder>{':('}</UserList.Placeholder>
             </UserList>
 
             <UserList users={missedUserList}>
               <UserList.Title color="secondary"> 아쉽지만 못오는 사람들</UserList.Title>
+              <UserList.Placeholder>{':)'}</UserList.Placeholder>
             </UserList>
           </FlexVertical>
         </FlexVertical>
