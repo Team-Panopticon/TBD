@@ -20,12 +20,7 @@ import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
-import {
-  PrimaryBold,
-  UserListLabel,
-  UserListWrapper,
-  VoteTableWrapper,
-} from '../templates/MeetingView/styled';
+import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -111,10 +106,10 @@ export function MeetingView() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserListWrapper>
-          <UserListLabel>참석자 목록</UserListLabel>
-          <UserList className="user-list" users={userList} onClick={handleClickUserList} />
-        </UserListWrapper>
+        <UserList className="user-list" users={userList} onClick={handleClickUserList}>
+          <UserList.Title color="primary">투표 현황</UserList.Title>
+        </UserList>
+
         <VoteTableWrapper>
           <VoteTable
             onClick={handleClickVoteTable}
