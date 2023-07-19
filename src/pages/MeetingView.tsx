@@ -84,8 +84,14 @@ export function MeetingView() {
       <Header>
         <HeaderContainer>
           <FlexVertical flex={1} alignItems={'center'} gap={1}>
-            <FlexVertical flex={1} gap={1}>
-              <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
+            <FlexVertical flex={1} gap={1} width={'100%'}>
+              <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                gap={1}
+              >
                 <Typography variant="h5" fontWeight={300}>
                   {meeting.name}
                 </Typography>
