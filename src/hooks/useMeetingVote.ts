@@ -17,12 +17,13 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
 
   const votings = useRecoilValue(votingsState);
   // TODO: 신규 유저 외에 기존 유저 선택 시 로직 반영
-  const currentVoting: Voting = {
+  const newUserVoting: Voting = {
     id: currentUser?.id ?? 'newUser',
     username: currentUser?.username ?? 'newUser',
     dateType: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
     mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
+  const currentVoting = currentUserVotingSlots.length > 0 ? newUserVoting : undefined;
 
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
