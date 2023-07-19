@@ -1,5 +1,5 @@
 import Typography from '@mui/material/Typography';
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { Children, CSSProperties, isValidElement, ReactNode } from 'react';
 
 import { User } from '../../stores/currentUser';
 import { FlexVertical } from '../styled';
@@ -22,30 +22,6 @@ interface Props {
   children?: ReactNode;
 }
 
-const UserListMain: React.FC<Props> = (props) => {
-  const { users, style, className, onClick, children } = props;
-
-  return (
-    <FlexVertical gap={0.5}>
-      <div>{children}</div>
-
-      <UserListContainer className={className} style={style}>
-        {users.map((targetUser, index) => (
-          <StyledChip
-            key={index}
-            checked={targetUser.checked}
-            focus={targetUser.focused}
-            onClick={(checked: boolean) => {
-              onClick?.(checked, targetUser);
-            }}
-          >
-            <ChipInnerText>{targetUser.username}</ChipInnerText>
-          </StyledChip>
-        ))}
-      </UserListContainer>
-    </FlexVertical>
-  );
-};
 const UserListTitle = ({
   color = 'primary',
   children,
@@ -59,5 +35,50 @@ const UserListTitle = ({
     </Typography>
   );
 };
+const Placeholder = ({ children }: { children?: ReactNode }) => {
+  return (
+    <Typography variant="caption" fontWeight={500}>
+      {children}
+    </Typography>
+  );
+};
+const UserListTitleType = (<UserListTitle />).type;
+const PlaceholderType = (<Placeholder />).type;
+const getTypeofChildren = (children: ReactNode, type: JSX.Element['type']) => {
+  const childrenArray = Children.toArray(children);
+  return childrenArray.filter((child) => isValidElement(child) && child.type === type).slice(0, 2);
+};
+const UserListMain: React.FC<Props> = (props) => {
+  const { users, style, className, onClick, children } = props;
+  const title = getTypeofChildren(children, UserListTitleType);
 
-export const UserList = Object.assign(UserListMain, { Title: UserListTitle });
+  const placeholer = getTypeofChildren(children, PlaceholderType);
+  return (
+    <FlexVertical gap={0.5}>
+      {title && <div>{title}</div>}
+
+      <UserListContainer className={className} style={style}>
+        {users.length > 0 ? (
+          users.map((targetUser, index) => (
+            <StyledChip
+              key={index}
+              checked={targetUser.checked}
+              focus={targetUser.focused}
+              onClick={(checked: boolean) => {
+                onClick?.(checked, targetUser);
+              }}
+            >
+              <ChipInnerText>{targetUser.username}</ChipInnerText>
+            </StyledChip>
+          ))
+        ) : (
+          <>{placeholer}</>
+        )}
+      </UserListContainer>
+    </FlexVertical>
+  );
+};
+export const UserList = Object.assign(UserListMain, {
+  Title: UserListTitle,
+  Placeholder: Placeholder,
+});
