@@ -43,13 +43,17 @@ export function MeetingVote() {
 
   useEffect(() => {
     (async () => {
-      const data = await getVotings(meetingId);
-      setVotings(data);
+      const votingsData = await getVotings(meetingId);
+      setVotings(votingsData);
 
       const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
+
+      const currentUserVoting = votingsData.find((voting) => voting.id === currentUser?.id);
+      const currentUserVotingSlots = currentUserVoting?.[meetingData.type];
+      setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
     })();
-  }, [meetingId, setVotings]);
+  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser]);
 
   const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
     if (!meeting) {
