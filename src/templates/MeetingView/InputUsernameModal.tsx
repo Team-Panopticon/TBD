@@ -22,7 +22,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
   const [invalidText, setInvalidText] = useState<InvalidText | ''>('');
 
   const onChangeTextField = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.slice(0, 20);
     setUsername(value);
 
     if (value.length === 0) {
