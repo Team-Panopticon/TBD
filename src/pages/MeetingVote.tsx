@@ -176,7 +176,7 @@ export function MeetingVote() {
           {userList.length > 0 ? (
             <UserList className="user-list" users={checkedUserList} onClick={handleClickUser} />
           ) : (
-            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요. 🥲</NoUserList>
+            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요</NoUserList>
           )}
         </UserListWrapper>
         <VoteTableWrapper>
