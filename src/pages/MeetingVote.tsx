@@ -42,6 +42,11 @@ export function MeetingVote() {
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
+  const checkedUserList = userList.map((user) => ({
+    ...user,
+    checked: user.id === currentUser?.id,
+  }));
+
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -164,18 +169,20 @@ export function MeetingVote() {
         </HeaderContainer>
       </Header>
       <Contents>
-        {isNewUser && (
-          <Alert severity="warning">이미 투표한 적이 있으면 아이디를 눌러주세요.</Alert>
-        )}
-        {!isNewUser && (
-          <Alert severity="warning">{`${currentUser.username}님의 투표를 수정합니다`}</Alert>
-        )}
-        <UserList users={userList} onClick={handleClickUser} />
-        <VoteTable
-          onClick={handleClickVoteTableSlot}
-          data={voteTableDataList}
-          headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
-        />
+        <UserListWrapper>
+          <UserListLabel>참석자 목록</UserListLabel>
+          {userList.length > 0 ? (
+            <UserList className="user-list" users={checkedUserList} onClick={handleClickUser} />
+          ) : (
+            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요. 🥲</NoUserList>
+          )}
+        </UserListWrapper>
+        <VoteTableWrapper>
+          <VoteTable
+            onClick={handleClickVoteTableSlot}
+            data={voteTableDataList}
+            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+          />
         </VoteTableWrapper>
       </Contents>
       <Footer>
