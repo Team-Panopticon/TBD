@@ -7,7 +7,6 @@ import { FullHeightButtonGroup } from '../../components/styled';
 enum InvalidText {
   EMPTY = '참석자 이름을 입력해주세요',
   DUP = '중복된 이름입니다',
-  LENGTH = '20자 이하로 입력해주세요',
 }
 
 interface Props {
@@ -29,8 +28,6 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
       setInvalidText(InvalidText.EMPTY);
     } else if (!validation(value)) {
       setInvalidText(InvalidText.DUP);
-    } else if (!validationNameLength(value)) {
-      setInvalidText(InvalidText.LENGTH);
     } else {
       setInvalidText('');
     }
@@ -38,7 +35,6 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
 
   /** username이 usernameList에 있지 않아 valid한 경우 true */
   const validation = (username: string): boolean => !usernameList.includes(username);
-  const validationNameLength = (username: string): boolean => username.length <= 20;
 
   return (
     <>
