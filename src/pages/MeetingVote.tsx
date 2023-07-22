@@ -12,7 +12,7 @@ import { UserList, UserListData } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
-import { currentUserStateOf } from '../stores/currentUser';
+import { currentUserStateFamily } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { userListState, votingsState } from '../stores/voting';
@@ -25,8 +25,8 @@ interface MeetingVoteRouteParams {
 export function MeetingVote() {
   const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
 
-  const [currentUser, setCurrentUser] = useRecoilState(currentUserStateOf(meetingId));
-  const resetCurrentUser = useResetRecoilState(currentUserStateOf(meetingId));
+  const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
+  const resetCurrentUser = useResetRecoilState(currentUserStateFamily(meetingId));
   const setCurrentUserVotingSlots = useSetRecoilState(currentUserVotingSlotsState);
   const setShowVoteSuccessPopup = useSetRecoilState(showVoteSuccessPopupState);
   const isNewUser = !currentUser;
@@ -34,6 +34,7 @@ export function MeetingVote() {
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
+
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
