@@ -39,13 +39,9 @@ export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
     throw new Error('adminToken is not set');
   }
 
-  await api.post(
-    `/meetings/${meetingId}/confirm`,
-    { slot },
-    {
-      headers: {
-        Authorization: `Bearer ${adminToken}`,
-      },
+  await api.post(`/meetings/${meetingId}/confirm`, slot, {
+    headers: {
+      Authorization: `Bearer ${adminToken}`,
     },
-  );
+  });
 };
