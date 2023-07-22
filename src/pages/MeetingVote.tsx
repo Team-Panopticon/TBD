@@ -1,4 +1,4 @@
-import { Alert, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
@@ -6,8 +6,9 @@ import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState 
 import { getMeeting } from '../apis/meetings';
 import { GetMeetingResponse } from '../apis/types';
 import { createVoting, getVotings, updateVoting } from '../apis/votes';
+import WritingHands from '../assets/writing.svg';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FullHeightButtonGroup } from '../components/styled';
+import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList, UserListData } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
@@ -17,6 +18,13 @@ import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { userListState, votingsState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
+import {
+  NoUserList,
+  PrimaryBold,
+  UserListLabel,
+  UserListWrapper,
+  VoteTableWrapper,
+} from '../templates/MeetingView/styled';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
@@ -125,7 +133,34 @@ export function MeetingVote() {
     <Page>
       <Header>
         <HeaderContainer>
-          <h1>{meeting.name}</h1>
+          <FlexVertical flex={1} alignItems={'center'} gap={1}>
+            <FlexVertical flex={1} gap={1} width={'100%'}>
+              <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                gap={1}
+              >
+                <Typography variant="h5" fontWeight={700}>
+                  {meeting.name}
+                </Typography>
+              </Box>
+              <FlexVertical alignItems={'center'}>
+                <img height={110} src={WritingHands} alt="" />
+              </FlexVertical>
+              {currentUser ? (
+                <Typography variant="h6" fontWeight={400} align="center">
+                  <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님의
+                  투표를 수정합니다
+                </Typography>
+              ) : (
+                <Typography variant="h6" fontWeight={400} align="center">
+                  투표하신 적이 있으면 참석자 목록에서 아이디를 눌러주세요
+                </Typography>
+              )}
+            </FlexVertical>
+          </FlexVertical>
         </HeaderContainer>
       </Header>
       <Contents>
@@ -141,6 +176,7 @@ export function MeetingVote() {
           data={voteTableDataList}
           headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
         />
+        </VoteTableWrapper>
       </Contents>
       <Footer>
         <FullHeightButtonGroup
