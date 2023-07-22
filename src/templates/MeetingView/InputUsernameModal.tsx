@@ -55,6 +55,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               onChange={onChangeTextField}
               error={invalidText !== ''}
               helperText={invalidText}
+              inputProps={{ maxLength: 20 }}
             />
           </div>
           <FullHeightButtonGroup
