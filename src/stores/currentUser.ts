@@ -7,8 +7,9 @@ export interface User {
   username: string;
 }
 
-export const currentUserState = atom({
-  key: 'currentUser',
-  default: undefined,
-  effects: [localstorageEffect<User | undefined>('current_user')],
-});
+export const currentUserStateOf = (meetingId: string) =>
+  atom({
+    key: 'currentUser',
+    default: undefined,
+    effects: [localstorageEffect<User | undefined>(`meetings/${meetingId}/current_user`)],
+  });

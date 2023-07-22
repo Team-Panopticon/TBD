@@ -5,12 +5,12 @@ import { GetMeetingResponse } from '../apis/types';
 import { Voting, VotingSlot } from '../apis/votes';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
-import { currentUserState } from '../stores/currentUser';
+import { currentUserStateOf } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { getVotings, votingsState } from '../stores/voting';
 
 export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
-  const currentUser = useRecoilValue(currentUserState);
+  const currentUser = useRecoilValue(currentUserStateOf(meeting?.id ?? ''));
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useRecoilState(
     currentUserVotingSlotsState,
   );
