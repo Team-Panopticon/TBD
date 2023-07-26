@@ -15,7 +15,7 @@ import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenState } from '../stores/adminToken';
-import { currentUserStateOf } from '../stores/currentUser';
+import { currentUserStateFamily } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
@@ -37,7 +37,7 @@ export function MeetingView() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
-  const currentUser = useRecoilValue(currentUserStateOf(meetingId));
+  const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
