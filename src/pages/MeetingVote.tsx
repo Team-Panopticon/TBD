@@ -154,7 +154,7 @@ export function MeetingVote() {
               <FlexVertical alignItems={'center'}>
                 <img height={110} src={WritingHands} alt="" />
               </FlexVertical>
-              <FlexVertical height={64}>
+              <FlexVertical>
                 {currentUser ? (
                   <Typography variant="h6" fontWeight={400} align="center">
                     <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님의
