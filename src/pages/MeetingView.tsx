@@ -123,7 +123,7 @@ export function MeetingView() {
           {userList.length ? (
             <UserList className="user-list" users={userList} onClick={handleClickUserList} />
           ) : (
-            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요. 🥲</NoUserList>
+            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>
           )}
         </UserListWrapper>
         <VoteTableWrapper>
