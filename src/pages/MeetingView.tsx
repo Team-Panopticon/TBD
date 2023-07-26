@@ -96,9 +96,7 @@ export function MeetingView() {
                   {meeting.name}
                 </Typography>
                 <Dropdown
-                  onClickConfirmButton={() => {
-                    // TODO: 확정하기 api 연결
-                  }}
+                  onClickConfirmButton={handleClickConfirmButton}
                   onClickEditButton={() => {
                     // TODO: 수정하기 api 연결
                   }}
