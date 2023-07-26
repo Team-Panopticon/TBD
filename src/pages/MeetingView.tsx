@@ -86,7 +86,7 @@ export function MeetingView() {
                 alignItems={'center'}
                 gap={1}
               >
-                <Typography variant="h5" fontWeight={300}>
+                <Typography variant="h5" fontWeight={700}>
                   {meeting.name}
                 </Typography>
                 <Dropdown
@@ -113,11 +113,11 @@ export function MeetingView() {
       </Header>
       <Contents>
         <UserList className="user-list" users={userList} onClick={handleClickUserList}>
-          {userList.length ? (
-            <UserList.Title color="primary">투표 현황</UserList.Title>
-          ) : (
-            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>
-          )}
+          <UserList.Title color="primary">투표 현황</UserList.Title>
+
+          <UserList.Placeholder>
+            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
+          </UserList.Placeholder>
         </UserList>
 
         <VoteTableWrapper>

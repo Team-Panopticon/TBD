@@ -49,17 +49,18 @@ export function MeetingResult() {
             <HeaderContainer>
               <FlexVertical flex={1} alignItems={'center'} gap={1}>
                 <FlexVertical flex={1} gap={1}>
-                  <Typography variant="h5" fontWeight={300}>
+                  <Typography variant="h5" fontWeight={700}>
                     축하합니다!
                   </Typography>
                   <FlexVertical alignItems={'center'}>
                     <HifiveIcon width={100} height={100}></HifiveIcon>
                   </FlexVertical>
                   <Typography variant="h5" fontWeight={300} align="center">
-                    <Typography variant="body1" fontWeight={300} align="center">
-                      {meeting?.name && `${meeting?.name}의`}
+                    <Typography variant="body1" fontWeight={700} align="center">
+                      {meeting?.name && `${meeting?.name}`}{' '}
+                      <span style={{ fontWeight: 'normal' }}>의</span>
                     </Typography>
-                    <Typography variant="body1" fontWeight={500} align="center">
+                    <Typography variant="body1" fontWeight={600} align="center">
                       날짜가 정해졌어요
                     </Typography>
                   </Typography>
