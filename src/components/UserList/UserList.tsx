@@ -12,7 +12,7 @@ export interface UserListVoteData {
   focused: boolean;
 }
 
-export interface UserListData extends UserListVoteData, User {}
+export interface UserListData extends UserListVoteData, User { }
 
 interface Props {
   className?: string;
@@ -46,7 +46,7 @@ const UserListTitleType = (<UserListTitle />).type;
 const PlaceholderType = (<Placeholder />).type;
 const getTypeofChildren = (children: ReactNode, type: JSX.Element['type']) => {
   const childrenArray = Children.toArray(children);
-  return childrenArray.filter((child) => isValidElement(child) && child.type === type).slice(0, 2);
+  return childrenArray.filter((child) => isValidElement(child) && child.type === type);
 };
 const UserListMain: React.FC<Props> = (props) => {
   const { users, style, className, onClick, children } = props;
