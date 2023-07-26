@@ -6,8 +6,8 @@ export const Page = styled('div')`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  height: 100vh;
-  overflow: hidden;
+  height: calc(100vh - 56px);
+  overflow: auto;
 `;
 
 export const Header = styled('header')`
@@ -57,6 +57,10 @@ export const Contents = ({ children }: { children: ReactNode }) => {
 };
 
 export const Footer = styled('footer')({
+  backgroundColor: 'white',
+  position: 'fixed',
+  bottom: 0,
+  width: '100%',
   height: '56px',
   flexShrink: 0,
 });

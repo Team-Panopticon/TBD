@@ -38,11 +38,7 @@ const router = createBrowserRouter([
   },
   {
     path: 'meetings/:meetingId/vote',
-    element: (
-      <ProtectedAdminRoute>
-        <MeetingVote />
-      </ProtectedAdminRoute>
-    ),
+    element: <MeetingVote />,
   },
   {
     path: 'meetings/:meetingId/modify',

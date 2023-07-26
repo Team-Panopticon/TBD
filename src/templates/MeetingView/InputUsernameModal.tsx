@@ -5,7 +5,7 @@ import { CenterContentModal } from '../../components/CenterContentModal';
 import { FullHeightButtonGroup } from '../../components/styled';
 
 enum InvalidText {
-  EMPTY = '참석자 이름을 입력해주세요',
+  EMPTY = '이름은 한글자 이상 입력해야 합니다',
   DUP = '중복된 이름입니다',
 }
 
@@ -48,6 +48,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               variant="outlined"
               fullWidth
               value={username}
+              placeholder="당신의 이름을 정해주세요"
               onChange={onChangeTextField}
               error={invalidText !== ''}
               helperText={invalidText}
@@ -66,7 +67,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               onClick={() => {
                 onConfirm(username);
               }}
-              disabled={invalidText !== ''}
+              disabled={username.length === 0 || invalidText !== ''}
             >
               완료
             </Button>

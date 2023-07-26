@@ -15,12 +15,12 @@ import { MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenState } from '../stores/adminToken';
-import { currentUserState } from '../stores/currentUser';
+import { currentUserStateFamily } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
-import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -31,7 +31,7 @@ export function MeetingView() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
-  const currentUser = useRecoilValue(currentUserState);
+  const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
   const [meeting, setMeeting] = useState<GetMeetingResponse>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
@@ -78,8 +78,14 @@ export function MeetingView() {
       <Header>
         <HeaderContainer>
           <FlexVertical flex={1} alignItems={'center'} gap={1}>
-            <FlexVertical flex={1} gap={1}>
-              <Box display={'flex'} flexDirection={'row'} alignItems={'center'} gap={1}>
+            <FlexVertical flex={1} gap={1} width={'100%'}>
+              <Box
+                display={'flex'}
+                flexDirection={'row'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                gap={1}
+              >
                 <Typography variant="h5" fontWeight={300}>
                   {meeting.name}
                 </Typography>
@@ -107,7 +113,11 @@ export function MeetingView() {
       </Header>
       <Contents>
         <UserList className="user-list" users={userList} onClick={handleClickUserList}>
-          <UserList.Title color="primary">투표 현황</UserList.Title>
+          {userList.length ? (
+            <UserList.Title color="primary">투표 현황</UserList.Title>
+          ) : (
+            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>
+          )}
         </UserList>
 
         <VoteTableWrapper>

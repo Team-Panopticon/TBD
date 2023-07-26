@@ -11,6 +11,13 @@ export const UserListLabel = styled('div')({
   marginBottom: '8px',
 });
 
+export const NoUserList = styled('div')((props) => ({
+  padding: '8px',
+  border: '1px solid #ccc',
+  borderRadius: '4px',
+  color: props.theme.palette.grey[500],
+}));
+
 export const VoteTableWrapper = styled('div')({
   marginTop: '36px',
   '.vote-table': {

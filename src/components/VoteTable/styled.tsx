@@ -57,7 +57,8 @@ export const ContentBox = styled('button')<{
       },
       checked,
     } = props;
-    return checked ? primary.main : 'white';
+
+    return checked ? primary.main : 'transparent';
   };
 
   return {
@@ -96,7 +97,7 @@ export const OpacityProgress = styled('div')<{ progress: number; isHide: boolean
   position: 'absolute',
   top: 0,
   left: 0,
-  zIndex: 0,
+  zIndex: -1,
   backgroundColor: props.theme.palette.primary.main,
   opacity: `${props.progress}%`,
   width: '100%',

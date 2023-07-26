@@ -1,4 +1,4 @@
-import { atom } from 'recoil';
+import { atomFamily } from 'recoil';
 
 import { localstorageEffect } from './localstorageEffect';
 
@@ -7,8 +7,10 @@ export interface User {
   username: string;
 }
 
-export const currentUserState = atom({
+export const currentUserStateFamily = atomFamily<User | undefined, string>({
   key: 'currentUser',
   default: undefined,
-  effects: [localstorageEffect<User | undefined>('current_user')],
+  effects: (meetingId) => [
+    localstorageEffect<User | undefined>(`meetings/${meetingId}/current_user`),
+  ],
 });
