@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { ValidCreateMeetingState } from '../stores/createMeeting';
 import { api } from './instance';
-import { CreateMeetingRequest, CreateMeetingResponse, GetMeetingResponse } from './types';
+import { CreateMeetingRequest, MeetingResponse } from './types';
 import { VotingSlot } from './votes';
 
 const meetingStateToRequest = (
@@ -19,16 +19,13 @@ const meetingStateToRequest = (
 export const createMeeting = async (meeting: ValidCreateMeetingState, setPassword: boolean) => {
   const meetingRequest = meetingStateToRequest(meeting, setPassword);
 
-  const response: AxiosResponse<CreateMeetingResponse> = await api.post(
-    '/meetings',
-    meetingRequest,
-  );
+  const response: AxiosResponse<MeetingResponse> = await api.post('/meetings', meetingRequest);
 
   return response.data;
 };
 
 export const getMeeting = async (meetingId: string) => {
-  const response: AxiosResponse<GetMeetingResponse> = await api.get(`/meetings/${meetingId}`);
+  const response: AxiosResponse<MeetingResponse> = await api.get(`/meetings/${meetingId}`);
 
   return response.data;
 };

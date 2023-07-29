@@ -10,15 +10,8 @@ export interface CreateMeetingRequest {
   password?: string;
 }
 
-export interface CreateMeetingResponse extends CreateMeetingRequest {
+export interface MeetingResponse extends CreateMeetingRequest {
   id: string;
   status: MeetingStatus;
-}
-
-export interface GetMeetingResponse {
-  id: string;
-  name: string;
-  dates: ISODateTime[];
-  type: MeetingType;
   confirmedDateType?: VotingSlotResponse;
 }

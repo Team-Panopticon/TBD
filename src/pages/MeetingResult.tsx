@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
-import { GetMeetingResponse } from '../apis/types';
+import { MeetingResponse } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
@@ -17,7 +17,7 @@ import { votingsState } from '../stores/voting';
 
 export function MeetingResult() {
   const navigate = useNavigate();
-  const [meeting, setMeeting] = useState<GetMeetingResponse>();
+  const [meeting, setMeeting] = useState<MeetingResponse>();
   const { meetingId } = useParams();
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [openShareDialog, setOpenShareDialog] = useState(false);
@@ -38,7 +38,7 @@ export function MeetingResult() {
     })();
   }, [setVotings, meetingId]);
 
-  const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
+  const { confirmedUserList, missedUserList } = useMeetingResult();
 
   return (
     <Page>
