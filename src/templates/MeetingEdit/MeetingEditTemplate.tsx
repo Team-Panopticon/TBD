@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
 import { SetterOrUpdater } from 'recoil';
 
+import { Meeting } from '../../apis/types';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { FullHeightButtonGroup } from '../../components/styled';
 import { MeetingType } from '../../constants/meeting';
@@ -18,14 +19,14 @@ import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
 import { BorderLinearProgress } from './styled';
 
-export interface ICreateMeetingTemplateProps {
+export interface ICreateMeetingTemplateProps<T extends CreateMeetingState | Meeting> {
   currentStep: number;
-  meeting: CreateMeetingState;
+  meeting: T;
   setStep?: SetterOrUpdater<number>;
-  onChange: SetterOrUpdater<CreateMeetingState>;
+  onChange: SetterOrUpdater<T>;
   onSubmit: () => void;
   meetingEditSteps: IMeetingEditStep[];
-  // pageType: 'create' | 'modify';
+  pageType: 'create' | 'modify';
 }
 
 /**
@@ -33,15 +34,15 @@ export interface ICreateMeetingTemplateProps {
  * - Step 진행 애니메이션, Progress Bar, 메시지 처리
  * - 모임생성, 모임수정에 공통적인 로직 처리
  */
-export function MeetingEditTemplate({
+export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
   currentStep,
   meeting,
   setStep,
   onChange,
   onSubmit,
   meetingEditSteps,
-}: // pageType,
-ICreateMeetingTemplateProps) {
+  pageType,
+}: ICreateMeetingTemplateProps<T>) {
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
@@ -97,7 +98,7 @@ ICreateMeetingTemplateProps) {
             </Button>
           ) : (
             <Button onClick={onSubmit} disabled={!isMeetingValid}>
-              생성하기
+              {pageType === 'create' ? '생성하기' : '수정하기'}
             </Button>
           )}
         </FullHeightButtonGroup>
@@ -106,10 +107,10 @@ ICreateMeetingTemplateProps) {
   );
 }
 
-const getMeetingEditContent = (
+const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
   type: IMeetingEditStep['type'],
-  setValue: SetterOrUpdater<CreateMeetingState>,
-  meeting: CreateMeetingState,
+  setValue: SetterOrUpdater<T>,
+  meeting: T,
 ) => {
   switch (type) {
     case 'name': {

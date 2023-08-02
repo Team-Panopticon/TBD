@@ -69,6 +69,7 @@ export function MeetingCreate() {
         setStep={setCurrentStep}
         onChange={setMeeting}
         onSubmit={handleMeetingEditComplete}
+        pageType="create"
       ></MeetingEditTemplate>
       <CreatePasswordModal
         show={showPasswordModal}
