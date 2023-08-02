@@ -1,8 +1,9 @@
 import { AxiosResponse } from 'axios';
+import dayjs from 'dayjs';
 
 import { ValidCreateMeetingState } from '../stores/createMeeting';
 import { api } from './instance';
-import { CreateMeetingRequest, CreateMeetingResponse, GetMeetingResponse } from './types';
+import { CreateMeetingRequest, Meeting, MeetingResponse } from './types';
 import { VotingSlot } from './votes';
 
 const meetingStateToRequest = (
@@ -16,21 +17,27 @@ const meetingStateToRequest = (
   };
 };
 
+const meetingResponseToState = (state: MeetingResponse): Meeting => {
+  return {
+    ...state,
+    dates: state.dates.map((date) => dayjs(date)),
+  };
+};
+
 export const createMeeting = async (meeting: ValidCreateMeetingState, setPassword: boolean) => {
   const meetingRequest = meetingStateToRequest(meeting, setPassword);
 
-  const response: AxiosResponse<CreateMeetingResponse> = await api.post(
-    '/meetings',
-    meetingRequest,
-  );
+  const response: AxiosResponse<MeetingResponse> = await api.post('/meetings', meetingRequest);
 
   return response.data;
 };
 
-export const getMeeting = async (meetingId: string) => {
-  const response: AxiosResponse<GetMeetingResponse> = await api.get(`/meetings/${meetingId}`);
+export const getMeeting = async (meetingId: string): Promise<Meeting> => {
+  const response: AxiosResponse<MeetingResponse> = await api.get(`/meetings/${meetingId}`);
 
-  return response.data;
+  const meeting = meetingResponseToState(response.data);
+
+  return meeting;
 };
 
 export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {

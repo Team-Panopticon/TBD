@@ -2,7 +2,7 @@ import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
-import { GetMeetingResponse } from '../apis/types';
+import { Meeting } from '../apis/types';
 import { VotingSlot } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
@@ -10,7 +10,7 @@ import { MeetingType } from '../constants/meeting';
 import { userListState, voteTableDataListState, votingsState } from '../stores/voting';
 import { isSameSlot } from './useMeetingVote';
 
-export const useMeetingView = (meeting?: GetMeetingResponse) => {
+export const useMeetingView = (meeting?: Meeting) => {
   const votings = useRecoilValue(votingsState);
   const userListStateValue = useRecoilValue(userListState);
   const voteTableDataListValue = useRecoilValue(voteTableDataListState(meeting));

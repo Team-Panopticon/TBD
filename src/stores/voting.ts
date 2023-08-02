@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { atom, selector, selectorFamily } from 'recoil';
 
-import { GetMeetingResponse } from '../apis/types';
+import { Meeting } from '../apis/types';
 import { Voting, VotingSlot, VotingSlotResponse } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
@@ -114,11 +114,11 @@ export const votingsState = atom<Voting[]>({
 
 export const voteTableDataListState = selectorFamily<
   VoteTableRowData[] | undefined,
-  SelectorMapper<GetMeetingResponse | undefined>
+  SelectorMapper<Meeting | undefined>
 >({
   key: 'voteTableDataList',
   get:
-    (meeting: GetMeetingResponse | undefined) =>
+    (meeting: Meeting | undefined) =>
     ({ get }) => {
       if (!meeting) {
         return;
@@ -126,7 +126,7 @@ export const voteTableDataListState = selectorFamily<
 
       const votings = get(votingsState);
 
-      const tableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
+      const tableDataList = meeting?.dates.map<VoteTableRowData>((day) => ({
         date: day,
         votings: getVotings(meeting.type, day, votings),
       }));

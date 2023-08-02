@@ -1,7 +1,7 @@
-import { GetMeetingResponse } from '../apis/types';
-import { MeetingType } from '../constants/meeting';
+import { MeetingResponse } from '../apis/types';
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 
-export const mockDateTypeMeeting: GetMeetingResponse = {
+export const mockDateTypeMeeting: MeetingResponse = {
   id: '1',
   name: 'mockDateTypeMeeting',
   dates: [
@@ -13,9 +13,10 @@ export const mockDateTypeMeeting: GetMeetingResponse = {
     '2022-11-30T01:44:39.114Z',
   ], // ISO date string with timezone
   type: MeetingType.date,
+  status: MeetingStatus.inProgress,
 };
 
-export const mockMealTypeMeeting: GetMeetingResponse = {
+export const mockMealTypeMeeting: MeetingResponse = {
   id: '2',
   name: 'mockMealTypeMeeting',
   dates: [
@@ -27,4 +28,5 @@ export const mockMealTypeMeeting: GetMeetingResponse = {
     '2022-11-30T01:44:39.114Z',
   ], // ISO date string with timezone
   type: MeetingType.meal,
+  status: MeetingStatus.inProgress,
 };

@@ -1,7 +1,7 @@
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { GetMeetingResponse } from '../apis/types';
+import { Meeting } from '../apis/types';
 import { Voting, VotingSlot } from '../apis/votes';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
@@ -9,7 +9,7 @@ import { currentUserStateFamily } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { getVotings, votingsState } from '../stores/voting';
 
-export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
+export const useMeetingViewVoteMode = (meeting?: Meeting) => {
   const currentUser = useRecoilValue(currentUserStateFamily(meeting?.id ?? ''));
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useRecoilState(
     currentUserVotingSlotsState,
@@ -30,7 +30,7 @@ export const useMeetingViewVoteMode = (meeting?: GetMeetingResponse) => {
   const hasNewUserNotVoted = isNewUser && currentUserVotingSlots.length === 0;
 
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
-  const voteTableDataList = meeting?.dates.map(dayjs).map<VoteTableRowData>((day) => ({
+  const voteTableDataList = meeting?.dates.map<VoteTableRowData>((day) => ({
     date: day,
     votings: getVotings(
       meeting.type,

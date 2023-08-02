@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
-import { GetMeetingResponse } from '../apis/types';
+import { Meeting } from '../apis/types';
 import { createVoting, getVotings, updateVoting } from '../apis/votes';
 import WritingHands from '../assets/writing.svg';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
@@ -39,7 +39,7 @@ export function MeetingVote() {
   const setShowVoteSuccessPopup = useSetRecoilState(showVoteSuccessPopupState);
   const isNewUser = !currentUser;
 
-  const [meeting, setMeeting] = useState<GetMeetingResponse>();
+  const [meeting, setMeeting] = useState<Meeting>();
   const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
   const checkedUserList = userList.map((user) => ({
