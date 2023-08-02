@@ -126,6 +126,7 @@ const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
           placeholder="한사랑산악회 신년 모임"
           error={isMeetingInValid}
           helperText={helperText}
+          value={meeting.name ?? ''}
           onChange={(v) => {
             setValue((prev) => ({
               ...prev,
