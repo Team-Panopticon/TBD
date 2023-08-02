@@ -93,6 +93,10 @@ export function MeetingVote() {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   const handleClickVote = async () => {
+    if (!meeting) {
+      return;
+    }
+
     if (isNewUser) {
       setShowUsernameModal(true);
       return;
@@ -104,7 +108,7 @@ export function MeetingVote() {
       votingId: currentUser.id,
       data: {
         username: currentUser.username,
-        dateType: currentUserVotingSlots,
+        [meeting.type]: currentUserVotingSlots,
       },
     });
     setShowUsernameModal(false);
@@ -113,11 +117,15 @@ export function MeetingVote() {
   };
 
   const handleUsernameConfirm = async (username: string) => {
+    if (!meeting) {
+      return;
+    }
+
     const voting = await createVoting({
       meetingId,
       data: {
         username,
-        dateType: currentUserVotingSlots,
+        [meeting.type]: currentUserVotingSlots,
       },
     });
 
