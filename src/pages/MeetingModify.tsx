@@ -50,7 +50,7 @@ export function MeetingModify() {
   const navigate = useNavigate();
 
   if (!meeting || isLoading || isError) {
-    return;
+    return null;
   }
 
   const handleMeetingEditComplete = () => {
