@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
@@ -8,12 +8,6 @@ import { Dayjs } from 'dayjs';
 import * as React from 'react';
 
 type CustomPickerDayProps = PickersDayProps<Dayjs>;
-
-const StyledDatePicker = styled(StaticDatePicker)`
-  .MuiDayPicker-slideTransition {
-    min-height: calc(44 * 6px);
-  }
-`;
 
 const CustomPickersDay = styled(PickersDay, {
   shouldForwardProp: (prop) => prop !== 'selected',
@@ -78,11 +72,10 @@ export function SelectDates(props: Props) {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className="date-picker-wrapper">
-        <StyledDatePicker
+        <StaticDatePicker
           displayStaticWrapperAs="desktop"
           value={dates}
           className="date-picker"
-          // onChange는 처음 클릭한 날짜에 대해 다시 클릭했을 때 이벤트가 발생하지 않으므로 사용하지 않음, PickersDay의 onClick으로 클릭 처리
           // eslint-disable-next-line @typescript-eslint/no-empty-function, prettier/prettier
           onChange={() => { }}
           renderDay={renderWeekPickerDay}
