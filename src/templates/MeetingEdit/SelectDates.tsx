@@ -46,7 +46,7 @@ export function SelectDates(props: Props) {
 
   const dayOnClick = (newDate: Dayjs, selected: boolean) => {
     if (selected) {
-      handleSelectDates(dates.filter((date) => !date.isSame(newDate)));
+      handleSelectDates(dates.filter((date) => !date.isSame(newDate, 'day')));
     } else {
       handleSelectDates(dates.concat(newDate));
     }
@@ -57,7 +57,7 @@ export function SelectDates(props: Props) {
     _: Array<Dayjs | null>,
     pickersDayProps: PickersDayProps<Dayjs>,
   ) => {
-    const selected = dates.some((date) => targetDate.isSame(date));
+    const selected = dates.some((date) => targetDate.isSame(date, 'day'));
 
     return (
       <CustomPickersDay
