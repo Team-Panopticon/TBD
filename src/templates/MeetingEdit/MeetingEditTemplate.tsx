@@ -40,8 +40,7 @@ export function MeetingEditTemplate({
   onChange,
   onSubmit,
   meetingEditSteps,
-}: // pageType,
-ICreateMeetingTemplateProps) {
+}: ICreateMeetingTemplateProps) {
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
@@ -67,7 +66,7 @@ ICreateMeetingTemplateProps) {
       <Header>
         <HeaderContainer>
           <BorderLinearProgress variant="determinate" value={progress} />
-          <Typography variant="h5" fontWeight={300} align="center">
+          <Typography variant="h5" fontWeight={700} align="center">
             {description}
           </Typography>
         </HeaderContainer>

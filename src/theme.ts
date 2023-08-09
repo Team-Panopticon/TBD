@@ -4,6 +4,20 @@ const PRIMARY_COLOR = '#66D6B4';
 const SECONDARY_COLOR = '#d9d9d9';
 
 const themeOptions: ThemeOptions = {
+  typography: {
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+  },
   palette: {
     primary: {
       main: PRIMARY_COLOR,
