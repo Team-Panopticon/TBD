@@ -11,7 +11,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { MeetingType } from '../constants/meeting';
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenState } from '../stores/adminToken';
@@ -89,12 +89,14 @@ export function MeetingView() {
                 <Typography variant="h5" fontWeight={700}>
                   {meeting.name}
                 </Typography>
-                <Dropdown
-                  onClickConfirmButton={handleClickConfirmButton}
-                  onClickEditButton={() => {
-                    // TODO: 수정하기 api 연결
-                  }}
-                />
+                {meeting.status === MeetingStatus.inProgress && (
+                  <Dropdown
+                    onClickConfirmButton={handleClickConfirmButton}
+                    onClickEditButton={() => {
+                      // TODO: 수정하기 api 연결
+                    }}
+                  />
+                )}
               </Box>
               <FlexVertical alignItems={'center'}>
                 <img height={110} src={GreetingHands} alt="" />
