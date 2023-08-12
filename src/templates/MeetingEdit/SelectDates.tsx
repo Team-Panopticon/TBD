@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField/TextField';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { PickersDay, PickersDayProps } from '@mui/x-date-pickers/PickersDay';
@@ -13,7 +13,7 @@ const CustomPickersDay = styled(PickersDay, {
   shouldForwardProp: (prop) => prop !== 'selected',
 })<CustomPickerDayProps>(({ theme, selected }) => {
   const style: React.CSSProperties = {
-    borderRadius: 0,
+    borderRadius: 2,
     width: 28,
     height: 28,
     margin: 6,
@@ -71,17 +71,19 @@ export function SelectDates(props: Props) {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <StaticDatePicker
-        displayStaticWrapperAs="desktop"
-        value={dates}
-        // onChange는 처음 클릭한 날짜에 대해 다시 클릭했을 때 이벤트가 발생하지 않으므로 사용하지 않음, PickersDay의 onClick으로 클릭 처리
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        onChange={() => {}}
-        renderDay={renderWeekPickerDay}
-        renderInput={(params) => <TextField {...params} />}
-        disableHighlightToday={true}
-        disablePast={true}
-      />
+      <div className="date-picker-wrapper">
+        <StaticDatePicker
+          displayStaticWrapperAs="desktop"
+          value={dates}
+          className="date-picker"
+          // eslint-disable-next-line @typescript-eslint/no-empty-function, prettier/prettier
+          onChange={() => { }}
+          renderDay={renderWeekPickerDay}
+          renderInput={(params) => <TextField {...params} />}
+          disableHighlightToday={true}
+          disablePast={true}
+        />
+      </div>
     </LocalizationProvider>
   );
 }

@@ -11,7 +11,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { MeetingType } from '../constants/meeting';
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenState } from '../stores/adminToken';
@@ -20,13 +20,7 @@ import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
-import {
-  NoUserList,
-  PrimaryBold,
-  UserListLabel,
-  UserListWrapper,
-  VoteTableWrapper,
-} from '../templates/MeetingView/styled';
+import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -103,13 +97,15 @@ export function MeetingView() {
                 alignItems={'center'}
                 gap={1}
               >
-                <Typography variant="h5" fontWeight={300}>
+                <Typography variant="h5" fontWeight={700}>
                   {meeting.name}
                 </Typography>
-                <Dropdown
-                  onClickConfirmButton={handleClickConfirmButton}
-                  onClickEditButton={handleClickEditButton}
-                />
+                {meeting.status === MeetingStatus.inProgress && (
+                  <Dropdown
+                    onClickConfirmButton={handleClickConfirmButton}
+                    onClickEditButton={handleClickEditButton}
+                  />
+                )}
               </Box>
               <FlexVertical alignItems={'center'}>
                 <img height={110} src={GreetingHands} alt="" />
@@ -125,14 +121,14 @@ export function MeetingView() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserListWrapper>
-          <UserListLabel>참석자 목록</UserListLabel>
-          {userList.length ? (
-            <UserList className="user-list" users={userList} onClick={handleClickUserList} />
-          ) : (
-            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>
-          )}
-        </UserListWrapper>
+        <UserList className="user-list" users={userList} onClick={handleClickUserList}>
+          <UserList.Title color="primary">투표 현황</UserList.Title>
+
+          <UserList.Placeholder>
+            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
+          </UserList.Placeholder>
+        </UserList>
+
         <VoteTableWrapper>
           <VoteTable
             onClick={handleClickVoteTable}

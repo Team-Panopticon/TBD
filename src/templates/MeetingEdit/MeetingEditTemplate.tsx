@@ -68,7 +68,7 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
       <Header>
         <HeaderContainer>
           <BorderLinearProgress variant="determinate" value={progress} />
-          <Typography variant="h5" fontWeight={300} align="center">
+          <Typography variant="h5" fontWeight={700} align="center">
             {description}
           </Typography>
         </HeaderContainer>

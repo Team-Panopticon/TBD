@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { ReactNode } from 'react';
 
 export const Page = styled('div')`
@@ -36,11 +36,12 @@ export const HeaderContainer = styled('div')({
   },
 });
 
-const ContentsWrapper = styled('div')`
+const ContentsWrapper = styled(Box)`
+  overflow: auto;
   padding: 16px 32px;
   height: 100%;
 `;
-const ContentsBox = styled('div')`
+const ContentsBox = styled(Box)`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;

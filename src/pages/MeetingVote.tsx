@@ -18,13 +18,7 @@ import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { userListState, votingsState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
-import {
-  NoUserList,
-  PrimaryBold,
-  UserListLabel,
-  UserListWrapper,
-  VoteTableWrapper,
-} from '../templates/MeetingView/styled';
+import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
@@ -93,6 +87,10 @@ export function MeetingVote() {
 
   // eslint-disable-next-line @typescript-eslint/require-await
   const handleClickVote = async () => {
+    if (!meeting) {
+      return;
+    }
+
     if (isNewUser) {
       setShowUsernameModal(true);
       return;
@@ -104,7 +102,7 @@ export function MeetingVote() {
       votingId: currentUser.id,
       data: {
         username: currentUser.username,
-        dateType: currentUserVotingSlots,
+        [meeting.type]: currentUserVotingSlots,
       },
     });
     setShowUsernameModal(false);
@@ -113,11 +111,15 @@ export function MeetingVote() {
   };
 
   const handleUsernameConfirm = async (username: string) => {
+    if (!meeting) {
+      return;
+    }
+
     const voting = await createVoting({
       meetingId,
       data: {
         username,
-        dateType: currentUserVotingSlots,
+        [meeting.type]: currentUserVotingSlots,
       },
     });
 
@@ -161,7 +163,12 @@ export function MeetingVote() {
                     투표를 수정합니다
                   </Typography>
                 ) : (
-                  <Typography variant="h6" fontWeight={400} align="center">
+                  <Typography
+                    variant="h6"
+                    fontWeight={400}
+                    style={{ wordBreak: 'keep-all' }}
+                    align="center"
+                  >
                     투표하신 적이 있으면 참석자 목록에서 아이디를 눌러주세요
                   </Typography>
                 )}
@@ -171,14 +178,13 @@ export function MeetingVote() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserListWrapper>
-          <UserListLabel>참석자 목록</UserListLabel>
-          {userList.length > 0 ? (
-            <UserList className="user-list" users={checkedUserList} onClick={handleClickUser} />
-          ) : (
-            <NoUserList>아직 아무도 참석할 수 있는 사람이 없어요</NoUserList>
-          )}
-        </UserListWrapper>
+        <UserList className="user-list" users={checkedUserList} onClick={handleClickUser}>
+          <UserList.Title color="primary">투표 현황</UserList.Title>
+
+          <UserList.Placeholder>
+            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
+          </UserList.Placeholder>
+        </UserList>
         <VoteTableWrapper>
           <VoteTable
             onClick={handleClickVoteTableSlot}

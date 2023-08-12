@@ -49,17 +49,18 @@ export function MeetingResult() {
             <HeaderContainer>
               <FlexVertical flex={1} alignItems={'center'} gap={1}>
                 <FlexVertical flex={1} gap={1}>
-                  <Typography variant="h5" fontWeight={300}>
-                    {'congratulations!'}
+                  <Typography variant="h5" fontWeight={700}>
+                    축하합니다!
                   </Typography>
                   <FlexVertical alignItems={'center'}>
                     <HifiveIcon width={100} height={100}></HifiveIcon>
                   </FlexVertical>
                   <Typography variant="h5" fontWeight={300} align="center">
-                    <Typography variant="body1" fontWeight={300} align="center">
-                      {meeting?.name && `${meeting?.name}의`}
+                    <Typography variant="body1" fontWeight={700} align="center">
+                      {meeting?.name && `${meeting?.name}`}{' '}
+                      <span style={{ fontWeight: 'normal' }}>의</span>
                     </Typography>
-                    <Typography variant="body1" fontWeight={500} align="center">
+                    <Typography variant="body1" fontWeight={600} align="center">
                       날짜가 정해졌어요
                     </Typography>
                   </Typography>
@@ -77,19 +78,15 @@ export function MeetingResult() {
           </Header>
 
           <FlexVertical gap={1}>
-            <FlexVertical>
-              <Typography variant="caption" fontWeight={500} color={'primary'}>
-                올 수 있는 사람들
-              </Typography>
-              <UserList users={confirmedUserList} />
-            </FlexVertical>
+            <UserList users={confirmedUserList}>
+              <UserList.Title> 올 수 있는 사람들</UserList.Title>
+              <UserList.Placeholder>{':('}</UserList.Placeholder>
+            </UserList>
 
-            <FlexVertical>
-              <Typography variant="caption" fontWeight={500}>
-                아쉽지만 못오는 사람들
-              </Typography>
-              <UserList users={missedUserList} />
-            </FlexVertical>
+            <UserList users={missedUserList}>
+              <UserList.Title color="secondary"> 아쉽지만 못오는 사람들</UserList.Title>
+              <UserList.Placeholder>{':)'}</UserList.Placeholder>
+            </UserList>
           </FlexVertical>
         </FlexVertical>
       </Contents>

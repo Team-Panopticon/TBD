@@ -35,8 +35,8 @@ export interface StepBox {
 export const StepBox = styled('div')<StepBox>((props) => ({
   display: 'flex',
   flexDirection: 'column',
-  transition: 'all 0.8s ease-in-out',
-  maxHeight: props.show ? '100%' : '0',
+  transition: 'all 1.2s ease-in-out',
+  maxHeight: props.show ? '100vh' : '0',
   paddingBottom: props.show ? '20px' : '0',
 
   overflow: 'hidden',
