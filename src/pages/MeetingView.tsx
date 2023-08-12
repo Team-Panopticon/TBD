@@ -65,6 +65,17 @@ export function MeetingView() {
     setShowPasswordModal(true);
   };
 
+  const handleClickEditButton = () => {
+    const isLoggedInAsAdmin = adminToken !== undefined;
+    if (isLoggedInAsAdmin) {
+      navigate(`/meetings/${meetingId}/modify`);
+      return;
+    }
+
+    // Not yet logged in as admin
+    setShowPasswordModal(true);
+  };
+
   const handlePasswordModalConfirm = () => {
     navigate(`/meetings/${meetingId}/confirm`);
   };
@@ -92,9 +103,7 @@ export function MeetingView() {
                 {meeting.status === MeetingStatus.inProgress && (
                   <Dropdown
                     onClickConfirmButton={handleClickConfirmButton}
-                    onClickEditButton={() => {
-                      // TODO: 수정하기 api 연결
-                    }}
+                    onClickEditButton={handleClickEditButton}
                   />
                 )}
               </Box>

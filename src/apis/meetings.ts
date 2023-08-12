@@ -40,6 +40,21 @@ export const getMeeting = async (meetingId: string): Promise<Meeting> => {
   return meeting;
 };
 
+export const updateMeeting = async (meeting: Meeting) => {
+  const adminToken = localStorage.getItem('adminToken');
+  if (!adminToken) {
+    throw new Error('adminToken is not set');
+  }
+
+  const response: AxiosResponse<MeetingResponse> = await api.put('/meetings', meeting, {
+    headers: {
+      Authorization: `Bearer ${adminToken}`,
+    },
+  });
+
+  return response.data;
+};
+
 export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
   const adminToken = localStorage.getItem('adminToken');
   if (!adminToken) {
