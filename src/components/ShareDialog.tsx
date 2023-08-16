@@ -9,6 +9,8 @@ import {
   ListItemText,
 } from '@mui/material';
 
+import { KakaoShareButton } from './KakaoShareButton';
+
 export interface SimpleDialogProps {
   open: boolean;
   onClose?: (value: string) => void;
@@ -33,14 +35,7 @@ export function ShareDialog(props: SimpleDialogProps) {
             <ListItemText primary="주소복사" />
           </ListItemButton>
         </ListItem>
-        {/* <ListItem disableGutters>
-          <ListItemButton autoFocus>
-            <ListItemAvatar>
-              <Avatar>+</Avatar>
-            </ListItemAvatar>
-            <ListItemText primary="카카오톡" />
-          </ListItemButton>
-        </ListItem> */}
+        <KakaoShareButton />
       </List>
     </Dialog>
   );

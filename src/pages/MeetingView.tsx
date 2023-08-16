@@ -8,6 +8,7 @@ import { getMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { ShareDialog } from '../components/ShareDialog';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
@@ -37,11 +38,16 @@ export function MeetingView() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
+  const [openShareDialog, setOpenShareDialog] = useState(false);
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const adminToken = useRecoilValue(adminTokenState);
+
+  const handleShareDialogClose = () => {
+    setOpenShareDialog(false);
+  };
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -148,7 +154,14 @@ export function MeetingView() {
           >
             {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
           </Button>
-          <Button color="transPrimary">공유하기</Button>
+          <Button
+            color="transPrimary"
+            onClick={() => {
+              setOpenShareDialog(true);
+            }}
+          >
+            공유하기
+          </Button>
         </FullHeightButtonGroup>
       </Footer>
       <InputPasswordModal
@@ -178,6 +191,7 @@ export function MeetingView() {
           </IconButton>
         }
       />
+      <ShareDialog open={openShareDialog} onClose={handleShareDialogClose} />
     </Page>
   );
 }
