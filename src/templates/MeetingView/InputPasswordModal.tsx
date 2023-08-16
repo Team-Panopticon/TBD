@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import { issuePrivateMeetingAdminToken } from '../../apis/meetings';
 import { CenterContentModal } from '../../components/CenterContentModal';
 import { MaskingInput } from '../../components/MaskingInput';
-import { adminTokenState } from '../../stores/adminToken';
+import { adminTokenStateFamily } from '../../stores/adminToken';
 import { validatePassword } from '../../stores/createMeeting';
 import { MaskingInputContainer, PasswordInput } from '../MeetingEdit/styled';
 import { ModalTopRightButton } from './styled';
@@ -25,7 +25,7 @@ interface Props {
  */
 export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Props) {
   const [password, setPassword] = useState<string>('');
-  const setAdminToken = useSetRecoilState(adminTokenState);
+  const setAdminToken = useSetRecoilState(adminTokenStateFamily(meetingId));
 
   const handlePasswordChange = (newPassword: string) => {
     if (newPassword.length >= 4) {

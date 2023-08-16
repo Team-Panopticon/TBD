@@ -14,7 +14,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
-import { adminTokenState } from '../stores/adminToken';
+import { adminTokenStateFamily } from '../stores/adminToken';
 import { currentUserStateFamily } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
@@ -35,7 +35,7 @@ export function MeetingView() {
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-  const [adminToken, setAdminToken] = useRecoilState(adminTokenState);
+  const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
