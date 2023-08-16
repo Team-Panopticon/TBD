@@ -191,7 +191,7 @@ export function MeetingView() {
           </IconButton>
         }
       />
-      <ShareDialog open={openShareDialog} onClose={handleShareDialogClose} />
+      <ShareDialog meeting={meeting} open={openShareDialog} onClose={handleShareDialogClose} />
     </Page>
   );
 }

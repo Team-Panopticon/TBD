@@ -9,11 +9,13 @@ import {
   ListItemText,
 } from '@mui/material';
 
+import { Meeting } from '../apis/types';
 import { KakaoShareButton } from './KakaoShareButton';
 
 export interface SimpleDialogProps {
   open: boolean;
   onClose?: (value: string) => void;
+  meeting?: Meeting;
 }
 export function ShareDialog(props: SimpleDialogProps) {
   const { open, onClose } = props;

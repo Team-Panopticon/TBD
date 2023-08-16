@@ -42,7 +42,11 @@ export function MeetingResult() {
 
   return (
     <Page>
-      <ShareDialog open={openShareDialog} onClose={handleShareDialogClose}></ShareDialog>
+      <ShareDialog
+        meeting={meeting}
+        open={openShareDialog}
+        onClose={handleShareDialogClose}
+      ></ShareDialog>
       <Contents>
         <FlexVertical gap={1}>
           <Header>

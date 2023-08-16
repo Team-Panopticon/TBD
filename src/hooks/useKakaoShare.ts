@@ -1,11 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
 
-export const useKakaoShare = ({ title, description }: { title: string; description: string }) => {
+export const useKakaoShare = ({
+  title,
+  description,
+  meetingId,
+}: {
+  title: string;
+  description: string;
+  meetingId: string;
+}) => {
   const [isInitialized, setInitialized] = useState(false);
   const [isError, setError] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const ref = useRef<HTMLAnchorElement>(null);
-  const URL = import.meta.env.VITE_ORIGIN_URL as string;
+  const REDIRECT_URL = (import.meta.env.VITE_ORIGIN_URL as string) + `/meetings/${meetingId}`;
   const API_KEY = import.meta.env.VITE_KAKAOTALK_JS_SDK_KEY as string;
 
   useEffect(() => {
@@ -30,8 +38,8 @@ export const useKakaoShare = ({ title, description }: { title: string; descripti
             title,
             description,
             link: {
-              mobileWebUrl: URL,
-              webUrl: URL,
+              mobileWebUrl: REDIRECT_URL,
+              webUrl: REDIRECT_URL,
             },
             imageUrl: '',
           },
@@ -41,7 +49,7 @@ export const useKakaoShare = ({ title, description }: { title: string; descripti
         setLoading(false);
       }
     }
-  }, [URL, description, isInitialized, ref, title]);
+  }, [REDIRECT_URL, description, isInitialized, ref, title]);
 
   return {
     isError,
