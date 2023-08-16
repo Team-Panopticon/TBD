@@ -17,3 +17,5 @@ export enum MeetingAccess {
   private = 'private',
   public = 'public',
 }
+
+export const INPUT_PASSWORD_FINISH_EVENT = 'inputPasswordFinish';

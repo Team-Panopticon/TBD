@@ -11,7 +11,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../stores/adminToken';
@@ -54,7 +54,7 @@ export function MeetingView() {
     })();
   }, [setVotings, meetingId]);
 
-  const handleClickConfirmButton = () => {
+  const handleClickConfirmButton = async () => {
     const isLoggedInAsAdmin = adminToken !== undefined;
     if (isLoggedInAsAdmin) {
       navigate(`/meetings/${meetingId}/confirm`);
@@ -70,22 +70,56 @@ export function MeetingView() {
     }
 
     // Private meeting AND Not yet logged in as admin
-    setShowPasswordModal(true);
+    const isInputPasswordResolved = await openInputPasswordModal();
+    if (isInputPasswordResolved) {
+      navigate(`/meetings/${meetingId}/confirm`);
+    }
   };
 
-  const handleClickEditButton = () => {
+  const handleClickEditButton = async () => {
     const isLoggedInAsAdmin = adminToken !== undefined;
     if (isLoggedInAsAdmin) {
       navigate(`/meetings/${meetingId}/modify`);
       return;
     }
 
-    // Not yet logged in as admin
+    if (meeting?.access === 'public') {
+      const token = await issuePublicMeetingAdminToken(meetingId);
+      setAdminToken(token);
+      navigate(`/meetings/${meetingId}/modify`);
+      return;
+    }
+
+    // Private meeting AND Not yet logged in as admin
+    const isInputPasswordResolved = await openInputPasswordModal();
+    if (isInputPasswordResolved) {
+      navigate(`/meetings/${meetingId}/modify`);
+    }
+  };
+
+  const openInputPasswordModal = () => {
     setShowPasswordModal(true);
+
+    const inputPasswordFinishPromise = new Promise((resolve, reject) => {
+      addEventListener(
+        INPUT_PASSWORD_FINISH_EVENT,
+        (event) => resolve((event as CustomEvent).detail),
+        {
+          once: true,
+        },
+      );
+    });
+
+    return inputPasswordFinishPromise;
   };
 
   const handlePasswordModalConfirm = () => {
-    navigate(`/meetings/${meetingId}/confirm`);
+    dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: true }));
+  };
+
+  const handlePasswordModalCancel = () => {
+    dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: false }));
+    setShowPasswordModal(false);
   };
 
   if (!meeting || !voteTableDataList) {
@@ -168,9 +202,7 @@ export function MeetingView() {
         meetingId={meetingId}
         show={showPasswordModal}
         onConfirm={handlePasswordModalConfirm}
-        onCancel={() => {
-          setShowPasswordModal(false);
-        }}
+        onCancel={handlePasswordModalCancel}
       />
       <Snackbar
         open={showVoteSuccessPopup}
