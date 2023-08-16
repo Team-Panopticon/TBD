@@ -54,17 +54,17 @@ export function MeetingView() {
     })();
   }, [setVotings, meetingId]);
 
-  const handleClickConfirmButton = async () => {
+  const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;
     if (isLoggedInAsAdmin) {
-      navigate(`/meetings/${meetingId}/confirm`);
+      navigate(destination);
       return;
     }
 
     if (meeting?.access === 'public') {
       issuePublicMeetingAdminToken(meetingId).then((token) => {
         setAdminToken(token);
-        navigate(`/meetings/${meetingId}/confirm`);
+        navigate(destination);
       });
       return;
     }
@@ -72,31 +72,11 @@ export function MeetingView() {
     // Private meeting AND Not yet logged in as admin
     const isInputPasswordResolved = await openInputPasswordModal();
     if (isInputPasswordResolved) {
-      navigate(`/meetings/${meetingId}/confirm`);
+      navigate(destination);
     }
   };
 
-  const handleClickEditButton = async () => {
-    const isLoggedInAsAdmin = adminToken !== undefined;
-    if (isLoggedInAsAdmin) {
-      navigate(`/meetings/${meetingId}/modify`);
-      return;
-    }
-
-    if (meeting?.access === 'public') {
-      const token = await issuePublicMeetingAdminToken(meetingId);
-      setAdminToken(token);
-      navigate(`/meetings/${meetingId}/modify`);
-      return;
-    }
-
-    // Private meeting AND Not yet logged in as admin
-    const isInputPasswordResolved = await openInputPasswordModal();
-    if (isInputPasswordResolved) {
-      navigate(`/meetings/${meetingId}/modify`);
-    }
-  };
-
+  // Create a promise that resolves when the user closes the password input modal
   const openInputPasswordModal = () => {
     setShowPasswordModal(true);
 
@@ -144,8 +124,12 @@ export function MeetingView() {
                 </Typography>
                 {meeting.status === MeetingStatus.inProgress && (
                   <Dropdown
-                    onClickConfirmButton={handleClickConfirmButton}
-                    onClickEditButton={handleClickEditButton}
+                    onClickConfirmButton={() =>
+                      handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
+                    }
+                    onClickEditButton={() =>
+                      handleClickSettingsButton(`/meetings/${meetingId}/modify`)
+                    }
                   />
                 )}
               </Box>
