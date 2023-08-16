@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
+import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
@@ -35,7 +35,7 @@ export function MeetingView() {
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-  const adminToken = useRecoilValue(adminTokenState);
+  const [adminToken, setAdminToken] = useRecoilState(adminTokenState);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -61,7 +61,15 @@ export function MeetingView() {
       return;
     }
 
-    // Not yet logged in as admin
+    if (meeting?.access === 'public') {
+      issuePublicMeetingAdminToken(meetingId).then((token) => {
+        setAdminToken(token);
+        navigate(`/meetings/${meetingId}/confirm`);
+      });
+      return;
+    }
+
+    // Private meeting AND Not yet logged in as admin
     setShowPasswordModal(true);
   };
 

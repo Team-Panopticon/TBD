@@ -12,3 +12,8 @@ export enum MeetingStatus {
   inProgress = 'inProgress',
   done = 'done',
 }
+
+export enum MeetingAccess {
+  private = 'private',
+  public = 'public',
+}
