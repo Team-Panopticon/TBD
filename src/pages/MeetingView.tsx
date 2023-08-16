@@ -148,6 +148,7 @@ export function MeetingView() {
         </FullHeightButtonGroup>
       </Footer>
       <InputPasswordModal
+        meetingId={meetingId}
         show={showPasswordModal}
         onConfirm={handlePasswordModalConfirm}
         onCancel={() => {

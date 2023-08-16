@@ -1,8 +1,9 @@
 import { Close as CloseIcon } from '@mui/icons-material';
 import { Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
+import { issuePrivateMeetingAdminToken } from '../../apis/meetings';
 import { CenterContentModal } from '../../components/CenterContentModal';
 import { MaskingInput } from '../../components/MaskingInput';
 import { adminTokenState } from '../../stores/adminToken';
@@ -11,6 +12,7 @@ import { MaskingInputContainer, PasswordInput } from '../MeetingEdit/styled';
 import { ModalTopRightButton } from './styled';
 
 interface Props {
+  meetingId: string;
   show: boolean;
   onConfirm: () => void;
   onCancel: () => void;
@@ -21,7 +23,7 @@ interface Props {
  * - 비밀번호 입력과 유효성 검증
  * - 비밀번호 입력 완료 시 token 발급 요청
  */
-export function InputPasswordModal({ show, onConfirm, onCancel }: Props) {
+export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Props) {
   const [password, setPassword] = useState<string>('');
   const setAdminToken = useSetRecoilState(adminTokenState);
 
@@ -33,17 +35,27 @@ export function InputPasswordModal({ show, onConfirm, onCancel }: Props) {
         setPassword('');
         return;
       }
-
-      // TODO: token 발급 API 호출
-      const sampleToken = 'sampleToken';
-      setAdminToken(sampleToken);
-      // TODO: token 발급 성공 시 onConfirm 호출
-      onConfirm();
-      // TODO: token 발급 실패 시 password 틀림을 표시 UI 효과
     }
 
     setPassword(newPassword);
   };
+
+  useEffect(() => {
+    const issueAdminToken = async () => {
+      try {
+        const adminToken = await issuePrivateMeetingAdminToken(meetingId, password);
+        setAdminToken(adminToken);
+        onConfirm();
+      } catch {
+        // TODO: password 틀림을 표시 UI 효과
+        setPassword('');
+      }
+    };
+
+    if (password.length === 4) {
+      issueAdminToken();
+    }
+  }, [meetingId, password, onConfirm, setAdminToken]);
 
   return (
     <CenterContentModal open={show} width={320} height={230}>

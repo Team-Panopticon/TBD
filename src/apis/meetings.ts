@@ -52,3 +52,17 @@ export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
     },
   });
 };
+
+export const issuePrivateMeetingAdminToken = async (meetingId: string, password: string) => {
+  const response: AxiosResponse<{ token: string }> = await api.post(`/meetings/${meetingId}/auth`, {
+    password,
+  });
+
+  return response.data.token;
+};
+
+export const issuePublicMeetingAdminToken = async (meetingId: string) => {
+  const response: AxiosResponse<{ token: string }> = await api.post(`/meetings/${meetingId}/auth`);
+
+  return response.data.token;
+};
