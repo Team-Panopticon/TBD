@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { getMeeting, updateMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { Page } from '../components/pageLayout';
-import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { MeetingAccess, MeetingStatus, MeetingType } from '../constants/meeting';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
@@ -20,6 +20,7 @@ export const initialState = {
   dates: [],
   type: MeetingType.date,
   status: MeetingStatus.inProgress,
+  access: MeetingAccess.public,
   password: undefined,
 };
 
