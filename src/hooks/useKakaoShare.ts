@@ -1,24 +1,17 @@
-import { RefObject, useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-export const useKakaoShare = ({
-  ref,
-  url,
-  title,
-  description,
-}: {
-  ref: RefObject<HTMLElement>;
-  url: string;
-  title: string;
-  description: string;
-}) => {
+export const useKakaoShare = ({ title, description }: { title: string; description: string }) => {
   const [isInitialized, setInitialized] = useState(false);
   const [isError, setError] = useState(false);
   const [isLoading, setLoading] = useState(true);
+  const ref = useRef<HTMLAnchorElement>(null);
+  const URL = import.meta.env.VITE_ORIGIN_URL as string;
+  const API_KEY = import.meta.env.VITE_KAKAOTALK_JS_SDK_KEY as string;
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
       try {
-        window.Kakao.init('1bef82833af6e7bc26767e5391f5014b');
+        window.Kakao.init(API_KEY);
         setInitialized(true);
       } catch {
         setError(true);
@@ -37,8 +30,8 @@ export const useKakaoShare = ({
             title,
             description,
             link: {
-              mobileWebUrl: url,
-              webUrl: url,
+              mobileWebUrl: URL,
+              webUrl: URL,
             },
             imageUrl: '',
           },
@@ -48,7 +41,12 @@ export const useKakaoShare = ({
         setLoading(false);
       }
     }
-  }, [description, isInitialized, ref, title, url]);
+  }, [URL, description, isInitialized, ref, title]);
 
-  return { isError, isLoading: !isError && !isInitialized && !isLoading, serviceName: '카카오톡' };
+  return {
+    isError,
+    isLoading: !isError && !isInitialized && !isLoading,
+    serviceName: '카카오톡',
+    ref,
+  };
 };
