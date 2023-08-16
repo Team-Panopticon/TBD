@@ -18,7 +18,7 @@ export interface SimpleDialogProps {
   meeting?: Meeting;
 }
 export function ShareDialog(props: SimpleDialogProps) {
-  const { open, onClose } = props;
+  const { open, onClose, meeting } = props;
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth={'sm'} fullWidth={true}>
@@ -37,7 +37,7 @@ export function ShareDialog(props: SimpleDialogProps) {
             <ListItemText primary="주소복사" />
           </ListItemButton>
         </ListItem>
-        <KakaoShareButton />
+        <KakaoShareButton meeting={meeting} />
       </List>
     </Dialog>
   );
