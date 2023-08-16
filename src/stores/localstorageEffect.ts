@@ -13,3 +13,12 @@ export const localstorageEffect =
       isReset ? localStorage.removeItem(key) : localStorage.setItem(key, JSON.stringify(newValue));
     });
   };
+
+export const getLocalStorageItem = <T>(key: string) => {
+  const savedValue = localStorage.getItem(key);
+  if (savedValue !== null) {
+    const parsedValue = JSON.parse(savedValue) as T;
+    return parsedValue;
+  }
+  return null;
+};
