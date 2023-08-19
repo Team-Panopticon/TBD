@@ -61,7 +61,7 @@ export function MeetingView() {
       return;
     }
 
-    if (meeting?.access === 'public') {
+    if (meeting?.adminAccess === 'public') {
       issuePublicMeetingAdminToken(meetingId).then((token) => {
         setAdminToken(token);
         navigate(destination);

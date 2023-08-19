@@ -13,7 +13,7 @@ export enum MeetingStatus {
   done = 'done',
 }
 
-export enum MeetingAccess {
+export enum MeetingAdminAccess {
   private = 'private',
   public = 'public',
 }
