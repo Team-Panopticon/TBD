@@ -7,6 +7,7 @@ import { useSetRecoilState } from 'recoil';
 import { initializeProgressInterceptor } from './apis/instance';
 import { Progress } from './components/Progress';
 import { ProtectedAdminRoute } from './components/ProtectedAdminRoute';
+import { ShareDialog } from './components/ShareDialog/ShareDialog';
 import { GlobalStyle } from './GlobalStyle';
 import { MeetingConfirm } from './pages/MeetingConfirm';
 import { MeetingCreate } from './pages/MeetingCreate';
@@ -74,6 +75,7 @@ export function App() {
       <GlobalStyle />
       <RouterProvider router={router} />
       <Progress />
+      <ShareDialog />
     </ThemeProvider>
   );
 }
