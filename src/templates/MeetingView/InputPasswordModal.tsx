@@ -40,6 +40,11 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
     setPassword(newPassword);
   };
 
+  const handleClickCancelButton = () => {
+    setPassword('');
+    onCancel();
+  };
+
   useEffect(() => {
     const issueAdminToken = async () => {
       try {
@@ -63,7 +68,7 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
         <Typography variant="subtitle1" fontWeight={300}>
           비밀번호를 입력해주세요.
         </Typography>
-        <ModalTopRightButton onClick={onCancel}>
+        <ModalTopRightButton onClick={handleClickCancelButton}>
           <CloseIcon />
         </ModalTopRightButton>
         <MaskingInputContainer>
