@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 export const VoteTableContainer = styled('div')({});
 
@@ -17,7 +17,7 @@ const commonStyle = {
   marginTop: '8px',
 };
 
-export const HeaderBox = styled('div')((props) => ({
+export const HeaderBox = styled(Box)((props) => ({
   ...commonStyle,
   fontWeight: 700,
   backgroundColor: props.theme.palette.secondary.main,

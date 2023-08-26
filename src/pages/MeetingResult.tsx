@@ -20,7 +20,7 @@ export function MeetingResult() {
   const [meeting, setMeeting] = useState<Meeting>();
   const { meetingId } = useParams();
   const [votings, setVotings] = useRecoilState<Voting[]>(votingsState);
-  const { openShare } = useShare();
+  const { openShare, setTarget } = useShare();
   useEffect(() => {
     (async () => {
       if (!meetingId) {
@@ -32,6 +32,7 @@ export function MeetingResult() {
 
       const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
+      setTarget(meetingData);
     })();
   }, [setVotings, meetingId]);
 
