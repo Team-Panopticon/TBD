@@ -8,12 +8,12 @@ import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { ShareDialog } from '../components/ShareDialog';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
+import useShare from '../hooks/useShare';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../stores/adminToken';
 import { currentUserStateFamily } from '../stores/currentUser';
@@ -32,16 +32,14 @@ export function MeetingView() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
-  const [openShareDialog, setOpenShareDialog] = useState(false);
+
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
-  const handleShareDialogClose = () => {
-    setOpenShareDialog(false);
-  };
+  const { openShare, setTarget } = useShare();
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -57,6 +55,7 @@ export function MeetingView() {
 
       const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
+      setTarget(meetingData);
     })();
   }, [setVotings, meetingId]);
 
@@ -188,7 +187,7 @@ export function MeetingView() {
           <Button
             color="transPrimary"
             onClick={() => {
-              setOpenShareDialog(true);
+              openShare();
             }}
           >
             공유하기
@@ -221,7 +220,6 @@ export function MeetingView() {
           </IconButton>
         }
       />
-      <ShareDialog meeting={meeting} open={openShareDialog} onClose={handleShareDialogClose} />
     </Page>
   );
 }

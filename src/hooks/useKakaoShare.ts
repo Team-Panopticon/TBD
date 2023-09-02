@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useKakaoShare = ({
   title,
@@ -12,9 +12,9 @@ export const useKakaoShare = ({
   const [isInitialized, setInitialized] = useState(false);
   const [isError, setError] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const ref = useRef<HTMLAnchorElement>(null);
-  const REDIRECT_URL = import.meta.env.VITE_ORIGIN_URL + `/meetings/${meetingId}`;
-  const API_KEY = import.meta.env.VITE_KAKAOTALK_JS_SDK_KEY;
+  const [ref, setRef] = useState<HTMLElement | null>(null);
+  const REDIRECT_URL = (import.meta.env.VITE_ORIGIN_URL as string) + `/meetings/${meetingId}`;
+  const API_KEY = import.meta.env.VITE_KAKAOTALK_JS_SDK_KEY as string;
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
@@ -29,10 +29,10 @@ export const useKakaoShare = ({
   }, []);
 
   useEffect(() => {
-    if (isInitialized && ref.current) {
+    if (isInitialized && ref) {
       try {
         window.Kakao.Share.createDefaultButton({
-          container: ref.current,
+          container: ref,
           objectType: 'feed',
           content: {
             title,
@@ -56,5 +56,6 @@ export const useKakaoShare = ({
     isLoading: !isError && !isInitialized && !isLoading,
     serviceName: '카카오톡',
     ref,
+    setRef,
   };
 };
