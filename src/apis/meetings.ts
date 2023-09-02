@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
 
 import { ValidCreateMeetingState } from '../stores/createMeeting';
+import { getLocalStorageItem } from '../stores/localstorageEffect';
 import { api } from './instance';
 import { CreateMeetingRequest, Meeting, MeetingResponse } from './types';
 import { VotingSlot } from './votes';
@@ -56,7 +57,8 @@ export const updateMeeting = async (meeting: Meeting) => {
 };
 
 export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
-  const adminToken = localStorage.getItem('adminToken');
+  const adminToken = getLocalStorageItem<string>(`meetings/${meetingId}/admin_token`);
+
   if (!adminToken) {
     throw new Error('adminToken is not set');
   }
@@ -66,4 +68,18 @@ export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
       Authorization: `Bearer ${adminToken}`,
     },
   });
+};
+
+export const issuePrivateMeetingAdminToken = async (meetingId: string, password: string) => {
+  const response: AxiosResponse<{ token: string }> = await api.post(`/meetings/${meetingId}/auth`, {
+    password,
+  });
+
+  return response.data.token;
+};
+
+export const issuePublicMeetingAdminToken = async (meetingId: string) => {
+  const response: AxiosResponse<{ token: string }> = await api.post(`/meetings/${meetingId}/auth`);
+
+  return response.data.token;
 };

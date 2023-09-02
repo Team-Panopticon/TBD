@@ -12,3 +12,10 @@ export enum MeetingStatus {
   inProgress = 'inProgress',
   done = 'done',
 }
+
+export enum MeetingAdminAccess {
+  private = 'private',
+  public = 'public',
+}
+
+export const INPUT_PASSWORD_FINISH_EVENT = 'inputPasswordFinish';

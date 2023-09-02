@@ -4,8 +4,8 @@ import GearImage from '../../../images/gear.png';
 import { DropdownButton, DropdownContainer, DropdownContentWrapper, ImageWrapper } from './styled';
 
 interface Props {
-  onClickConfirmButton: () => void;
-  onClickEditButton: () => void;
+  onClickConfirmButton: () => Promise<void>;
+  onClickEditButton: () => Promise<void>;
 }
 
 export function Dropdown(props: Props) {

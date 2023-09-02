@@ -4,18 +4,18 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
+import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import useShare from '../hooks/useShare';
 import GreetingHands from '../images/greeting-hands.png';
-import { adminTokenState } from '../stores/adminToken';
+import { adminTokenStateFamily } from '../stores/adminToken';
 import { currentUserStateFamily } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
@@ -37,7 +37,7 @@ export function MeetingView() {
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-  const adminToken = useRecoilValue(adminTokenState);
+  const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
   const { openShare, setTarget } = useShare();
 
@@ -59,30 +59,52 @@ export function MeetingView() {
     })();
   }, [setVotings, meetingId]);
 
-  const handleClickConfirmButton = () => {
+  const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;
     if (isLoggedInAsAdmin) {
-      navigate(`/meetings/${meetingId}/confirm`);
+      navigate(destination);
       return;
     }
 
-    // Not yet logged in as admin
-    setShowPasswordModal(true);
+    if (meeting?.adminAccess === 'public') {
+      issuePublicMeetingAdminToken(meetingId).then((token) => {
+        setAdminToken(token);
+        navigate(destination);
+      });
+      return;
+    }
+
+    // Private meeting AND Not yet logged in as admin
+    const isInputPasswordResolved = await openInputPasswordModal();
+    if (isInputPasswordResolved) {
+      navigate(destination);
+    }
   };
 
-  const handleClickEditButton = () => {
-    const isLoggedInAsAdmin = adminToken !== undefined;
-    if (isLoggedInAsAdmin) {
-      navigate(`/meetings/${meetingId}/modify`);
-      return;
-    }
-
-    // Not yet logged in as admin
+  // Create a promise that resolves when the user closes the password input modal
+  const openInputPasswordModal = () => {
     setShowPasswordModal(true);
+
+    const inputPasswordFinishPromise = new Promise((resolve, reject) => {
+      addEventListener(
+        INPUT_PASSWORD_FINISH_EVENT,
+        (event) => resolve((event as CustomEvent).detail),
+        {
+          once: true,
+        },
+      );
+    });
+
+    return inputPasswordFinishPromise;
   };
 
   const handlePasswordModalConfirm = () => {
-    navigate(`/meetings/${meetingId}/confirm`);
+    dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: true }));
+  };
+
+  const handlePasswordModalCancel = () => {
+    dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: false }));
+    setShowPasswordModal(false);
   };
 
   if (!meeting || !voteTableDataList) {
@@ -107,8 +129,12 @@ export function MeetingView() {
                 </Typography>
                 {meeting.status === MeetingStatus.inProgress && (
                   <Dropdown
-                    onClickConfirmButton={handleClickConfirmButton}
-                    onClickEditButton={handleClickEditButton}
+                    onClickConfirmButton={() =>
+                      handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
+                    }
+                    onClickEditButton={() =>
+                      handleClickSettingsButton(`/meetings/${meetingId}/modify`)
+                    }
                   />
                 )}
               </Box>
@@ -169,11 +195,10 @@ export function MeetingView() {
         </FullHeightButtonGroup>
       </Footer>
       <InputPasswordModal
+        meetingId={meetingId}
         show={showPasswordModal}
         onConfirm={handlePasswordModalConfirm}
-        onCancel={() => {
-          setShowPasswordModal(false);
-        }}
+        onCancel={handlePasswordModalCancel}
       />
       <Snackbar
         open={showVoteSuccessPopup}
