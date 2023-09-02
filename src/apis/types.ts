@@ -1,6 +1,6 @@
 import { Dayjs } from 'dayjs';
 
-import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../constants/meeting';
 import { VotingSlotResponse } from './votes';
 
 export type ISODateTime = string;
@@ -16,6 +16,7 @@ export interface MeetingResponse extends CreateMeetingRequest {
   id: string;
   status: MeetingStatus;
   confirmedDateType?: VotingSlotResponse;
+  adminAccess: MeetingAdminAccess;
 }
 
 export type Meeting = Omit<MeetingResponse, 'dates'> & {
