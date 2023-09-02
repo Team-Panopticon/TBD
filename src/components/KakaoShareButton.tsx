@@ -13,5 +13,5 @@ export const KakaoShareButton = ({ meeting }: { meeting?: Meeting }) => {
     meetingId: meeting?.id || '',
   });
 
-  return <ShareButton isError={isError} serviceName={serviceName} ref={ref} />;
+  return <ShareButton isError={isError} serviceName={serviceName} />;
 };
