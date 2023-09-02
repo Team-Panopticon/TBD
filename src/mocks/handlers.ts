@@ -3,7 +3,7 @@ import { rest } from 'msw';
 import { mockDateTypeMeeting, mockMealTypeMeeting } from './meetingData';
 import { mockDateVoting, mockDateVotingsData, mockMealVotingsData } from './votingsData';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL as string;
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 export const handlers = [
   rest.get(`${baseURL}meetings/:meetingId/votings`, (req, res, ctx) => {
     const meetingId = req.params.meetingId;
