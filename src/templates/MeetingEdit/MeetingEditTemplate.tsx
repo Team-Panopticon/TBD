@@ -128,6 +128,9 @@ const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
           helperText={helperText}
           value={meeting.name ?? ''}
           onChange={(v) => {
+            if (v.target.value.length > 30) {
+              return;
+            }
             setValue((prev) => ({
               ...prev,
               name: v.target.value,
