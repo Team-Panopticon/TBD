@@ -7,6 +7,8 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
+import { ResultPageButton } from '../components/buttons/ResultPageButton';
+import { VotePageButton } from '../components/buttons/VotePageButton';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
@@ -176,14 +178,11 @@ export function MeetingView() {
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
-          <Button
-            color="primary"
-            onClick={() => {
-              navigate(`/meetings/${meeting.id}/vote`);
-            }}
-          >
-            {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
-          </Button>
+          {meeting.status === MeetingStatus.inProgress ? (
+            <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
+          ) : (
+            <ResultPageButton meetingId={meetingId} />
+          )}
           <Button
             color="transPrimary"
             onClick={() => {
