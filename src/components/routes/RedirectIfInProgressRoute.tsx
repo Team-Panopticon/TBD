@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { Navigate, useParams } from 'react-router-dom';
 
-import { getMeeting } from '../apis/meetings';
-import { MeetingStatus } from '../constants/meeting';
+import { getMeeting } from '../../apis/meetings';
+import { MeetingStatus } from '../../constants/meeting';
 
 interface MeetingPathParams {
   meetingId: string;

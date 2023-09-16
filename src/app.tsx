@@ -6,9 +6,9 @@ import { useSetRecoilState } from 'recoil';
 
 import { initializeProgressInterceptor } from './apis/instance';
 import { Progress } from './components/Progress';
-import { ProtectedAdminRoute } from './components/ProtectedAdminRoute';
-import { RedirectIfConfirmedRoute } from './components/RedirectIfConfirmedRoute';
-import { RedirectIfInProgressRoute } from './components/RedirectIfInProgressRoute';
+import { ProtectedAdminRoute } from './components/routes/ProtectedAdminRoute';
+import { RedirectIfConfirmedRoute } from './components/routes/RedirectIfConfirmedRoute';
+import { RedirectIfInProgressRoute } from './components/routes/RedirectIfInProgressRoute';
 import { ShareDialog } from './components/ShareDialog/ShareDialog';
 import { GlobalStyle } from './GlobalStyle';
 import { MeetingConfirm } from './pages/MeetingConfirm';
