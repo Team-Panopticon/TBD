@@ -22,4 +22,5 @@ export const StyledChip = styled(Chip)({
 export const ChipInnerText = styled('div')({
   textOverflow: 'ellipsis',
   overflow: 'hidden',
+  wordBreak: 'keep-all',
 });
