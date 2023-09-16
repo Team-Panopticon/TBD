@@ -8,6 +8,7 @@ import { initializeProgressInterceptor } from './apis/instance';
 import { Progress } from './components/Progress';
 import { ProtectedAdminRoute } from './components/ProtectedAdminRoute';
 import { RedirectIfConfirmedRoute } from './components/RedirectIfConfirmedRoute';
+import { RedirectIfInProgressRoute } from './components/RedirectIfInProgressRoute';
 import { ShareDialog } from './components/ShareDialog/ShareDialog';
 import { GlobalStyle } from './GlobalStyle';
 import { MeetingConfirm } from './pages/MeetingConfirm';
@@ -58,7 +59,11 @@ const router = createBrowserRouter([
   },
   {
     path: 'meetings/:meetingId/result',
-    element: <MeetingResult />,
+    element: (
+      <RedirectIfInProgressRoute>
+        <MeetingResult />
+      </RedirectIfInProgressRoute>
+    ),
   },
   {
     path: 'meetings/:meetingId/confirm',
