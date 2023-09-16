@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
@@ -97,17 +98,26 @@ export function MeetingVote() {
     }
 
     // Old user
-    await updateVoting({
-      meetingId,
-      votingId: currentUser.id,
-      data: {
-        username: currentUser.username,
-        [meeting.type]: currentUserVotingSlots,
-      },
-    });
-    setShowUsernameModal(false);
-    setShowVoteSuccessPopup(true);
-    navigate(`/meetings/${meetingId}`);
+    try {
+      await updateVoting({
+        meetingId,
+        votingId: currentUser.id,
+        data: {
+          username: currentUser.username,
+          [meeting.type]: currentUserVotingSlots,
+        },
+      });
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    }
   };
 
   const handleUsernameConfirm = async (username: string) => {
@@ -115,21 +125,30 @@ export function MeetingVote() {
       return;
     }
 
-    const voting = await createVoting({
-      meetingId,
-      data: {
-        username,
-        [meeting.type]: currentUserVotingSlots,
-      },
-    });
+    try {
+      const voting = await createVoting({
+        meetingId,
+        data: {
+          username,
+          [meeting.type]: currentUserVotingSlots,
+        },
+      });
 
-    setCurrentUser({
-      id: voting.id,
-      username: voting.username,
-    });
-    setShowUsernameModal(false);
-    setShowVoteSuccessPopup(true);
-    navigate(`/meetings/${meetingId}`);
+      setCurrentUser({
+        id: voting.id,
+        username: voting.username,
+      });
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    }
   };
 
   if (!meeting || !voteTableDataList) {
