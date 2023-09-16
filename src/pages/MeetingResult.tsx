@@ -2,39 +2,34 @@ import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
-import { getVotings, Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { useMeetingResult } from '../hooks/useMeetingResult';
 import useShare from '../hooks/useShare';
-import { votingsState } from '../stores/voting';
 
 export function MeetingResult() {
   const navigate = useNavigate();
   const [meeting, setMeeting] = useState<Meeting>();
   const { meetingId } = useParams();
-  const [votings, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { openShare, setTarget } = useShare();
+
   useEffect(() => {
     (async () => {
       if (!meetingId) {
         return;
       }
 
-      const data = await getVotings(meetingId);
-      setVotings(data);
-
       const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
       setTarget(meetingData);
     })();
-  }, [setVotings, meetingId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [meetingId]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult();
 
@@ -64,10 +59,10 @@ export function MeetingResult() {
                 </FlexVertical>
                 <FlexVertical>
                   <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
-                    {'11/4'}
+                    {meeting?.confirmedDateType?.date.format('M/DD')}
                   </Typography>
                   <Typography variant="h5" color={'primary'} align="center">
-                    {'[화요일]'}
+                    {`[${meeting?.confirmedDateType?.date.format('dddd') || ''}]`}
                   </Typography>
                 </FlexVertical>
               </FlexVertical>
