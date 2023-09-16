@@ -19,9 +19,17 @@ const meetingStateToRequest = (
 };
 
 const meetingResponseToState = (state: MeetingResponse): Meeting => {
+  const confirmedDateType: VotingSlot | undefined = state.confirmedDateType
+    ? {
+        date: dayjs(state.confirmedDateType.date),
+        meal: state.confirmedDateType.meal,
+      }
+    : undefined;
+
   return {
     ...state,
     dates: state.dates.map((date) => dayjs(date)),
+    confirmedDateType,
   };
 };
 
