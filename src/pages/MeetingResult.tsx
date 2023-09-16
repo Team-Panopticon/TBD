@@ -2,19 +2,23 @@ import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
+import { getVotings, Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { useMeetingResult } from '../hooks/useMeetingResult';
 import useShare from '../hooks/useShare';
+import { votingsState } from '../stores/voting';
 
 export function MeetingResult() {
   const navigate = useNavigate();
   const [meeting, setMeeting] = useState<Meeting>();
+  const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
 
@@ -24,12 +28,14 @@ export function MeetingResult() {
         return;
       }
 
-      const meetingData = await getMeeting(meetingId);
+      const [meetingData, data] = await Promise.all([getMeeting(meetingId), getVotings(meetingId)]);
+
+      setVotings(data);
       setMeeting(meetingData);
       setTarget(meetingData);
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meetingId]);
+  }, [setVotings, meetingId]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult();
 
