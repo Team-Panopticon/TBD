@@ -24,7 +24,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
     const value = e.target.value.slice(0, 20);
     setUsername(value);
 
-    if (value.length === 0) {
+    if (value.trim().length === 0) {
       setInvalidText(InvalidText.EMPTY);
     } else if (!validation(value)) {
       setInvalidText(InvalidText.DUP);
@@ -41,7 +41,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
       <CenterContentModal open={show} width={320} height={170}>
         <div style={{ position: 'relative', height: '100%' }}>
           <div style={{ padding: 25 }}>
-            <InputLabel shrink>참석자 이름</InputLabel>
+            <InputLabel shrink>참석자 이름 (최대 20자)</InputLabel>
             <TextField
               id="userId"
               size="small"
@@ -65,9 +65,9 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
             </Button>
             <Button
               onClick={() => {
-                onConfirm(username);
+                onConfirm(username.trim());
               }}
-              disabled={username.length === 0 || invalidText !== ''}
+              disabled={username.trim().length === 0 || invalidText !== ''}
             >
               완료
             </Button>
