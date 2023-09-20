@@ -72,6 +72,7 @@ export function MaskingInput({ style, length, text, setText, size }: MaskingInpu
         type="number"
         value={text}
         onChange={onChange}
+        autoComplete="off"
       />
     </div>
   );
