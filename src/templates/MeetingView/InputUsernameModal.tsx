@@ -43,6 +43,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
           <div style={{ padding: 25 }}>
             <InputLabel shrink>참석자 이름 (최대 20자)</InputLabel>
             <TextField
+              autoComplete="off"
               id="userId"
               size="small"
               variant="outlined"
