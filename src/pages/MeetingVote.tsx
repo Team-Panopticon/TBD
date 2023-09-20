@@ -51,12 +51,13 @@ export function MeetingVote() {
 
   useEffect(() => {
     (async () => {
-      const votingsData = await getVotings(meetingId);
-      setVotings(votingsData);
+      const [votingsData, meetingData] = await Promise.all([
+        getVotings(meetingId),
+        getMeeting(meetingId),
+      ]);
 
-      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
-
+      setVotings(votingsData);
       const currentUserVoting = votingsData.find((voting) => voting.id === currentUser?.id);
       const currentUserVotingSlots = currentUserVoting?.[meetingData.type];
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);

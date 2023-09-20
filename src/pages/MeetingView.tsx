@@ -52,11 +52,14 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings(meetingId);
-      setVotings(data);
+      const [votingsData, meetingData] = await Promise.all([
+        getVotings(meetingId),
+        getMeeting(meetingId),
+      ]);
 
-      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
+      setVotings(votingsData);
+
       setTarget(meetingData);
     })();
   }, [setVotings, meetingId]);
