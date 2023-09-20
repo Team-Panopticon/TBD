@@ -1,7 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
-import { adminTokenStateFamily } from '../stores/adminToken';
+import { adminTokenStateFamily } from '../../stores/adminToken';
 
 interface ProtectedAdminRouteParams {
   meetingId: string;
