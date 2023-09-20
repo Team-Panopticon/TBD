@@ -63,6 +63,13 @@ export function MeetingCreate() {
   const handlePasswordSkip = () => {
     createMeetingAndNavigate({ usePassword: false });
   };
+  const handlePasswordCancel = () => {
+    setShowPasswordModal(false);
+    setMeeting((prev) => ({
+      ...prev,
+      password: undefined,
+    }));
+  };
 
   return (
     <Page>
@@ -80,7 +87,7 @@ export function MeetingCreate() {
         password={meeting.password}
         onChange={handlePasswordChange}
         onConfirm={handlePasswordConfirm}
-        onCancel={() => setShowPasswordModal(false)}
+        onCancel={handlePasswordCancel}
         onSkip={handlePasswordSkip}
       />
     </Page>
