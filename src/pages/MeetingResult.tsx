@@ -18,22 +18,23 @@ import { votingsState } from '../stores/voting';
 export function MeetingResult() {
   const navigate = useNavigate();
   const [meeting, setMeeting] = useState<Meeting>();
+  const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
-  const [votings, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { openShare, setTarget } = useShare();
+
   useEffect(() => {
     (async () => {
       if (!meetingId) {
         return;
       }
 
-      const data = await getVotings(meetingId);
-      setVotings(data);
+      const [meetingData, data] = await Promise.all([getMeeting(meetingId), getVotings(meetingId)]);
 
-      const meetingData = await getMeeting(meetingId);
+      setVotings(data);
       setMeeting(meetingData);
       setTarget(meetingData);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setVotings, meetingId]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult();
@@ -64,10 +65,10 @@ export function MeetingResult() {
                 </FlexVertical>
                 <FlexVertical>
                   <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
-                    {'11/4'}
+                    {meeting?.confirmedDateType?.date.format('M/DD')}
                   </Typography>
                   <Typography variant="h5" color={'primary'} align="center">
-                    {'[화요일]'}
+                    {`[${meeting?.confirmedDateType?.date.format('dddd') || ''}]`}
                   </Typography>
                 </FlexVertical>
               </FlexVertical>
