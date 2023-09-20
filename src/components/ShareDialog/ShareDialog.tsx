@@ -22,7 +22,6 @@ export function ShareDialog() {
     description: `${name}모임 투표를 부탁드려요.`,
     meetingId: target?.id || '',
   });
-  console.log(isError, serviceName, ref, isLoading);
   return (
     <>
       <Drawer anchor="bottom" open={show} onClose={closeShare}>
