@@ -31,7 +31,7 @@ export const createMeetingState = atom<CreateMeetingState>({
 
 export const validateMeetingName = (name: string) => {
   const trimmedName = name.trim();
-  return trimmedName.length > 0;
+  return trimmedName.length > 0 && trimmedName.length <= 30;
 };
 
 interface ValidateSelectedDatesProps {
