@@ -46,6 +46,7 @@ export const VoteTable: React.FC<Props> = (props) => {
   const { data, onClick, style, className, headers } = props;
 
   const isHideVotingStatus = data.some((item) => item.votings.some((vote) => vote.checked));
+  const sortedData = [...data].sort((a, b) => a.date.diff(b.date));
 
   return (
     <VoteTableContainer className={className} style={style}>
@@ -57,7 +58,7 @@ export const VoteTable: React.FC<Props> = (props) => {
         ))}
       </Header>
       <ContentWrapper>
-        {data.map((item, idx) => (
+        {sortedData.map((item, idx) => (
           <VoteTableContent
             isHideVotingStatus={isHideVotingStatus}
             onClick={onClick}
