@@ -2,6 +2,7 @@ import Typography from '@mui/material/Typography';
 import React, { Children, CSSProperties, isValidElement, ReactNode } from 'react';
 
 import { User } from '../../stores/currentUser';
+import { NoUserList } from '../../templates/MeetingView/styled';
 import { FlexVertical } from '../styled';
 import { ChipInnerText, StyledChip, UserListContainer } from './styled';
 
@@ -12,7 +13,7 @@ export interface UserListVoteData {
   focused: boolean;
 }
 
-export interface UserListData extends UserListVoteData, User { }
+export interface UserListData extends UserListVoteData, User {}
 
 interface Props {
   className?: string;
@@ -52,7 +53,14 @@ const UserListMain: React.FC<Props> = (props) => {
   const { users, style, className, onClick, children } = props;
   const title = getTypeofChildren(children, UserListTitleType);
 
-  const placeholer = getTypeofChildren(children, PlaceholderType);
+  const placeholer = getTypeofChildren(children, PlaceholderType)[0] ? (
+    getTypeofChildren(children, PlaceholderType)
+  ) : (
+    <UserList.Placeholder>
+      {<NoUserList>아직 참석할 수 있는 사람이 없어요.</NoUserList>}
+    </UserList.Placeholder>
+  );
+  console.log(placeholer);
   return (
     <FlexVertical gap={0.5}>
       {title && <div>{title}</div>}

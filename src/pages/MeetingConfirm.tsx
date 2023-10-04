@@ -17,7 +17,7 @@ import { useMeetingView } from '../hooks/useMeetingView';
 import { isSameSlot } from '../hooks/useMeetingVote';
 import { votingsState } from '../stores/voting';
 import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
-import { UserListLabel, UserListWrapper, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingConfirmPathParams {
   meetingId: string;
@@ -120,10 +120,10 @@ export function MeetingConfirm() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserListWrapper>
-          <UserListLabel>참석자 목록</UserListLabel>
-          <UserList users={userList} />
-        </UserListWrapper>
+        <UserList users={userList}>
+          <UserList.Title color="primary">투표 현황</UserList.Title>
+        </UserList>
+
         <VoteTableWrapper>
           <VoteTable
             onClick={handleClickVoteTable}
