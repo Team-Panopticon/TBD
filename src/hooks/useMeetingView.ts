@@ -36,6 +36,22 @@ export const useMeetingView = (meeting?: Meeting) => {
 
     const votedSlots = targetVoting[meetingType];
 
+    setUserList((prev) => {
+      const { username } = target;
+      const newUserList = resolveUserList(prev);
+      const user = newUserList.find((user) => user.username === username);
+
+      if (user) {
+        return changeUser(newUserList, {
+          ...user,
+          checked,
+          focused: checked,
+        });
+      }
+
+      return newUserList;
+    });
+
     if (!votedSlots) {
       return;
     }
@@ -72,22 +88,6 @@ export const useMeetingView = (meeting?: Meeting) => {
       }
 
       return resolveVoteTableDataList(prev);
-    });
-
-    setUserList((prev) => {
-      const { username } = target;
-      const newUserList = resolveUserList(prev);
-      const user = newUserList.find((user) => user.username === username);
-
-      if (user) {
-        return changeUser(newUserList, {
-          ...user,
-          checked,
-          focused: checked,
-        });
-      }
-
-      return newUserList;
     });
   };
 
