@@ -132,7 +132,8 @@ const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
           onBlur={() => {
             // Mobile Browser
             if (hasTouchScreen) {
-              setStep?.((prev) => prev + 1);
+              const meetingDateStepNo = 1;
+              setStep?.((currentStepNo) => Math.max(currentStepNo, meetingDateStepNo));
             }
           }}
           onChange={(v) => {
