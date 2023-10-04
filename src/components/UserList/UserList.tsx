@@ -60,7 +60,6 @@ const UserListMain: React.FC<Props> = (props) => {
       {<NoUserList>아직 참석할 수 있는 사람이 없어요.</NoUserList>}
     </UserList.Placeholder>
   );
-  console.log(placeholer);
   return (
     <FlexVertical gap={0.5}>
       {title && <div>{title}</div>}
