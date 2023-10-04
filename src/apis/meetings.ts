@@ -55,11 +55,15 @@ export const updateMeeting = async (meeting: Meeting) => {
     throw new Error('adminToken is not set');
   }
 
-  const response: AxiosResponse<MeetingResponse> = await api.put('/meetings', meeting, {
+  const response: AxiosResponse<MeetingResponse> = await api.put(
+    `/meetings/${meeting.id}`,
+    meeting,
+    {
     headers: {
       Authorization: `Bearer ${adminToken}`,
     },
-  });
+    },
+  );
 
   return response.data;
 };
