@@ -13,7 +13,13 @@ if (process.env.NODE_ENV === 'development' && import.meta.env.VITE_USE_MSW) {
   worker.start();
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
