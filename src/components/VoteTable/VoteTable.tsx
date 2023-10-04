@@ -1,5 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
+import { isBrowser, isMobile } from 'react-device-detect';
 
 import { VotingSlot } from '../../apis/votes';
 import { MealType } from '../../constants/meeting';
@@ -100,8 +101,11 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             isHideVotingStatus={isHideVotingStatus}
             key={`vote-content-${idx}`}
             focus={focused}
+            onTouchEnd={(e) => {
+              return isMobile && handleClick(checked, vote, mealType);
+            }}
             checked={checked}
-            onClick={() => handleClick(checked, vote, mealType)}
+            onClick={() => isBrowser && handleClick(checked, vote, mealType)}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>
