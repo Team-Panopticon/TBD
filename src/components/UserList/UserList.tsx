@@ -2,6 +2,7 @@ import Typography from '@mui/material/Typography';
 import React, { Children, CSSProperties, isValidElement, ReactNode } from 'react';
 
 import { User } from '../../stores/currentUser';
+import { NoUserList } from '../../templates/MeetingView/styled';
 import { FlexVertical } from '../styled';
 import { ChipInnerText, StyledChip, UserListContainer } from './styled';
 
@@ -12,7 +13,7 @@ export interface UserListVoteData {
   focused: boolean;
 }
 
-export interface UserListData extends UserListVoteData, User { }
+export interface UserListData extends UserListVoteData, User {}
 
 interface Props {
   className?: string;
@@ -44,15 +45,21 @@ const Placeholder = ({ children }: { children?: ReactNode }) => {
 };
 const UserListTitleType = (<UserListTitle />).type;
 const PlaceholderType = (<Placeholder />).type;
-const getTypeofChildren = (children: ReactNode, type: JSX.Element['type']) => {
+const getChildrenOfType = (children: ReactNode, type: JSX.Element['type']) => {
   const childrenArray = Children.toArray(children);
   return childrenArray.filter((child) => isValidElement(child) && child.type === type);
 };
 const UserListMain: React.FC<Props> = (props) => {
   const { users, style, className, onClick, children } = props;
-  const title = getTypeofChildren(children, UserListTitleType);
+  const title = getChildrenOfType(children, UserListTitleType);
 
-  const placeholer = getTypeofChildren(children, PlaceholderType);
+  const placeholder = getChildrenOfType(children, PlaceholderType)[0] ? (
+    getChildrenOfType(children, PlaceholderType)
+  ) : (
+    <UserList.Placeholder>
+      {<NoUserList>아직 참석할 수 있는 사람이 없어요.</NoUserList>}
+    </UserList.Placeholder>
+  );
   return (
     <FlexVertical gap={0.5}>
       {title && <div>{title}</div>}
@@ -72,7 +79,7 @@ const UserListMain: React.FC<Props> = (props) => {
             </StyledChip>
           ))
         ) : (
-          <>{placeholer}</>
+          <>{placeholder}</>
         )}
       </UserListContainer>
     </FlexVertical>

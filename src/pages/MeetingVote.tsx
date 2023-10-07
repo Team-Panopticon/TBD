@@ -19,7 +19,7 @@ import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { userListState, votingsState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
-import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
@@ -200,10 +200,6 @@ export function MeetingVote() {
       <Contents>
         <UserList className="user-list" users={checkedUserList} onClick={handleClickUser}>
           <UserList.Title color="primary">투표 현황</UserList.Title>
-
-          <UserList.Placeholder>
-            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
-          </UserList.Placeholder>
         </UserList>
         <VoteTableWrapper>
           <VoteTable

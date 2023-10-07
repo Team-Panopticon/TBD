@@ -23,7 +23,7 @@ import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
-import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -159,10 +159,6 @@ export function MeetingView() {
       <Contents>
         <UserList className="user-list" users={userList} onClick={handleClickUserList}>
           <UserList.Title color="primary">투표 현황</UserList.Title>
-
-          <UserList.Placeholder>
-            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
-          </UserList.Placeholder>
         </UserList>
 
         <VoteTableWrapper>
