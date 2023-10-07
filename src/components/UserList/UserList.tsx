@@ -45,16 +45,16 @@ const Placeholder = ({ children }: { children?: ReactNode }) => {
 };
 const UserListTitleType = (<UserListTitle />).type;
 const PlaceholderType = (<Placeholder />).type;
-const getTypeofChildren = (children: ReactNode, type: JSX.Element['type']) => {
+const getChildrenOfType = (children: ReactNode, type: JSX.Element['type']) => {
   const childrenArray = Children.toArray(children);
   return childrenArray.filter((child) => isValidElement(child) && child.type === type);
 };
 const UserListMain: React.FC<Props> = (props) => {
   const { users, style, className, onClick, children } = props;
-  const title = getTypeofChildren(children, UserListTitleType);
+  const title = getChildrenOfType(children, UserListTitleType);
 
-  const placeholder = getTypeofChildren(children, PlaceholderType)[0] ? (
-    getTypeofChildren(children, PlaceholderType)
+  const placeholder = getChildrenOfType(children, PlaceholderType)[0] ? (
+    getChildrenOfType(children, PlaceholderType)
   ) : (
     <UserList.Placeholder>
       {<NoUserList>아직 참석할 수 있는 사람이 없어요.</NoUserList>}
