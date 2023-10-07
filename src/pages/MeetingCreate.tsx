@@ -41,13 +41,17 @@ export function MeetingCreate() {
 
   const createMeetingAndNavigate = async ({ usePassword }: { usePassword: boolean }) => {
     try {
-      const response = await createMeeting(meeting as ValidCreateMeetingState, usePassword);
+      const trimmedName = meeting.name?.trim();
+      const response = await createMeeting(
+        { ...meeting, name: trimmedName } as ValidCreateMeetingState,
+        usePassword,
+      );
       navigate(`/meetings/${response.id}`);
     } catch (e: unknown) {
       if (e instanceof AxiosError) {
         alert(e.message);
       } else {
-        alert('알수 없는 에러가 발생했습니다');
+        alert('알 수 없는 에러가 발생했습니다');
       }
     }
   };
@@ -59,6 +63,13 @@ export function MeetingCreate() {
   const handlePasswordSkip = () => {
     createMeetingAndNavigate({ usePassword: false });
   };
+  const handlePasswordCancel = () => {
+    setShowPasswordModal(false);
+    setMeeting((prev) => ({
+      ...prev,
+      password: undefined,
+    }));
+  };
 
   return (
     <Page>
@@ -69,13 +80,14 @@ export function MeetingCreate() {
         setStep={setCurrentStep}
         onChange={setMeeting}
         onSubmit={handleMeetingEditComplete}
+        pageType="create"
       ></MeetingEditTemplate>
       <CreatePasswordModal
         show={showPasswordModal}
         password={meeting.password}
         onChange={handlePasswordChange}
         onConfirm={handlePasswordConfirm}
-        onCancel={() => setShowPasswordModal(false)}
+        onCancel={handlePasswordCancel}
         onSkip={handlePasswordSkip}
       />
     </Page>

@@ -2,47 +2,45 @@ import { Button } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { ShareDialog } from '../components/ShareDialog';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { useMeetingResult } from '../hooks/useMeetingResult';
+import useShare from '../hooks/useShare';
 import { votingsState } from '../stores/voting';
 
 export function MeetingResult() {
   const navigate = useNavigate();
   const [meeting, setMeeting] = useState<Meeting>();
+  const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
-  const setVotings = useSetRecoilState<Voting[]>(votingsState);
-  const [openShareDialog, setOpenShareDialog] = useState(false);
-  const handleShareDialogClose = () => {
-    setOpenShareDialog(false);
-  };
+  const { openShare, setTarget } = useShare();
+
   useEffect(() => {
     (async () => {
       if (!meetingId) {
         return;
       }
 
-      const data = await getVotings(meetingId);
-      setVotings(data);
+      const [meetingData, data] = await Promise.all([getMeeting(meetingId), getVotings(meetingId)]);
 
-      const meetingData = await getMeeting(meetingId);
+      setVotings(data);
       setMeeting(meetingData);
+      setTarget(meetingData);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setVotings, meetingId]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult();
 
   return (
     <Page>
-      <ShareDialog open={openShareDialog} onClose={handleShareDialogClose}></ShareDialog>
       <Contents>
         <FlexVertical gap={1}>
           <Header>
@@ -67,10 +65,10 @@ export function MeetingResult() {
                 </FlexVertical>
                 <FlexVertical>
                   <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
-                    {'11/4'}
+                    {meeting?.confirmedDateType?.date.format('M/DD')}
                   </Typography>
                   <Typography variant="h5" color={'primary'} align="center">
-                    {'[화요일]'}
+                    {`[${meeting?.confirmedDateType?.date.format('dddd') || ''}]`}
                   </Typography>
                 </FlexVertical>
               </FlexVertical>
@@ -108,7 +106,7 @@ export function MeetingResult() {
           </Button>
           <Button
             onClick={() => {
-              setOpenShareDialog(true);
+              openShare();
             }}
           >
             공유하기

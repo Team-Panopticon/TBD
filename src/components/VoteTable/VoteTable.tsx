@@ -1,5 +1,6 @@
 import { Dayjs } from 'dayjs';
 import { CSSProperties, ReactNode } from 'react';
+import { isBrowser, isMobile } from 'react-device-detect';
 
 import { VotingSlot } from '../../apis/votes';
 import { MealType } from '../../constants/meeting';
@@ -46,6 +47,7 @@ export const VoteTable: React.FC<Props> = (props) => {
   const { data, onClick, style, className, headers } = props;
 
   const isHideVotingStatus = data.some((item) => item.votings.some((vote) => vote.checked));
+  const sortedData = [...data].sort((a, b) => a.date.diff(b.date));
 
   return (
     <VoteTableContainer className={className} style={style}>
@@ -57,7 +59,7 @@ export const VoteTable: React.FC<Props> = (props) => {
         ))}
       </Header>
       <ContentWrapper>
-        {data.map((item, idx) => (
+        {sortedData.map((item, idx) => (
           <VoteTableContent
             isHideVotingStatus={isHideVotingStatus}
             onClick={onClick}
@@ -99,8 +101,11 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             isHideVotingStatus={isHideVotingStatus}
             key={`vote-content-${idx}`}
             focus={focused}
+            onTouchEnd={(e) => {
+              return isMobile && handleClick(checked, vote, mealType);
+            }}
             checked={checked}
-            onClick={() => handleClick(checked, vote, mealType)}
+            onClick={() => isBrowser && handleClick(checked, vote, mealType)}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>

@@ -16,7 +16,7 @@ export default function useMeetingEdit() {
         index: 0,
         description: '모임의 이름이 무엇인가요?',
         progress: 25,
-        title: '모임 이름',
+        title: '모임 이름 (최대 30글자)',
         type: 'name',
       },
       {
@@ -35,7 +35,7 @@ export default function useMeetingEdit() {
       },
       {
         index: 4,
-        description: '모임을 만들 준비가 되었나요?',
+        description: type === 'create' ? '모임을 만들 준비가 되었나요?' : '모임 정보를 바꾸나요?',
         progress: 100,
         type: 'confirm',
       },

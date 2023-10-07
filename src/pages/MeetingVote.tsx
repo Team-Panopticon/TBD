@@ -1,4 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
@@ -18,7 +19,7 @@ import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { userListState, votingsState } from '../stores/voting';
 import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
-import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
@@ -50,12 +51,13 @@ export function MeetingVote() {
 
   useEffect(() => {
     (async () => {
-      const votingsData = await getVotings(meetingId);
-      setVotings(votingsData);
+      const [votingsData, meetingData] = await Promise.all([
+        getVotings(meetingId),
+        getMeeting(meetingId),
+      ]);
 
-      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
-
+      setVotings(votingsData);
       const currentUserVoting = votingsData.find((voting) => voting.id === currentUser?.id);
       const currentUserVotingSlots = currentUserVoting?.[meetingData.type];
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
@@ -97,17 +99,26 @@ export function MeetingVote() {
     }
 
     // Old user
-    await updateVoting({
-      meetingId,
-      votingId: currentUser.id,
-      data: {
-        username: currentUser.username,
-        [meeting.type]: currentUserVotingSlots,
-      },
-    });
-    setShowUsernameModal(false);
-    setShowVoteSuccessPopup(true);
-    navigate(`/meetings/${meetingId}`);
+    try {
+      await updateVoting({
+        meetingId,
+        votingId: currentUser.id,
+        data: {
+          username: currentUser.username,
+          [meeting.type]: currentUserVotingSlots,
+        },
+      });
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    }
   };
 
   const handleUsernameConfirm = async (username: string) => {
@@ -115,21 +126,30 @@ export function MeetingVote() {
       return;
     }
 
-    const voting = await createVoting({
-      meetingId,
-      data: {
-        username,
-        [meeting.type]: currentUserVotingSlots,
-      },
-    });
+    try {
+      const voting = await createVoting({
+        meetingId,
+        data: {
+          username,
+          [meeting.type]: currentUserVotingSlots,
+        },
+      });
 
-    setCurrentUser({
-      id: voting.id,
-      username: voting.username,
-    });
-    setShowUsernameModal(false);
-    setShowVoteSuccessPopup(true);
-    navigate(`/meetings/${meetingId}`);
+      setCurrentUser({
+        id: voting.id,
+        username: voting.username,
+      });
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    }
   };
 
   if (!meeting || !voteTableDataList) {
@@ -180,10 +200,6 @@ export function MeetingVote() {
       <Contents>
         <UserList className="user-list" users={checkedUserList} onClick={handleClickUser}>
           <UserList.Title color="primary">투표 현황</UserList.Title>
-
-          <UserList.Placeholder>
-            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
-          </UserList.Placeholder>
         </UserList>
         <VoteTableWrapper>
           <VoteTable

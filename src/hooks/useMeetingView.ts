@@ -34,11 +34,7 @@ export const useMeetingView = (meeting?: Meeting) => {
       return;
     }
 
-    const votedSlots = targetVoting[meetingType];
-
-    if (!votedSlots) {
-      return;
-    }
+    const votedSlots = targetVoting[meetingType] || [];
 
     setVoteTableDataList((prev) => {
       if (checked) {

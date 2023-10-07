@@ -6,7 +6,10 @@ import { useSetRecoilState } from 'recoil';
 
 import { initializeProgressInterceptor } from './apis/instance';
 import { Progress } from './components/Progress';
-import { ProtectedAdminRoute } from './components/ProtectedAdminRoute';
+import { ProtectedAdminRoute } from './components/routes/ProtectedAdminRoute';
+import { RedirectIfConfirmedRoute } from './components/routes/RedirectIfConfirmedRoute';
+import { RedirectIfInProgressRoute } from './components/routes/RedirectIfInProgressRoute';
+import { ShareDialog } from './components/ShareDialog/ShareDialog';
 import { GlobalStyle } from './GlobalStyle';
 import { MeetingConfirm } from './pages/MeetingConfirm';
 import { MeetingCreate } from './pages/MeetingCreate';
@@ -38,22 +41,38 @@ const router = createBrowserRouter([
   },
   {
     path: 'meetings/:meetingId/vote',
-    element: <MeetingVote />,
+    element: (
+      <RedirectIfConfirmedRoute>
+        <MeetingVote />
+      </RedirectIfConfirmedRoute>
+    ),
   },
   {
     path: 'meetings/:meetingId/modify',
-    element: <MeetingModify />,
+    element: (
+      <RedirectIfConfirmedRoute>
+        <ProtectedAdminRoute>
+          <MeetingModify />
+        </ProtectedAdminRoute>
+      </RedirectIfConfirmedRoute>
+    ),
   },
   {
     path: 'meetings/:meetingId/result',
-    element: <MeetingResult />,
+    element: (
+      <RedirectIfInProgressRoute>
+        <MeetingResult />
+      </RedirectIfInProgressRoute>
+    ),
   },
   {
     path: 'meetings/:meetingId/confirm',
     element: (
-      <ProtectedAdminRoute>
-        <MeetingConfirm />
-      </ProtectedAdminRoute>
+      <RedirectIfConfirmedRoute>
+        <ProtectedAdminRoute>
+          <MeetingConfirm />
+        </ProtectedAdminRoute>
+      </RedirectIfConfirmedRoute>
     ),
   },
 ]);
@@ -70,6 +89,7 @@ export function App() {
       <GlobalStyle />
       <RouterProvider router={router} />
       <Progress />
+      <ShareDialog />
     </ThemeProvider>
   );
 }

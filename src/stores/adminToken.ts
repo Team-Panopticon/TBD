@@ -1,9 +1,11 @@
-import { atom } from 'recoil';
+import { atomFamily } from 'recoil';
 
 import { localstorageEffect } from './localstorageEffect';
 
-export const adminTokenState = atom({
+export const adminTokenStateFamily = atomFamily<string | undefined, string>({
   key: 'adminToken',
   default: undefined,
-  effects: [localstorageEffect<string | undefined>('adminToken')],
+  effects: (meetingId) => [
+    localstorageEffect<string | undefined>(`meetings/${meetingId}/admin_token`),
+  ],
 });

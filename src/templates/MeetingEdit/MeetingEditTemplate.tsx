@@ -3,6 +3,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
 import { SetterOrUpdater } from 'recoil';
 
+import { Meeting } from '../../apis/types';
 import { Contents, Footer, Header, HeaderContainer } from '../../components/pageLayout';
 import { FullHeightButtonGroup } from '../../components/styled';
 import { MeetingType } from '../../constants/meeting';
@@ -13,19 +14,20 @@ import {
   validateMeetingName,
   validateSelectedDates,
 } from '../../stores/createMeeting';
+import { hasTouchScreen } from '../../utils/hasTouchScreen';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
 import { BorderLinearProgress } from './styled';
 
-export interface ICreateMeetingTemplateProps {
+export interface ICreateMeetingTemplateProps<T extends CreateMeetingState | Meeting> {
   currentStep: number;
-  meeting: CreateMeetingState;
+  meeting: T;
   setStep?: SetterOrUpdater<number>;
-  onChange: SetterOrUpdater<CreateMeetingState>;
+  onChange: SetterOrUpdater<T>;
   onSubmit: () => void;
   meetingEditSteps: IMeetingEditStep[];
-  // pageType: 'create' | 'modify';
+  pageType: 'create' | 'modify';
 }
 
 /**
@@ -33,14 +35,15 @@ export interface ICreateMeetingTemplateProps {
  * - Step 진행 애니메이션, Progress Bar, 메시지 처리
  * - 모임생성, 모임수정에 공통적인 로직 처리
  */
-export function MeetingEditTemplate({
+export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
   currentStep,
   meeting,
   setStep,
   onChange,
   onSubmit,
   meetingEditSteps,
-}: ICreateMeetingTemplateProps) {
+  pageType,
+}: ICreateMeetingTemplateProps<T>) {
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
@@ -78,7 +81,7 @@ export function MeetingEditTemplate({
           meetingEditSteps={meetingEditSteps
             .map((step) => ({
               ...step,
-              component: getMeetingEditContent(step.type, onChange, meeting),
+              component: getMeetingEditContent(step.type, onChange, setStep, meeting),
             }))
             .reverse()}
         ></MeetingEditStepper>
@@ -96,7 +99,7 @@ export function MeetingEditTemplate({
             </Button>
           ) : (
             <Button onClick={onSubmit} disabled={!isMeetingValid}>
-              생성하기
+              {pageType === 'create' ? '생성하기' : '수정하기'}
             </Button>
           )}
         </FullHeightButtonGroup>
@@ -105,10 +108,11 @@ export function MeetingEditTemplate({
   );
 }
 
-const getMeetingEditContent = (
+const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
   type: IMeetingEditStep['type'],
-  setValue: SetterOrUpdater<CreateMeetingState>,
-  meeting: CreateMeetingState,
+  setValue: SetterOrUpdater<T>,
+  setStep: SetterOrUpdater<number> | undefined,
+  meeting: T,
 ) => {
   switch (type) {
     case 'name': {
@@ -124,7 +128,18 @@ const getMeetingEditContent = (
           placeholder="한사랑산악회 신년 모임"
           error={isMeetingInValid}
           helperText={helperText}
+          value={meeting.name ?? ''}
+          onBlur={() => {
+            // Mobile Browser
+            if (meeting.name && validateMeetingName(meeting.name) && hasTouchScreen) {
+              const meetingDateStepNo = 1;
+              setStep?.((currentStepNo) => Math.max(currentStepNo, meetingDateStepNo));
+            }
+          }}
           onChange={(v) => {
+            if (v.target.value.length > 30) {
+              return;
+            }
             setValue((prev) => ({
               ...prev,
               name: v.target.value,

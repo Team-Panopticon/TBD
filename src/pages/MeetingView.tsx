@@ -4,23 +4,26 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
+import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
+import { ResultPageButton } from '../components/buttons/ResultPageButton';
+import { VotePageButton } from '../components/buttons/VotePageButton';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
-import { MeetingStatus, MeetingType } from '../constants/meeting';
+import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
+import useShare from '../hooks/useShare';
 import GreetingHands from '../images/greeting-hands.png';
-import { adminTokenState } from '../stores/adminToken';
+import { adminTokenStateFamily } from '../stores/adminToken';
 import { currentUserStateFamily } from '../stores/currentUser';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
 import { votingsState } from '../stores/voting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
-import { NoUserList, PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -31,11 +34,14 @@ export function MeetingView() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
+
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-  const adminToken = useRecoilValue(adminTokenState);
+  const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
+
+  const { openShare, setTarget } = useShare();
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
     useMeetingView(meeting);
@@ -46,27 +52,64 @@ export function MeetingView() {
         return;
       }
 
-      const data = await getVotings(meetingId);
-      setVotings(data);
+      const [votingsData, meetingData] = await Promise.all([
+        getVotings(meetingId),
+        getMeeting(meetingId),
+      ]);
 
-      const meetingData = await getMeeting(meetingId);
       setMeeting(meetingData);
+      setVotings(votingsData);
+
+      setTarget(meetingData);
     })();
   }, [setVotings, meetingId]);
 
-  const handleClickConfirmButton = () => {
+  const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;
     if (isLoggedInAsAdmin) {
-      navigate(`/meetings/${meetingId}/confirm`);
+      navigate(destination);
       return;
     }
 
-    // Not yet logged in as admin
+    if (meeting?.adminAccess === 'public') {
+      issuePublicMeetingAdminToken(meetingId).then((token) => {
+        setAdminToken(token);
+        navigate(destination);
+      });
+      return;
+    }
+
+    // Private meeting AND Not yet logged in as admin
+    const isInputPasswordResolved = await openInputPasswordModal();
+    if (isInputPasswordResolved) {
+      navigate(destination);
+    }
+  };
+
+  // Create a promise that resolves when the user closes the password input modal
+  const openInputPasswordModal = () => {
     setShowPasswordModal(true);
+
+    const inputPasswordFinishPromise = new Promise((resolve, reject) => {
+      addEventListener(
+        INPUT_PASSWORD_FINISH_EVENT,
+        (event) => resolve((event as CustomEvent).detail),
+        {
+          once: true,
+        },
+      );
+    });
+
+    return inputPasswordFinishPromise;
   };
 
   const handlePasswordModalConfirm = () => {
-    navigate(`/meetings/${meetingId}/confirm`);
+    dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: true }));
+  };
+
+  const handlePasswordModalCancel = () => {
+    dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: false }));
+    setShowPasswordModal(false);
   };
 
   if (!meeting || !voteTableDataList) {
@@ -91,10 +134,12 @@ export function MeetingView() {
                 </Typography>
                 {meeting.status === MeetingStatus.inProgress && (
                   <Dropdown
-                    onClickConfirmButton={handleClickConfirmButton}
-                    onClickEditButton={() => {
-                      // TODO: 수정하기 api 연결
-                    }}
+                    onClickConfirmButton={() =>
+                      handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
+                    }
+                    onClickEditButton={() =>
+                      handleClickSettingsButton(`/meetings/${meetingId}/modify`)
+                    }
                   />
                 )}
               </Box>
@@ -114,10 +159,6 @@ export function MeetingView() {
       <Contents>
         <UserList className="user-list" users={userList} onClick={handleClickUserList}>
           <UserList.Title color="primary">투표 현황</UserList.Title>
-
-          <UserList.Placeholder>
-            {<NoUserList>아직 아무도 참석할 수 있는 사람이 없어요.</NoUserList>}
-          </UserList.Placeholder>
         </UserList>
 
         <VoteTableWrapper>
@@ -136,23 +177,26 @@ export function MeetingView() {
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
+          {meeting.status === MeetingStatus.inProgress ? (
+            <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
+          ) : (
+            <ResultPageButton meetingId={meetingId} />
+          )}
           <Button
-            color="primary"
+            color="transPrimary"
             onClick={() => {
-              navigate(`/meetings/${meeting.id}/vote`);
+              openShare();
             }}
           >
-            {currentUser?.username ? '다시 투표하러 가기' : '투표하러 가기'}
+            공유하기
           </Button>
-          <Button color="transPrimary">공유하기</Button>
         </FullHeightButtonGroup>
       </Footer>
       <InputPasswordModal
+        meetingId={meetingId}
         show={showPasswordModal}
         onConfirm={handlePasswordModalConfirm}
-        onCancel={() => {
-          setShowPasswordModal(false);
-        }}
+        onCancel={handlePasswordModalCancel}
       />
       <Snackbar
         open={showVoteSuccessPopup}
