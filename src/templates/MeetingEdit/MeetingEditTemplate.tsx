@@ -14,6 +14,7 @@ import {
   validateMeetingName,
   validateSelectedDates,
 } from '../../stores/createMeeting';
+import { hasTouchScreen } from '../../utils/hasTouchScreen';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
@@ -80,7 +81,7 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
           meetingEditSteps={meetingEditSteps
             .map((step) => ({
               ...step,
-              component: getMeetingEditContent(step.type, onChange, meeting),
+              component: getMeetingEditContent(step.type, onChange, setStep, meeting),
             }))
             .reverse()}
         ></MeetingEditStepper>
@@ -110,6 +111,7 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
 const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
   type: IMeetingEditStep['type'],
   setValue: SetterOrUpdater<T>,
+  setStep: SetterOrUpdater<number> | undefined,
   meeting: T,
 ) => {
   switch (type) {
@@ -127,6 +129,13 @@ const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
           error={isMeetingInValid}
           helperText={helperText}
           value={meeting.name ?? ''}
+          onBlur={() => {
+            // Mobile Browser
+            if (hasTouchScreen) {
+              const meetingDateStepNo = 1;
+              setStep?.((currentStepNo) => Math.max(currentStepNo, meetingDateStepNo));
+            }
+          }}
           onChange={(v) => {
             if (v.target.value.length > 30) {
               return;
