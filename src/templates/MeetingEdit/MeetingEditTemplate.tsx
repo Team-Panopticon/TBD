@@ -131,7 +131,7 @@ const getMeetingEditContent = <T extends CreateMeetingState | Meeting>(
           value={meeting.name ?? ''}
           onBlur={() => {
             // Mobile Browser
-            if (hasTouchScreen) {
+            if (meeting.name && validateMeetingName(meeting.name) && hasTouchScreen) {
               const meetingDateStepNo = 1;
               setStep?.((currentStepNo) => Math.max(currentStepNo, meetingDateStepNo));
             }
