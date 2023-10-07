@@ -53,7 +53,7 @@ const UserListMain: React.FC<Props> = (props) => {
   const { users, style, className, onClick, children } = props;
   const title = getTypeofChildren(children, UserListTitleType);
 
-  const placeholer = getTypeofChildren(children, PlaceholderType)[0] ? (
+  const placeholder = getTypeofChildren(children, PlaceholderType)[0] ? (
     getTypeofChildren(children, PlaceholderType)
   ) : (
     <UserList.Placeholder>
@@ -79,7 +79,7 @@ const UserListMain: React.FC<Props> = (props) => {
             </StyledChip>
           ))
         ) : (
-          <>{placeholer}</>
+          <>{placeholder}</>
         )}
       </UserListContainer>
     </FlexVertical>
