@@ -78,8 +78,11 @@ const doCopy = (text: string) => {
       .then(() => {
         alert('클립보드에 복사되었습니다.');
       })
-      .catch(() => {
-        alert('복사를 다시 시도해주세요.');
+      .catch((e) => {
+        const error = e as unknown as any;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        alert(error?.message);
+        alert(JSON.stringify(error));
       });
   }
 };
