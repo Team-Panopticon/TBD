@@ -1,15 +1,17 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Drawer, IconButton, Typography } from '@mui/material';
+import { Drawer, IconButton, Snackbar, Typography } from '@mui/material';
+import { useState } from 'react';
 
 import { useKakaoShare } from '../../hooks/useKakaoShare';
 import useShare from '../../hooks/useShare';
 import { KakaoIcon } from '../IconComponent/KakaoIcon';
-// import { KakaoIcon } from '../IconComponent/KakaoIcon';
 import { Flex, FlexVertical } from '../styled';
 
 export function ShareDialog() {
   const { show, closeShare, target } = useShare();
+  const [showCopySuccessToast, setShowCopySuccessToast] = useState(false);
+
   const iconProps = {
     width: 48,
     height: 48,
@@ -43,7 +45,13 @@ export function ShareDialog() {
             alignItems={'center'}
             padding={1}
             onClick={() => {
-              doCopy(window.location.href);
+              copyToClipboard(window.location.href)
+                .then(() => {
+                  setShowCopySuccessToast(true);
+                })
+                .catch(() => {
+                  alert('복사를 다시 시도해주세요.');
+                });
               closeShare();
             }}
           >
@@ -64,22 +72,37 @@ export function ShareDialog() {
           {/* <KakaoShareButton meeting={target} /> */}
         </Flex>
       </Drawer>
+      <Snackbar
+        open={showCopySuccessToast}
+        autoHideDuration={2000}
+        onClose={() => {
+          setShowCopySuccessToast(false);
+        }}
+        message="클립보드에 복사되었습니다."
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => {
+              setShowCopySuccessToast(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </>
   );
 }
 
-const doCopy = (text: string) => {
+const copyToClipboard = (text: string) => {
   // (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
   const clipboard = navigator.clipboard;
 
-  if (clipboard) {
-    clipboard
-      .writeText(text)
-      .then(() => {
-        alert('클립보드에 복사되었습니다.');
-      })
-      .catch(() => {
-        alert('복사를 다시 시도해주세요.');
-      });
+  if (!clipboard) {
+    return Promise.reject();
   }
+
+  return clipboard.writeText(text);
 };
