@@ -1,4 +1,11 @@
-import { Button, LinearProgress, styled, ToggleButtonGroup } from '@mui/material';
+import {
+  Button,
+  keyframes,
+  LinearProgress,
+  styled,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material';
 
 export const InputContainer = styled('div')({
   display: 'flex',
@@ -88,3 +95,19 @@ export const CenteredButtonContainer = styled('div')({
   display: 'flex',
   justifyContent: 'center',
 });
+
+export const fadeInUp = keyframes`
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 100%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translateZ(0);
+    }
+`;
+
+export const AnimatedTypography = styled(Typography)`
+  animation: ${fadeInUp} 1s;
+  animation-fill-mode: forwards;
+`;
