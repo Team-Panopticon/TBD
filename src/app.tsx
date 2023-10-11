@@ -81,6 +81,10 @@ export function App() {
   const setShowProgress = useSetRecoilState(showProgressState);
 
   useEffect(() => {
+    document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+  }, []);
+
+  useEffect(() => {
     initializeProgressInterceptor(setShowProgress);
   }, [setShowProgress]);
 
