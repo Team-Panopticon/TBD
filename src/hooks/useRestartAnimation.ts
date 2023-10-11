@@ -2,7 +2,6 @@ import { RefObject, useEffect, useRef } from 'react';
 
 const restartAnimation = <T extends HTMLElement>(el: T) => {
   el.style.opacity = '0';
-  1;
   el.style.animationName = 'none';
 
   requestAnimationFrame(() => {
