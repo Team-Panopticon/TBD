@@ -1,6 +1,7 @@
 import { Button, TextField, Typography } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SetterOrUpdater } from 'recoil';
 
 import { Meeting } from '../../apis/types';
@@ -44,6 +45,8 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
   meetingEditSteps,
   pageType,
 }: ICreateMeetingTemplateProps<T>) {
+  const navigate = useNavigate();
+
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
@@ -62,6 +65,10 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
 
   const onClickNext = () => {
     setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
+  };
+
+  const onClickBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -93,6 +100,11 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
+          {pageType === 'modify' && (
+            <Button onClick={onClickBack} color="secondary">
+              다음에하기
+            </Button>
+          )}
           {currentStep < meetingEditSteps.length - 1 ? (
             <Button onClick={onClickNext} disabled={!isCurrentStepValid}>
               다음
