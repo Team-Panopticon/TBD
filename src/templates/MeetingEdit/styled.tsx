@@ -99,7 +99,7 @@ export const CenteredButtonContainer = styled('div')({
 export const fadeInUp = keyframes`
     0% {
       opacity: 0;
-      transform: translate3d(0, 100%, 0);
+      transform: translate3d(0, -100%, 0);
     }
     to {
       opacity: 1;
@@ -108,6 +108,6 @@ export const fadeInUp = keyframes`
 `;
 
 export const AnimatedTypography = styled(Typography)`
-  animation: ${fadeInUp} 1s;
+  animation: ${fadeInUp} 1s ease-in-out;
   animation-fill-mode: forwards;
 `;
