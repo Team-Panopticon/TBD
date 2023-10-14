@@ -72,7 +72,7 @@ export function ShareDialog() {
             size="small"
             fullWidth={true}
             disableUnderline={true}
-            value={window.location.href}
+            value={`${window.location.href}/vote`}
             style={{ margin: '0 8px' }}
           ></Input>
         </Flex>
