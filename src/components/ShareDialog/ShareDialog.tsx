@@ -1,7 +1,7 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Drawer, IconButton, Snackbar, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Drawer, IconButton, Input, Snackbar, Typography } from '@mui/material';
+import { useRef, useState } from 'react';
 
 import { useKakaoShare } from '../../hooks/useKakaoShare';
 import useShare from '../../hooks/useShare';
@@ -17,6 +17,8 @@ export function ShareDialog() {
     height: 48,
   };
 
+  const copyUrlRef = useRef<HTMLInputElement>(null);
+
   const name = target?.name || '';
 
   const { isError, serviceName, ref, isLoading, setRef } = useKakaoShare({
@@ -24,11 +26,32 @@ export function ShareDialog() {
     description: `${name}모임 투표를 부탁드려요.`,
     meetingId: target?.id || '',
   });
+
+  const copyUrl = () => {
+    if (copyUrlRef.current) {
+      const copyUrlEl = copyUrlRef.current;
+      copyUrlEl.focus();
+      copyUrlEl.setSelectionRange(0, copyUrlEl.value.length);
+      try {
+        document.execCommand('copy');
+        copyUrlEl.blur();
+      } catch (e) {
+        console.log('Share Dialog >> Copy Failed', e);
+      }
+    }
+  };
+
   return (
     <>
       <Drawer anchor="bottom" open={show} onClose={closeShare}>
-        <Flex padding={2} alignItems="center" justifyContent={'space-between'}>
-          <Typography>공유하기</Typography>
+        <Flex
+          paddingX={2}
+          paddingTop={2}
+          paddingBottom={1}
+          alignItems="center"
+          justifyContent={'space-between'}
+        >
+          <Typography style={{ whiteSpace: 'nowrap' }}>공유하기</Typography>
           <IconButton
             aria-label="close"
             onClick={closeShare}
@@ -40,18 +63,23 @@ export function ShareDialog() {
             <CloseIcon />
           </IconButton>
         </Flex>
+        <Flex paddingX={1}>
+          <Input
+            inputRef={copyUrlRef}
+            autoComplete="off"
+            size="small"
+            fullWidth={true}
+            disableUnderline={true}
+            value={window.location.href}
+            style={{ margin: '0 8px' }}
+          ></Input>
+        </Flex>
         <Flex justifyContent={'space-around'} padding={1}>
           <FlexVertical
             alignItems={'center'}
             padding={1}
             onClick={() => {
-              copyToClipboard(window.location.href)
-                .then(() => {
-                  setShowCopySuccessToast(true);
-                })
-                .catch(() => {
-                  alert('복사를 다시 시도해주세요.');
-                });
+              copyUrl();
               closeShare();
             }}
           >
@@ -95,14 +123,3 @@ export function ShareDialog() {
     </>
   );
 }
-
-const copyToClipboard = (text: string) => {
-  // (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
-  const clipboard = navigator.clipboard;
-
-  if (!clipboard) {
-    return Promise.reject();
-  }
-
-  return clipboard.writeText(text);
-};
