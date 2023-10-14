@@ -35,8 +35,10 @@ export function ShareDialog() {
       try {
         document.execCommand('copy');
         copyUrlEl.blur();
+        alert('클립보드에 복사되었습니다.');
       } catch (e) {
         console.log('Share Dialog >> Copy Failed', e);
+        alert('복사를 다시 시도해주세요.');
       }
     }
   };
