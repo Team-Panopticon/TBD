@@ -127,7 +127,6 @@ export function MeetingView() {
                 flexDirection={'row'}
                 justifyContent={'center'}
                 alignItems={'center'}
-                gap={1}
               >
                 <Typography variant="h5" fontWeight={700}>
                   {meeting.name}
