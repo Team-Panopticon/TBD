@@ -4,11 +4,12 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "local": "vite --mode local",
-    "dev": "vite --mode development",
+    "local": "VITE_USE_MSW=true vite",
+    "dev": "vite",
+    "beta": "vite --mode beta",
     "prod": "vite --mode production",
     "build": "tsc && vite build",
-    "build:dev": "tsc && vite build --mode development",
+    "build:beta": "tsc && vite build --mode beta",
     "preview": "vite preview",
     "lint": "yarn eslint ./src/**/*.{ts,tsx}"
   },
