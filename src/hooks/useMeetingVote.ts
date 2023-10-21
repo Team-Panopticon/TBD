@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { Meeting } from '../apis/types';
 import { Voting, VotingSlot } from '../apis/votes';
 import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
-import { MeetingType } from '../constants/meeting';
+import { MealType, MeetingType } from '../constants/meeting';
 import { currentUserStateFamily } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { getVotings, votingsState } from '../stores/voting';
@@ -40,6 +40,25 @@ export const useMeetingViewVoteMode = (meeting?: Meeting) => {
     ),
   }));
 
+  const handleClickVoteTableDate = (date: Dayjs) => {
+    const isLunchAndDinnerVoted =
+      currentUserVotingSlots.filter((voting) => voting.date.isSame(date, 'day')).length === 2;
+
+    const votingSlotsWithoutGivenDate = currentUserVotingSlots.filter(
+      (voting) => !voting.date.isSame(date, 'day'),
+    );
+
+    if (isLunchAndDinnerVoted) {
+      setCurrentUserVotingSlots(votingSlotsWithoutGivenDate);
+    } else {
+      setCurrentUserVotingSlots([
+        ...votingSlotsWithoutGivenDate,
+        { date, meal: MealType.lunch },
+        { date, meal: MealType.dinner },
+      ]);
+    }
+  };
+
   const handleClickVoteTableSlot = (
     date: Dayjs,
     checked: boolean,
@@ -59,6 +78,7 @@ export const useMeetingViewVoteMode = (meeting?: Meeting) => {
     currentUserVotingSlots,
     setCurrentUserVotingSlots,
     handleClickVoteTableSlot,
+    handleClickVoteTableDate,
   };
 };
 

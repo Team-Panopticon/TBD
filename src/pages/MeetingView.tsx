@@ -163,7 +163,7 @@ export function MeetingView() {
 
         <VoteTableWrapper>
           <VoteTable
-            onClick={handleClickVoteTable}
+            onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
             headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
             className="vote-table"
