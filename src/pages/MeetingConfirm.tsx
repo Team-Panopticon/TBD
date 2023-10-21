@@ -58,7 +58,7 @@ export function MeetingConfirm() {
     })();
   }, [setVotings, meetingId]);
 
-  if (isLoading || isError) {
+  if (isLoading || isError || !meeting) {
     return null;
   }
 
