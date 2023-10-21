@@ -9,9 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: yarn && VITE_ORIGIN_URL=to-be-determined-8620e--$VITE_ORIGIN_URL yarn build:dev
+      - run: yarn && VITE_ORIGIN_URL=$VITE_ORIGIN_URL yarn build:dev
         env:
-          VITE_ORIGIN_URL: '${{ github.sha }}'
+          VITE_ORIGIN_URL: 'to-be-determined-8620e--${{ github.sha }}'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
