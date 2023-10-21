@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: yarn && VITE_ORIGIN_URL=to-be-determined-8620e--$VITE_ORIGIN_URL yarn build:dev
-        with:
+        env:
           VITE_ORIGIN_URL: '${{ github.sha }}'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
