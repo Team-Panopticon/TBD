@@ -2,6 +2,7 @@ import { Button, styled } from '@mui/material';
 
 export const DropdownContainer = styled('div')({
   position: 'relative',
+  marginLeft: '8px',
 });
 
 export const ImageWrapper = styled('button')({
