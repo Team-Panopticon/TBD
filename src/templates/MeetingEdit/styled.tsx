@@ -7,6 +7,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../theme';
+
 export const InputContainer = styled('div')({
   display: 'flex',
   flexDirection: 'column',
@@ -23,10 +25,10 @@ export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)({
   gap: '25px',
 });
 
-export const customButtonStyle: React.CSSProperties = {
-  border: '1px solid #D9D9D9',
+export const getCustomButtonStyle = (isSelected: boolean): React.CSSProperties => ({
+  border: `1px solid ${isSelected ? PRIMARY_COLOR : SECONDARY_COLOR}`,
   borderRadius: '4px',
-};
+});
 
 // StyledComponent for MeetingEditTemplate
 export const BorderLinearProgress = styled(LinearProgress)({

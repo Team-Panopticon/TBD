@@ -1,7 +1,7 @@
 import { ToggleButton } from '@mui/material';
 
 import { MeetingType } from '../../constants/meeting';
-import { customButtonStyle, CustomTogglebuttonGroup } from './styled';
+import { CustomTogglebuttonGroup, getCustomButtonStyle } from './styled';
 
 interface Props {
   value: MeetingType;
@@ -23,10 +23,16 @@ export function SelectMeetingType({ value, onChange }: Props) {
       value={value}
       fullWidth
     >
-      <ToggleButton style={customButtonStyle} value={MeetingType.date}>
+      <ToggleButton
+        style={getCustomButtonStyle(value === MeetingType.date)}
+        value={MeetingType.date}
+      >
         날짜만
       </ToggleButton>
-      <ToggleButton style={customButtonStyle} value={MeetingType.meal}>
+      <ToggleButton
+        style={getCustomButtonStyle(value === MeetingType.meal)}
+        value={MeetingType.meal}
+      >
         점심/저녁
       </ToggleButton>
     </CustomTogglebuttonGroup>
