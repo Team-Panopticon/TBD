@@ -6,8 +6,10 @@
   "scripts": {
     "local": "VITE_USE_MSW=true vite",
     "dev": "vite",
+    "beta": "vite --mode beta",
     "prod": "vite --mode production",
     "build": "tsc && vite build",
+    "build:beta": "tsc && vite build --mode beta",
     "preview": "vite preview",
     "lint": "yarn eslint ./src/**/*.{ts,tsx}"
   },
