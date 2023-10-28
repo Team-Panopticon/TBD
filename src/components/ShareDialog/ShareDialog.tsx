@@ -3,6 +3,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { Drawer, IconButton, Snackbar, Typography } from '@mui/material';
 import { useState } from 'react';
 
+import { MeetingStatus } from '../../constants/meeting';
 import { useKakaoShare } from '../../hooks/useKakaoShare';
 import useShare from '../../hooks/useShare';
 import { KakaoIcon } from '../IconComponent/KakaoIcon';
@@ -18,11 +19,23 @@ export function ShareDialog() {
   };
 
   const name = target?.name || '';
+  const id = target?.id || '';
+  const confirmedDate = target?.confirmedDateType?.date.toString() || '';
+  const status = target?.status || MeetingStatus.inProgress;
+
+  const redirectURL = `${import.meta.env.VITE_ORIGIN_URL}/meetings/${id}/${
+    status === MeetingStatus.done ? 'result' : 'vote'
+  }`;
+
+  const description =
+    status === MeetingStatus.done
+      ? `${name}모임 투표를 부탁드려요.`
+      : `${name}모임의 날짜가 ${confirmedDate}로 확정되었어요.`;
 
   const { isError, serviceName, ref, isLoading, setRef } = useKakaoShare({
     title: `${name}모임 투표`,
-    description: `${name}모임 투표를 부탁드려요.`,
-    meetingId: target?.id || '',
+    description: description,
+    redirectURL,
   });
   return (
     <>
@@ -45,7 +58,7 @@ export function ShareDialog() {
             alignItems={'center'}
             padding={1}
             onClick={() => {
-              copyToClipboard(window.location.href)
+              copyToClipboard(redirectURL)
                 .then(() => {
                   setShowCopySuccessToast(true);
                 })
