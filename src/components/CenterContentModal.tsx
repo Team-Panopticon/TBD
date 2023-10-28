@@ -8,7 +8,7 @@ export const Container = styled('div')({
 
 export const Content = styled('div')<{ width: number; height: number }>((props) => ({
   position: 'absolute',
-  top: '50%',
+  top: '40%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
 
