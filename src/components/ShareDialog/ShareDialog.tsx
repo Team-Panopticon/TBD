@@ -1,8 +1,9 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Drawer, IconButton, Input, Snackbar, Typography } from '@mui/material';
+import { Drawer, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useRef, useState } from 'react';
 
+import { MealType, MeetingStatus } from '../../constants/meeting';
 import { useKakaoShare } from '../../hooks/useKakaoShare';
 import useShare from '../../hooks/useShare';
 import { KakaoIcon } from '../IconComponent/KakaoIcon';
@@ -20,11 +21,27 @@ export function ShareDialog() {
   const copyUrlRef = useRef<HTMLInputElement>(null);
 
   const name = target?.name || '';
+  const id = target?.id || '';
+  const confirmedDate = target?.confirmedDateType?.date.format('MM월 DD일') || '';
+
+  const mealType = target?.confirmedDateType?.meal;
+  const status = target?.status || MeetingStatus.inProgress;
+
+  const redirectURL = `${window.location.origin}/meetings/${id}/${
+    status === MeetingStatus.done ? 'result' : 'vote'
+  }`;
+
+  const description =
+    status === MeetingStatus.done
+      ? `${name}모임의 날짜가 ${confirmedDate}${
+          mealType ? (mealType === MealType.lunch ? ' 점심으' : ' 저녁으') : ''
+        }로 확정되었어요.`
+      : `${name}모임 투표를 부탁드려요.`;
 
   const { isError, serviceName, ref, isLoading, setRef } = useKakaoShare({
     title: `${name}모임 투표`,
-    description: `${name}모임 투표를 부탁드려요.`,
-    meetingId: target?.id || '',
+    description: description,
+    redirectURL,
   });
 
   const copyUrl = () => {
@@ -66,15 +83,14 @@ export function ShareDialog() {
           </IconButton>
         </Flex>
         <Flex paddingX={1}>
-          <Input
+          <TextField
             inputRef={copyUrlRef}
             autoComplete="off"
             size="small"
             fullWidth={true}
-            disableUnderline={true}
-            value={`${window.location.href}/vote`}
+            value={`${redirectURL}`}
             style={{ margin: '0 8px' }}
-          ></Input>
+          ></TextField>
         </Flex>
         <Flex justifyContent={'space-around'} padding={1}>
           <FlexVertical
@@ -90,16 +106,12 @@ export function ShareDialog() {
             </Flex>
             <Typography>주소복사</Typography>
           </FlexVertical>
-
           <FlexVertical ref={setRef} alignItems={'center'} padding={1}>
             <Flex flex={1} padding={1} justifyContent="center" alignItems={'center'}>
               <KakaoIcon {...iconProps} />
             </Flex>
-            {/* {isLoading && <Typography>로딩중</Typography>} */}
             <Typography>카카오톡</Typography>
           </FlexVertical>
-
-          {/* <KakaoShareButton meeting={target} /> */}
         </Flex>
       </Drawer>
       <Snackbar
