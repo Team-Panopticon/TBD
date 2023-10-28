@@ -34,7 +34,7 @@ export function ShareDialog() {
   const description =
     status === MeetingStatus.done
       ? `${name}모임의 날짜가 ${confirmedDate}${
-          mealType ? (mealType === MealType.lunch ? '점심으' : '저녁으') : ''
+          mealType ? (mealType === MealType.lunch ? ' 점심으' : ' 저녁으') : ''
         }로 확정되었어요.`
       : `${name}모임 투표를 부탁드려요.`;
 
