@@ -1,6 +1,6 @@
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { Box, Button, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -45,6 +45,20 @@ export function MeetingConfirm() {
 
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const comfirmMeetingMutation = useMutation<void, Error, { meetingId: string; slot: VotingSlot }>({
+    mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['meeting', meetingId] });
+      navigate(`/meetings/${meetingId}/result`);
+    },
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : '정상적으로 처리되지 못했습니다.';
+      alert(errorMessage);
+      setShowConfirmModal(false);
+    },
+  });
 
   // TODO: Recoil로 비동기 데이터 가져오는 것 대체
   useEffect(() => {
@@ -76,20 +90,12 @@ export function MeetingConfirm() {
     handleVoteTableClickHightlight(date, checked, target, slot);
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     if (!selectedSlot) {
       return;
     }
 
-    try {
-      await confirmMeeting(meetingId, selectedSlot);
-      navigate(`/meetings/${meetingId}/result`);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : '정상적으로 처리되지 못했습니다.';
-      alert(errorMessage);
-      setShowConfirmModal(false);
-    }
+    comfirmMeetingMutation.mutate({ meetingId, slot: selectedSlot });
   };
 
   return (
