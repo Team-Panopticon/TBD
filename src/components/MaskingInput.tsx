@@ -49,6 +49,9 @@ export function MaskingInput({ style, length, text, setText, size }: MaskingInpu
       return;
     }
     setText(e.target.value);
+    if (filledLength === length) {
+      return e.target.blur();
+    }
   };
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = () => {

@@ -127,7 +127,6 @@ export function MeetingView() {
                 flexDirection={'row'}
                 justifyContent={'center'}
                 alignItems={'center'}
-                gap={1}
               >
                 <Typography variant="h5" fontWeight={700}>
                   {meeting.name}
@@ -163,7 +162,7 @@ export function MeetingView() {
 
         <VoteTableWrapper>
           <VoteTable
-            onClick={handleClickVoteTable}
+            onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
             headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
             className="vote-table"

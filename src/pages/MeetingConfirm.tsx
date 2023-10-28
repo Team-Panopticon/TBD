@@ -58,7 +58,7 @@ export function MeetingConfirm() {
     })();
   }, [setVotings, meetingId]);
 
-  if (isLoading || isError) {
+  if (isLoading || isError || !meeting) {
     return null;
   }
 
@@ -126,7 +126,7 @@ export function MeetingConfirm() {
 
         <VoteTableWrapper>
           <VoteTable
-            onClick={handleClickVoteTable}
+            onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
             headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />

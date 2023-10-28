@@ -46,8 +46,12 @@ export function MeetingVote() {
 
   const navigate = useNavigate();
 
-  const { voteTableDataList, currentUserVotingSlots, handleClickVoteTableSlot } =
-    useMeetingViewVoteMode(meeting);
+  const {
+    voteTableDataList,
+    currentUserVotingSlots,
+    handleClickVoteTableSlot,
+    handleClickVoteTableDate,
+  } = useMeetingViewVoteMode(meeting);
 
   useEffect(() => {
     (async () => {
@@ -203,7 +207,8 @@ export function MeetingVote() {
         </UserList>
         <VoteTableWrapper>
           <VoteTable
-            onClick={handleClickVoteTableSlot}
+            onDateClick={handleClickVoteTableDate}
+            onSlotClick={handleClickVoteTableSlot}
             data={voteTableDataList}
             headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />

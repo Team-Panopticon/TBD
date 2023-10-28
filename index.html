@@ -20,16 +20,99 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      html,
+      body {
+        margin: 0;
+      }
+      .progress_container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .progress_span {
+        width: 40px;
+        height: 40px;
+
+        display: inline-block;
+
+        -webkit-animation: rotate 1.4s linear infinite;
+        animation: rotate 1.4s linear infinite;
+      }
+
+      .progress_svg {
+        display: block;
+      }
+
+      .progress_circle {
+        display: block;
+        color: #66d6b4;
+
+        stroke: currentColor;
+        stroke-dasharray: 80px, 200px;
+        stroke-dashoffset: 0;
+        -webkit-animation: dash 1.4s ease-in-out infinite;
+        animation: dash 1.4s ease-in-out infinite;
+      }
+
+      @keyframes rotate {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes dash {
+        0% {
+          stroke-dasharray: 1px, 200px;
+          stroke-dashoffset: 0;
+        }
+
+        50% {
+          stroke-dasharray: 100px, 200px;
+          stroke-dashoffset: -15px;
+        }
+
+        100% {
+          stroke-dasharray: 100px, 200px;
+          stroke-dashoffset: -125px;
+        }
+      }
+    </style>
     <title>To Be Determined</title>
+    <script
+    src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"
+    integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh"
+    crossorigin="anonymous"
+    defer
+    ></script>
   </head>
   <body>
-    <div id="root"></div>
-    <script
-      src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"
-      integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh"
-      crossorigin="anonymous"
-      defer
-    ></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root">
+      <div class="progress_container">
+        <span class="progress_span">
+          <svg class="progress_svg" viewBox="22 22 44 44">
+            <circle
+              class="progress_circle"
+              cx="44"
+              cy="44"
+              r="20.2"
+              fill="none"
+              stroke-width="3.6"
+            ></circle>
+          </svg>
+        </span>
+      </div>
+    </div>
+    <script type="module" src="/src/main.tsx" defer></script>
   </body>
 </html>
