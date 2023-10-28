@@ -31,8 +31,8 @@ export function ShareDialog() {
 
   const description =
     status === MeetingStatus.done
-      ? `${name}모임 투표를 부탁드려요.`
-      : `${name}모임의 날짜가 ${confirmedDate}로 확정되었어요.`;
+      ? `${name}모임의 날짜가 ${confirmedDate}로 확정되었어요.`
+      : `${name}모임 투표를 부탁드려요.`;
 
   const { isError, serviceName, ref, isLoading, setRef } = useKakaoShare({
     title: `${name}모임 투표`,
