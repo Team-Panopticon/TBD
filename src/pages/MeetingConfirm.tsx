@@ -12,7 +12,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
-import { MeetingType } from '../constants/meeting';
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { isSameSlot } from '../hooks/useMeetingVote';
 import { votingsState } from '../stores/voting';
@@ -48,8 +48,11 @@ export function MeetingConfirm() {
   const queryClient = useQueryClient();
   const comfirmMeetingMutation = useMutation<void, Error, { meetingId: string; slot: VotingSlot }>({
     mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['meeting', meetingId] });
+    onSuccess: () => {
+      queryClient.setQueryData(['meeting', meetingId], {
+        ...meeting,
+        status: MeetingStatus.done,
+      });
       navigate(`/meetings/${meetingId}/result`);
     },
     onError: (error) => {
