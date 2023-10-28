@@ -13,8 +13,8 @@ export const useKakaoShare = ({
   const [isError, setError] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [ref, setRef] = useState<HTMLElement | null>(null);
-  const REDIRECT_URL = (import.meta.env.VITE_ORIGIN_URL as string) + `/meetings/${meetingId}`;
-  const API_KEY = import.meta.env.VITE_KAKAOTALK_JS_SDK_KEY as string;
+  const REDIRECT_URL = `${window.location.origin}/meetings/${meetingId}/vote`;
+  const API_KEY = import.meta.env.VITE_KAKAOTALK_JS_SDK_KEY;
 
   useEffect(() => {
     if (!window.Kakao.isInitialized()) {
