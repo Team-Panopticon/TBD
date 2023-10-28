@@ -1,6 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Drawer, IconButton, Input, Snackbar, Typography } from '@mui/material';
+import { Drawer, IconButton, Snackbar, TextField, Typography } from '@mui/material';
 import { useRef, useState } from 'react';
 
 import { MeetingStatus } from '../../constants/meeting';
@@ -25,7 +25,7 @@ export function ShareDialog() {
   const confirmedDate = target?.confirmedDateType?.date.toString() || '';
   const status = target?.status || MeetingStatus.inProgress;
 
-  const redirectURL = `${import.meta.env.VITE_ORIGIN_URL}/meetings/${id}/${
+  const redirectURL = `${window.location.origin}/meetings/${id}/${
     status === MeetingStatus.done ? 'result' : 'vote'
   }`;
 
@@ -79,15 +79,14 @@ export function ShareDialog() {
           </IconButton>
         </Flex>
         <Flex paddingX={1}>
-          <Input
+          <TextField
             inputRef={copyUrlRef}
             autoComplete="off"
             size="small"
             fullWidth={true}
-            disableUnderline={true}
             value={`${redirectURL}`}
             style={{ margin: '0 8px' }}
-          ></Input>
+          ></TextField>
         </Flex>
         <Flex justifyContent={'space-around'} padding={1}>
           <FlexVertical
@@ -108,11 +107,8 @@ export function ShareDialog() {
             <Flex flex={1} padding={1} justifyContent="center" alignItems={'center'}>
               <KakaoIcon {...iconProps} />
             </Flex>
-            {/* {isLoading && <Typography>로딩중</Typography>} */}
             <Typography>카카오톡</Typography>
           </FlexVertical>
-
-          {/* <KakaoShareButton meeting={target} /> */}
         </Flex>
       </Drawer>
       <Snackbar
