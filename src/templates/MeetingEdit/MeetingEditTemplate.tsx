@@ -1,6 +1,7 @@
-import { Button, TextField, Typography } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import dayjs, { Dayjs } from 'dayjs';
 import { useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { SetterOrUpdater } from 'recoil';
 
 import { Meeting } from '../../apis/types';
@@ -8,6 +9,7 @@ import { Contents, Footer, Header, HeaderContainer } from '../../components/page
 import { FullHeightButtonGroup } from '../../components/styled';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
+import { useRestartAnimation } from '../../hooks/useRestartAnimation';
 import {
   CreateMeetingState,
   validateMeeting,
@@ -18,7 +20,7 @@ import { hasTouchScreen } from '../../utils/hasTouchScreen';
 import { MeetingEditStepper } from './MeetingEditStepper';
 import { SelectDates } from './SelectDates';
 import { SelectMeetingType } from './SelectMeetingType';
-import { BorderLinearProgress } from './styled';
+import { AnimatedTypography, BorderLinearProgress } from './styled';
 
 export interface ICreateMeetingTemplateProps<T extends CreateMeetingState | Meeting> {
   currentStep: number;
@@ -44,6 +46,8 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
   meetingEditSteps,
   pageType,
 }: ICreateMeetingTemplateProps<T>) {
+  const navigate = useNavigate();
+
   const stepLen = useMemo(() => {
     return meetingEditSteps.length;
   }, [meetingEditSteps]);
@@ -60,8 +64,14 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
     return validateMeeting(meeting, dayjs().startOf('day'));
   }, [meeting]);
 
+  const { targetRef } = useRestartAnimation(description);
+
   const onClickNext = () => {
     setStep?.((prev) => (prev < stepLen - 1 ? prev + 1 : prev));
+  };
+
+  const onClickBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -69,9 +79,9 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
       <Header>
         <HeaderContainer>
           <BorderLinearProgress variant="determinate" value={progress} />
-          <Typography variant="h5" fontWeight={700} align="center">
+          <AnimatedTypography variant="h5" ref={targetRef} fontWeight={700} align="center">
             {description}
-          </Typography>
+          </AnimatedTypography>
         </HeaderContainer>
       </Header>
       <Contents>
@@ -93,6 +103,11 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
+          {pageType === 'modify' && (
+            <Button onClick={onClickBack} color="secondary">
+              다음에하기
+            </Button>
+          )}
           {currentStep < meetingEditSteps.length - 1 ? (
             <Button onClick={onClickNext} disabled={!isCurrentStepValid}>
               다음

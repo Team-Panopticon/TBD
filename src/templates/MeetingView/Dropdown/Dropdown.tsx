@@ -27,39 +27,41 @@ export function Dropdown(props: Props) {
   }, [isShow]);
 
   return (
-    <DropdownContainer>
-      <ImageWrapper
-        onClick={(event) => {
-          event.stopPropagation();
-          setShow((prev) => !prev);
-        }}
-      >
-        <img src={GearImage} alt="드롭다운 버튼" />
-      </ImageWrapper>
-      {isShow && (
-        <DropdownContentWrapper>
-          <DropdownButton
-            color="transPrimary"
-            onClick={(event) => {
-              event.stopPropagation();
-              onClickEditButton();
-              setShow(false);
-            }}
-          >
-            수정하기
-          </DropdownButton>
-          <DropdownButton
-            color="transPrimary"
-            onClick={(event) => {
-              event.stopPropagation();
-              onClickConfirmButton();
-              setShow(false);
-            }}
-          >
-            확정하기
-          </DropdownButton>
-        </DropdownContentWrapper>
-      )}
-    </DropdownContainer>
+    <div style={{ width: 0 }}>
+      <DropdownContainer>
+        <ImageWrapper
+          onClick={(event) => {
+            event.stopPropagation();
+            setShow((prev) => !prev);
+          }}
+        >
+          <img src={GearImage} alt="드롭다운 버튼" />
+        </ImageWrapper>
+        {isShow && (
+          <DropdownContentWrapper>
+            <DropdownButton
+              color="transPrimary"
+              onClick={(event) => {
+                event.stopPropagation();
+                onClickEditButton();
+                setShow(false);
+              }}
+            >
+              수정하기
+            </DropdownButton>
+            <DropdownButton
+              color="transPrimary"
+              onClick={(event) => {
+                event.stopPropagation();
+                onClickConfirmButton();
+                setShow(false);
+              }}
+            >
+              확정하기
+            </DropdownButton>
+          </DropdownContentWrapper>
+        )}
+      </DropdownContainer>
+    </div>
   );
 }

@@ -6,7 +6,7 @@ export const Page = styled('div')`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  height: calc(100vh - 56px);
+  height: calc(var(--vh, 1vh) * 100 - 56px);
   overflow: auto;
 `;
 

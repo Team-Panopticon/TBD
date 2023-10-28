@@ -1,32 +1,76 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Drawer, IconButton, Typography } from '@mui/material';
+import { Drawer, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import { useRef, useState } from 'react';
 
+import { MealType, MeetingStatus } from '../../constants/meeting';
 import { useKakaoShare } from '../../hooks/useKakaoShare';
 import useShare from '../../hooks/useShare';
 import { KakaoIcon } from '../IconComponent/KakaoIcon';
-// import { KakaoIcon } from '../IconComponent/KakaoIcon';
 import { Flex, FlexVertical } from '../styled';
 
 export function ShareDialog() {
   const { show, closeShare, target } = useShare();
+  const [showCopySuccessToast, setShowCopySuccessToast] = useState(false);
+
   const iconProps = {
     width: 48,
     height: 48,
   };
 
+  const copyUrlRef = useRef<HTMLInputElement>(null);
+
   const name = target?.name || '';
+  const id = target?.id || '';
+  const confirmedDate = target?.confirmedDateType?.date.format('MM월 DD일') || '';
+
+  const mealType = target?.confirmedDateType?.meal;
+  const status = target?.status || MeetingStatus.inProgress;
+
+  const redirectURL = `${window.location.origin}/meetings/${id}/${
+    status === MeetingStatus.done ? 'result' : 'vote'
+  }`;
+
+  const description =
+    status === MeetingStatus.done
+      ? `${name}모임의 날짜가 ${confirmedDate}${
+          mealType ? (mealType === MealType.lunch ? ' 점심으' : ' 저녁으') : ''
+        }로 확정되었어요.`
+      : `${name}모임 투표를 부탁드려요.`;
 
   const { isError, serviceName, ref, isLoading, setRef } = useKakaoShare({
     title: `${name}모임 투표`,
-    description: `${name}모임 투표를 부탁드려요.`,
-    meetingId: target?.id || '',
+    description: description,
+    redirectURL,
   });
+
+  const copyUrl = () => {
+    if (copyUrlRef.current) {
+      const copyUrlEl = copyUrlRef.current;
+      copyUrlEl.focus();
+      copyUrlEl.setSelectionRange(0, copyUrlEl.value.length);
+      try {
+        document.execCommand('copy');
+        copyUrlEl.blur();
+        alert('클립보드에 복사되었습니다.');
+      } catch (e) {
+        console.log('Share Dialog >> Copy Failed', e);
+        alert('복사를 다시 시도해주세요.');
+      }
+    }
+  };
+
   return (
     <>
       <Drawer anchor="bottom" open={show} onClose={closeShare}>
-        <Flex padding={2} alignItems="center" justifyContent={'space-between'}>
-          <Typography>공유하기</Typography>
+        <Flex
+          paddingX={2}
+          paddingTop={2}
+          paddingBottom={1}
+          alignItems="center"
+          justifyContent={'space-between'}
+        >
+          <Typography style={{ whiteSpace: 'nowrap' }}>공유하기</Typography>
           <IconButton
             aria-label="close"
             onClick={closeShare}
@@ -38,12 +82,22 @@ export function ShareDialog() {
             <CloseIcon />
           </IconButton>
         </Flex>
+        <Flex paddingX={1}>
+          <TextField
+            inputRef={copyUrlRef}
+            autoComplete="off"
+            size="small"
+            fullWidth={true}
+            value={`${redirectURL}`}
+            style={{ margin: '0 8px' }}
+          ></TextField>
+        </Flex>
         <Flex justifyContent={'space-around'} padding={1}>
           <FlexVertical
             alignItems={'center'}
             padding={1}
             onClick={() => {
-              doCopy(window.location.href);
+              copyUrl();
               closeShare();
             }}
           >
@@ -52,34 +106,34 @@ export function ShareDialog() {
             </Flex>
             <Typography>주소복사</Typography>
           </FlexVertical>
-
           <FlexVertical ref={setRef} alignItems={'center'} padding={1}>
             <Flex flex={1} padding={1} justifyContent="center" alignItems={'center'}>
               <KakaoIcon {...iconProps} />
             </Flex>
-            {/* {isLoading && <Typography>로딩중</Typography>} */}
             <Typography>카카오톡</Typography>
           </FlexVertical>
-
-          {/* <KakaoShareButton meeting={target} /> */}
         </Flex>
       </Drawer>
+      <Snackbar
+        open={showCopySuccessToast}
+        autoHideDuration={2000}
+        onClose={() => {
+          setShowCopySuccessToast(false);
+        }}
+        message="클립보드에 복사되었습니다."
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => {
+              setShowCopySuccessToast(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </>
   );
 }
-
-const doCopy = (text: string) => {
-  // (IE는 사용 못하고, 크롬은 66버전 이상일때 사용 가능합니다.)
-  const clipboard = navigator.clipboard;
-
-  if (clipboard) {
-    clipboard
-      .writeText(text)
-      .then(() => {
-        alert('클립보드에 복사되었습니다.');
-      })
-      .catch(() => {
-        alert('복사를 다시 시도해주세요.');
-      });
-  }
-};

@@ -39,12 +39,13 @@ interface Props {
   className?: string;
   style?: CSSProperties;
   data: VoteTableRowData[];
-  onClick?: onClickHandler;
+  onSlotClick?: onClickHandler;
+  onDateClick?: (date: Dayjs) => void;
   headers: ReactNode[];
 }
 
 export const VoteTable: React.FC<Props> = (props) => {
-  const { data, onClick, style, className, headers } = props;
+  const { data, onSlotClick, onDateClick, style, className, headers } = props;
 
   const isHideVotingStatus = data.some((item) => item.votings.some((vote) => vote.checked));
   const sortedData = [...data].sort((a, b) => a.date.diff(b.date));
@@ -62,7 +63,8 @@ export const VoteTable: React.FC<Props> = (props) => {
         {sortedData.map((item, idx) => (
           <VoteTableContent
             isHideVotingStatus={isHideVotingStatus}
-            onClick={onClick}
+            onDateClick={onDateClick}
+            onSlotClick={onSlotClick}
             key={`vote-item-${idx}`}
             item={item}
           />
@@ -74,22 +76,32 @@ export const VoteTable: React.FC<Props> = (props) => {
 
 interface VoteTableContentProps {
   item: VoteTableRowData;
-  onClick?: onClickHandler;
+  onSlotClick?: onClickHandler;
+  onDateClick?: (date: Dayjs) => void;
   isHideVotingStatus: boolean;
 }
 
 const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
-  const { item, onClick, isHideVotingStatus } = props;
+  const { item, onSlotClick, onDateClick, isHideVotingStatus } = props;
   const { date, votings } = item;
 
-  const handleClick = (checked: boolean, vote: VoteTableVoting, mealType?: MealType) => {
+  const handleDateClick = () => {
+    onDateClick?.(date);
+  };
+
+  const handleSlotClick = (checked: boolean, vote: VoteTableVoting, mealType?: MealType) => {
     const slot: VotingSlot = { date, meal: mealType };
-    onClick?.(date, !checked, vote, slot);
+    onSlotClick?.(date, !checked, vote, slot);
   };
 
   return (
     <Wrapper>
-      <DateContentBox>{date.format('M/D (dd)')}</DateContentBox>
+      <DateContentBox
+        onClick={() => isBrowser && handleDateClick()}
+        onTouchEnd={() => isMobile && handleDateClick()}
+      >
+        {date.format('M/D (dd)')}
+      </DateContentBox>
       <Divider />
       {votings.map((vote, idx) => {
         const { current, total, focused, checked, mealType } = vote;
@@ -102,10 +114,10 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             key={`vote-content-${idx}`}
             focus={focused}
             onTouchEnd={(e) => {
-              return isMobile && handleClick(checked, vote, mealType);
+              return isMobile && handleSlotClick(checked, vote, mealType);
             }}
             checked={checked}
-            onClick={() => isBrowser && handleClick(checked, vote, mealType)}
+            onClick={() => isBrowser && handleSlotClick(checked, vote, mealType)}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>

@@ -1,4 +1,13 @@
-import { Button, LinearProgress, styled, ToggleButtonGroup } from '@mui/material';
+import {
+  Button,
+  keyframes,
+  LinearProgress,
+  styled,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material';
+
+import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../theme';
 
 export const InputContainer = styled('div')({
   display: 'flex',
@@ -16,10 +25,10 @@ export const CustomTogglebuttonGroup = styled(ToggleButtonGroup)({
   gap: '25px',
 });
 
-export const customButtonStyle: React.CSSProperties = {
-  border: '1px solid #D9D9D9',
+export const getCustomButtonStyle = (isSelected: boolean): React.CSSProperties => ({
+  border: `1px solid ${isSelected ? PRIMARY_COLOR : SECONDARY_COLOR}`,
   borderRadius: '4px',
-};
+});
 
 // StyledComponent for MeetingEditTemplate
 export const BorderLinearProgress = styled(LinearProgress)({
@@ -88,3 +97,19 @@ export const CenteredButtonContainer = styled('div')({
   display: 'flex',
   justifyContent: 'center',
 });
+
+export const fadeInUp = keyframes`
+    0% {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translateZ(0);
+    }
+`;
+
+export const AnimatedTypography = styled(Typography)`
+  animation: ${fadeInUp} 1s ease-in-out;
+  animation-fill-mode: forwards;
+`;

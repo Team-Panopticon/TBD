@@ -1,6 +1,6 @@
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { Box, Button, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { Contents, Footer, Header, HeaderContainer, Page } from '../components/p
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
-import { MeetingType } from '../constants/meeting';
+import { MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { isSameSlot } from '../hooks/useMeetingVote';
 import { votingsState } from '../stores/voting';
@@ -45,6 +45,23 @@ export function MeetingConfirm() {
 
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const comfirmMeetingMutation = useMutation<void, Error, { meetingId: string; slot: VotingSlot }>({
+    mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
+    onSuccess: () => {
+      queryClient.setQueryData(['meeting', meetingId], {
+        ...meeting,
+        status: MeetingStatus.done,
+      });
+      navigate(`/meetings/${meetingId}/result`);
+    },
+    onError: (error) => {
+      const errorMessage =
+        error instanceof Error ? error.message : '정상적으로 처리되지 못했습니다.';
+      alert(errorMessage);
+      setShowConfirmModal(false);
+    },
+  });
 
   // TODO: Recoil로 비동기 데이터 가져오는 것 대체
   useEffect(() => {
@@ -58,7 +75,7 @@ export function MeetingConfirm() {
     })();
   }, [setVotings, meetingId]);
 
-  if (isLoading || isError) {
+  if (isLoading || isError || !meeting) {
     return null;
   }
 
@@ -76,20 +93,12 @@ export function MeetingConfirm() {
     handleVoteTableClickHightlight(date, checked, target, slot);
   };
 
-  const handleConfirm = async () => {
+  const handleConfirm = () => {
     if (!selectedSlot) {
       return;
     }
 
-    try {
-      await confirmMeeting(meetingId, selectedSlot);
-      navigate(`/meetings/${meetingId}/result`);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : '정상적으로 처리되지 못했습니다.';
-      alert(errorMessage);
-      setShowConfirmModal(false);
-    }
+    comfirmMeetingMutation.mutate({ meetingId, slot: selectedSlot });
   };
 
   return (
@@ -126,7 +135,7 @@ export function MeetingConfirm() {
 
         <VoteTableWrapper>
           <VoteTable
-            onClick={handleClickVoteTable}
+            onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
             headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
