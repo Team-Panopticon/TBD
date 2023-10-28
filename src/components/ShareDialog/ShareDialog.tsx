@@ -22,7 +22,7 @@ export function ShareDialog() {
 
   const name = target?.name || '';
   const id = target?.id || '';
-  const confirmedDate = target?.confirmedDateType?.date.toString() || '';
+  const confirmedDate = target?.confirmedDateType?.date.format('MM-DD') || '';
   const status = target?.status || MeetingStatus.inProgress;
 
   const redirectURL = `${window.location.origin}/meetings/${id}/${
