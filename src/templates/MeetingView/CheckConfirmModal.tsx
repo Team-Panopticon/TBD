@@ -3,6 +3,7 @@ import { Box, Button, Typography } from '@mui/material';
 
 import { VotingSlot } from '../../apis/votes';
 import { CenterContentModal } from '../../components/CenterContentModal';
+import { getMealLabel } from '../../utils/getMealLabel';
 import { CenteredButtonContainer, ConfirmModalContainer } from '../MeetingEdit/styled';
 import { ModalTopRightButton } from './styled';
 
@@ -54,15 +55,4 @@ export function CheckConfirmModal({ show, slot, onConfirm, onCancel }: Props) {
       </ConfirmModalContainer>
     </CenterContentModal>
   );
-}
-
-function getMealLabel(meal: 'lunch' | 'dinner') {
-  if (meal === 'lunch') {
-    return '점심';
-  }
-  if (meal === 'dinner') {
-    return '저녁';
-  }
-
-  return '';
 }
