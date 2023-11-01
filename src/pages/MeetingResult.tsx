@@ -37,7 +37,7 @@ export function MeetingResult() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setVotings, meetingId]);
 
-  const { confirmedUserList, missedUserList } = useMeetingResult();
+  const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
 
   return (
     <Page>
