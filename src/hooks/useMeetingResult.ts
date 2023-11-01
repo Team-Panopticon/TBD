@@ -21,9 +21,11 @@ const getMissedUserList = (votings: Voting[], meeting?: Meeting) => {
   return votings
     .filter((voting) => {
       const votingDates = voting[meetingType];
-
       return !votingDates?.find((meal: VotingSlot) => {
-        return meal.date.isSame(meeting?.confirmedDateType?.date, 'day');
+        return (
+          meal.date.isSame(meeting?.confirmedDateType?.date, 'day') &&
+          meal.meal === meeting?.confirmedDateType?.meal
+        );
       });
     })
     .map<UserListData>((voting) => {
@@ -46,7 +48,10 @@ const getConfirmedUserList = (votings: Voting[], meeting?: Meeting) => {
       const votingDates = voting[meetingType];
 
       return !!votingDates?.find((meal: VotingSlot) => {
-        return meal.date.isSame(meeting?.confirmedDateType?.date, 'day');
+        return (
+          meal.date.isSame(meeting?.confirmedDateType?.date, 'day') &&
+          meal.meal === meeting?.confirmedDateType?.meal
+        );
       });
     })
     .map<UserListData>((voting) => {
