@@ -14,6 +14,7 @@ import { UserList } from '../components/UserList/UserList';
 import { useMeetingResult } from '../hooks/useMeetingResult';
 import useShare from '../hooks/useShare';
 import { votingsState } from '../stores/voting';
+import { getMealLabel } from '../utils/getMealLabel';
 
 export function MeetingResult() {
   const navigate = useNavigate();
@@ -38,6 +39,9 @@ export function MeetingResult() {
   }, [setVotings, meetingId]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
+
+  const meetingDate = meeting?.confirmedDateType?.date;
+  const meetingMeal = meeting?.confirmedDateType?.meal;
 
   return (
     <Page>
@@ -65,10 +69,10 @@ export function MeetingResult() {
                 </FlexVertical>
                 <FlexVertical>
                   <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
-                    {meeting?.confirmedDateType?.date.format('M/DD')}
+                    {meetingDate?.format('M/DD')} {getMealLabel(meetingMeal)}
                   </Typography>
                   <Typography variant="h5" color={'primary'} align="center">
-                    {`[${meeting?.confirmedDateType?.date.format('dddd') || ''}]`}
+                    {`[${meetingDate?.format('dddd') || ''}]`}
                   </Typography>
                 </FlexVertical>
               </FlexVertical>
