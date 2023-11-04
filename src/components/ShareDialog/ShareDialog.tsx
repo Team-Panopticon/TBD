@@ -28,7 +28,7 @@ export function ShareDialog() {
   const status = target?.status || MeetingStatus.inProgress;
 
   const redirectURL = `${window.location.origin}/meetings/${id}/${
-    status === MeetingStatus.done ? 'result' : 'vote'
+    status === MeetingStatus.done ? 'result' : 'vote?ref=share'
   }`;
 
   const description =
