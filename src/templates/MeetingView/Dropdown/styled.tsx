@@ -25,10 +25,12 @@ export const DropdownContentWrapper = styled('div')((props) => ({
 
 export const DropdownButton = styled(Button)((props) => ({
   whiteSpace: 'nowrap',
-  padding: '4px 12px',
+  padding: '12px 12px',
   color: props.theme.palette.transPrimary.contrastText,
-
+  gap: '12px',
   '&:hover': {
     backgroundColor: props.theme.palette.transPrimary.main,
   },
+  width: '100%',
+  justifyContent: 'flex-start',
 }));

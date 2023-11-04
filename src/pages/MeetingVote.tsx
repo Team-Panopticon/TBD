@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from '@mui/material';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
@@ -26,6 +26,7 @@ interface MeetingVoteRouteParams {
 }
 
 export function MeetingVote() {
+  const [searchParams] = useSearchParams();
   const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
@@ -52,6 +53,13 @@ export function MeetingVote() {
     handleClickVoteTableSlot,
     handleClickVoteTableDate,
   } = useMeetingViewVoteMode(meeting);
+
+  useEffect(() => {
+    const isFromSharedURL = searchParams.get('ref') === 'share';
+    if (isFromSharedURL && !isNewUser) {
+      navigate(`/meetings/${meetingId}`);
+    }
+  }, [isNewUser, meetingId, navigate, searchParams]);
 
   useEffect(() => {
     (async () => {
