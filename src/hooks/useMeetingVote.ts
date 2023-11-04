@@ -41,21 +41,42 @@ export const useMeetingViewVoteMode = (meeting?: Meeting) => {
   }));
 
   const handleClickVoteTableDate = (date: Dayjs) => {
-    const isLunchAndDinnerVoted =
-      currentUserVotingSlots.filter((voting) => voting.date.isSame(date, 'day')).length === 2;
+    if (!meeting) {
+      return;
+    }
 
-    const votingSlotsWithoutGivenDate = currentUserVotingSlots.filter(
-      (voting) => !voting.date.isSame(date, 'day'),
-    );
+    if (meeting.type === MeetingType.date) {
+      const isAlreadyVoted = currentUserVotingSlots.some((voting) =>
+        voting.date.isSame(date, 'day'),
+      );
+      const votingSlotsWithoutGivenDate = currentUserVotingSlots.filter(
+        (voting) => !voting.date.isSame(date, 'day'),
+      );
 
-    if (isLunchAndDinnerVoted) {
-      setCurrentUserVotingSlots(votingSlotsWithoutGivenDate);
-    } else {
-      setCurrentUserVotingSlots([
-        ...votingSlotsWithoutGivenDate,
-        { date, meal: MealType.lunch },
-        { date, meal: MealType.dinner },
-      ]);
+      if (isAlreadyVoted) {
+        setCurrentUserVotingSlots(votingSlotsWithoutGivenDate);
+      } else {
+        setCurrentUserVotingSlots([...votingSlotsWithoutGivenDate, { date }]);
+      }
+    }
+
+    if (meeting.type === MeetingType.meal) {
+      const isLunchAndDinnerVoted =
+        currentUserVotingSlots.filter((voting) => voting.date.isSame(date, 'day')).length === 2;
+
+      const votingSlotsWithoutGivenDate = currentUserVotingSlots.filter(
+        (voting) => !voting.date.isSame(date, 'day'),
+      );
+
+      if (isLunchAndDinnerVoted) {
+        setCurrentUserVotingSlots(votingSlotsWithoutGivenDate);
+      } else {
+        setCurrentUserVotingSlots([
+          ...votingSlotsWithoutGivenDate,
+          { date, meal: MealType.lunch },
+          { date, meal: MealType.dinner },
+        ]);
+      }
     }
   };
 
