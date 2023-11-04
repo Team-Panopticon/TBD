@@ -118,7 +118,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             //   return isMobile && handleSlotClick(checked, vote, mealType);
             // }}
             checked={checked}
-            onClick={() => isMobile && handleSlotClick(checked, vote, mealType)}
+            onClick={() => handleSlotClick(checked, vote, mealType)}
             onDoubleClick={() => console.log('dblclick')}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
