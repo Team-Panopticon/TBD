@@ -45,7 +45,7 @@ export function Dropdown(props: Props) {
       {
         <Drawer
           onClose={() => {
-            setShow(() => false);
+            setShow(false);
           }}
           open={isShow}
           anchor="bottom"
