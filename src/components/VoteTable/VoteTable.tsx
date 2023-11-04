@@ -90,7 +90,6 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
   };
 
   const handleSlotClick = (checked: boolean, vote: VoteTableVoting, mealType?: MealType) => {
-    console.log('click', date, mealType);
     const slot: VotingSlot = { date, meal: mealType };
     onSlotClick?.(date, !checked, vote, slot);
   };
@@ -114,12 +113,8 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             isHideVotingStatus={isHideVotingStatus}
             key={`vote-content-${idx}`}
             focus={focused}
-            // onTouchEnd={(e) => {
-            //   return isMobile && handleSlotClick(checked, vote, mealType);
-            // }}
             checked={checked}
             onClick={() => handleSlotClick(checked, vote, mealType)}
-            onDoubleClick={() => console.log('dblclick')}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>
