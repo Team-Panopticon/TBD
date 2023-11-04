@@ -50,5 +50,5 @@ html,body{
   overflow-x: hidden;
 }
 body{
-	touch-action: manipulation;
+  touch-action: manipulation;
 }
