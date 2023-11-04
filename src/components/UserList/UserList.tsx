@@ -21,7 +21,7 @@ interface Props {
   users: UserListData[];
   onClick?: (checked: boolean, target: UserListData) => void;
   children?: ReactNode;
-  isSticky: boolean;
+  isSticky?: boolean;
 }
 
 const UserListTitle = ({

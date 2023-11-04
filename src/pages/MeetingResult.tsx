@@ -76,12 +76,12 @@ export function MeetingResult() {
           </Header>
 
           <FlexVertical gap={1}>
-            <UserList users={confirmedUserList} isSticky={false}>
+            <UserList users={confirmedUserList}>
               <UserList.Title> 올 수 있는 사람들</UserList.Title>
               <UserList.Placeholder>{':('}</UserList.Placeholder>
             </UserList>
 
-            <UserList users={missedUserList} isSticky={false}>
+            <UserList users={missedUserList}>
               <UserList.Title color="secondary"> 아쉽지만 못오는 사람들</UserList.Title>
               <UserList.Placeholder>{':)'}</UserList.Placeholder>
             </UserList>

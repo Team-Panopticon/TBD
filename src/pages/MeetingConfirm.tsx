@@ -129,7 +129,7 @@ export function MeetingConfirm() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserList users={userList} isSticky={true}>
+        <UserList users={userList} isSticky>
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>
 

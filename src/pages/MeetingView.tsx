@@ -156,12 +156,7 @@ export function MeetingView() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserList
-          className="user-list"
-          users={userList}
-          onClick={handleClickUserList}
-          isSticky={true}
-        >
+        <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>
 

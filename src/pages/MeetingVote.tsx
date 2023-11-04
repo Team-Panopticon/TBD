@@ -202,12 +202,7 @@ export function MeetingVote() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserList
-          className="user-list"
-          users={checkedUserList}
-          onClick={handleClickUser}
-          isSticky={false}
-        >
+        <UserList className="user-list" users={checkedUserList} onClick={handleClickUser}>
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>
         <VoteTableWrapper>
