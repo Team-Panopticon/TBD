@@ -21,6 +21,7 @@ interface Props {
   users: UserListData[];
   onClick?: (checked: boolean, target: UserListData) => void;
   children?: ReactNode;
+  isSticky?: boolean;
 }
 
 const UserListTitle = ({
@@ -50,7 +51,7 @@ const getChildrenOfType = (children: ReactNode, type: JSX.Element['type']) => {
   return childrenArray.filter((child) => isValidElement(child) && child.type === type);
 };
 const UserListMain: React.FC<Props> = (props) => {
-  const { users, style, className, onClick, children } = props;
+  const { users, style, className, onClick, children, isSticky } = props;
   const title = getChildrenOfType(children, UserListTitleType);
 
   const placeholder = getChildrenOfType(children, PlaceholderType)[0] ? (
@@ -61,7 +62,20 @@ const UserListMain: React.FC<Props> = (props) => {
     </UserList.Placeholder>
   );
   return (
-    <FlexVertical gap={0.5}>
+    <FlexVertical
+      gap={0.5}
+      style={
+        isSticky
+          ? {
+              position: 'sticky',
+              top: 0,
+              backgroundColor: 'white',
+              padding: '8px 0',
+              zIndex: 1,
+            }
+          : {}
+      }
+    >
       {title && <div>{title}</div>}
 
       <UserListContainer className={className} style={style}>
