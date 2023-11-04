@@ -21,6 +21,16 @@ const queryClient = new QueryClient({
   },
 });
 
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const oldAddEventListener = Node.prototype.addEventListener;
+Node.prototype.addEventListener = function (type, ...args) {
+  if (type === 'dblclick') {
+    // ignore
+    return;
+  }
+  return oldAddEventListener.call(this, type, ...args);
+};
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   <RecoilRoot>

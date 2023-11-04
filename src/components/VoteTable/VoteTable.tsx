@@ -90,6 +90,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
   };
 
   const handleSlotClick = (checked: boolean, vote: VoteTableVoting, mealType?: MealType) => {
+    console.log('click', date, mealType);
     const slot: VotingSlot = { date, meal: mealType };
     onSlotClick?.(date, !checked, vote, slot);
   };
@@ -117,7 +118,7 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             //   return isMobile && handleSlotClick(checked, vote, mealType);
             // }}
             checked={checked}
-            onClick={() => isBrowser && handleSlotClick(checked, vote, mealType)}
+            onClick={() => isMobile && handleSlotClick(checked, vote, mealType)}
             onDoubleClick={() => console.log('dblclick')}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
