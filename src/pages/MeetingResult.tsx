@@ -51,7 +51,7 @@ export function MeetingResult() {
             <HeaderContainer>
               <FlexVertical flex={1} alignItems={'center'} gap={1}>
                 <FlexVertical flex={1} gap={1}>
-                  <Typography variant="h5" fontWeight={700}>
+                  <Typography variant="h5" fontWeight={700} alignSelf={'center'}>
                     축하합니다!
                   </Typography>
                   <FlexVertical alignItems={'center'}>
