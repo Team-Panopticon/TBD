@@ -113,11 +113,8 @@ const VoteTableContent: React.FC<VoteTableContentProps> = (props) => {
             isHideVotingStatus={isHideVotingStatus}
             key={`vote-content-${idx}`}
             focus={focused}
-            onTouchEnd={(e) => {
-              return isMobile && handleSlotClick(checked, vote, mealType);
-            }}
             checked={checked}
-            onClick={() => isBrowser && handleSlotClick(checked, vote, mealType)}
+            onClick={() => handleSlotClick(checked, vote, mealType)}
           >
             <OpacityProgress isHide={isHideVotingStatus} progress={progress} />
             <span>{`${current}/${total} (${progress}%)`}</span>
