@@ -73,7 +73,6 @@ export const PasswordInput = styled('div')({
 
 export const MaskingInputContainer = styled('div')({
   height: '100%',
-
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
