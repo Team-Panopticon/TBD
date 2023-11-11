@@ -6,10 +6,11 @@ export const DropdownContainer = styled('div')({
 });
 
 export const ImageWrapper = styled('button')({
+  color: '#000000',
   background: 'none',
   border: '0',
   display: 'flex',
-  width: '25px',
+  width: '24px',
   cursor: 'pointer',
   img: {
     width: '100%',
