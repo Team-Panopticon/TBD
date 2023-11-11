@@ -21,6 +21,18 @@ const queryClient = new QueryClient({
   },
 });
 
+// https://github.com/facebook/react/issues/19841#issuecomment-694978234
+// iOS에서 빠르게 근처를 두번 클릭 시 더블클릭 이벤트로 간주되어 처음 클릭한 곳이 두번 클릭되는 이슈를 해결
+// eslint-disable-next-line @typescript-eslint/unbound-method
+const oldAddEventListener = Node.prototype.addEventListener;
+Node.prototype.addEventListener = function (type, ...args) {
+  if (type === 'dblclick') {
+    // ignore
+    return;
+  }
+  return oldAddEventListener.call(this, type, ...args);
+};
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   // <React.StrictMode>
   <RecoilRoot>

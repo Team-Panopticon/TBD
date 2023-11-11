@@ -37,7 +37,6 @@ export const HeaderContainer = styled('div')({
 });
 
 const ContentsWrapper = styled(Box)`
-  overflow: auto;
   padding: 16px 32px;
   height: 100%;
 `;
@@ -46,7 +45,6 @@ const ContentsBox = styled(Box)`
   flex-direction: column;
   flex-wrap: nowrap;
   flex-grow: 1;
-  overflow-y: auto;
 `;
 export const Contents = ({ children }: { children: ReactNode }) => {
   return (

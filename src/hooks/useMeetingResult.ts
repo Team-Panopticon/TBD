@@ -5,6 +5,7 @@ import { Voting, VotingSlot } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { MeetingType } from '../constants/meeting';
 import { votingsState } from '../stores/voting';
+import { isSameSlot } from './useMeetingVote';
 
 export const useMeetingResult = (meeting?: Meeting) => {
   const votings = useRecoilValue(votingsState);
@@ -21,9 +22,8 @@ const getMissedUserList = (votings: Voting[], meeting?: Meeting) => {
   return votings
     .filter((voting) => {
       const votingDates = voting[meetingType];
-
       return !votingDates?.find((meal: VotingSlot) => {
-        return meal.date.isSame(meeting?.confirmedDateType?.date, 'day');
+        return meeting?.confirmedDateType && isSameSlot(meal, meeting?.confirmedDateType);
       });
     })
     .map<UserListData>((voting) => {
@@ -46,7 +46,7 @@ const getConfirmedUserList = (votings: Voting[], meeting?: Meeting) => {
       const votingDates = voting[meetingType];
 
       return !!votingDates?.find((meal: VotingSlot) => {
-        return meal.date.isSame(meeting?.confirmedDateType?.date, 'day');
+        return meeting?.confirmedDateType && isSameSlot(meal, meeting?.confirmedDateType);
       });
     })
     .map<UserListData>((voting) => {

@@ -1,7 +1,7 @@
 {
   "name": "motoo",
   "private": true,
-  "version": "0.1.0",
+  "version": "2023.11.04.1204",
   "type": "module",
   "scripts": {
     "local": "VITE_USE_MSW=true vite",
