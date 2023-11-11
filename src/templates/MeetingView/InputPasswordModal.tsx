@@ -76,7 +76,7 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
             length={4}
             text={password}
             setText={handlePasswordChange}
-            size={28}
+            size={30}
             style={{ paddingTop: 10 }}
           />
         </MaskingInputContainer>
