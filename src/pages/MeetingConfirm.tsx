@@ -37,6 +37,10 @@ export function MeetingConfirm() {
     queryKey: ['meeting', meetingId],
     queryFn: () => getMeeting(meetingId),
   });
+  const { data: votings, isLoading: isVotingsLoading } = useQuery({
+    queryKey: ['votings', meetingId],
+    queryFn: () => getVotings(meetingId),
+  });
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const {
@@ -67,17 +71,12 @@ export function MeetingConfirm() {
 
   // TODO: Recoil로 비동기 데이터 가져오는 것 대체
   useEffect(() => {
-    (async () => {
-      if (!meetingId) {
-        return;
-      }
+    if (votings) {
+      setVotings(votings);
+    }
+  }, [setVotings, votings]);
 
-      const data = await getVotings(meetingId);
-      setVotings(data);
-    })();
-  }, [setVotings, meetingId]);
-
-  if (isLoading || isError || !meeting) {
+  if (isLoading || isError || !meeting || isVotingsLoading) {
     return null;
   }
 
