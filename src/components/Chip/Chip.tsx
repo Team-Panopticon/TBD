@@ -1,4 +1,4 @@
-import { Tooltip } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import { CSSProperties, PropsWithChildren } from 'react';
 
 import { ChipContainer } from './styled';
