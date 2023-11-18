@@ -57,7 +57,7 @@ export function MeetingView() {
       setVotings(data.votings);
       setTarget(data.meeting);
     }
-  }, [data.meeting, data.meeting, setVotings, meetingId]);
+  }, [data.meeting, data.votings, setVotings, meetingId]);
 
   const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;
