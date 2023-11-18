@@ -63,7 +63,7 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
   }, [meetingId, password, onConfirm, setAdminToken]);
 
   return (
-    <CenterContentModal open={show} width={320} height={230}>
+    <CenterContentModal open={show} width={320} height={180}>
       <PasswordInput>
         <Typography variant="subtitle1" fontWeight={300}>
           비밀번호를 입력해주세요.
@@ -76,7 +76,7 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
             length={4}
             text={password}
             setText={handlePasswordChange}
-            size={28}
+            size={30}
             style={{ paddingTop: 10 }}
           />
         </MaskingInputContainer>

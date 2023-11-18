@@ -48,7 +48,7 @@ export function CreatePasswordModal({
             length={4}
             text={password ?? ''}
             setText={onChange}
-            size={28}
+            size={30}
             style={{ paddingTop: 10 }}
           />
         </MaskingInputContainer>

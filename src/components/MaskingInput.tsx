@@ -21,7 +21,6 @@ const Dot = styled('div')<DotProps>((props) => ({
   height: `${props.size}px`,
   borderRadius: '50%',
   backgroundColor: props.filled ? props.theme.palette.primary.main : '#d9d9d9',
-  marginRight: '8px',
 }));
 
 const HiddenInput = styled('input')({
