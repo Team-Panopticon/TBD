@@ -31,7 +31,7 @@ export function CreatePasswordModal({
   const isPasswordValid = password !== undefined && validatePassword(password);
 
   return (
-    <CenterContentModal open={show} width={320} height={230}>
+    <CenterContentModal open={show} width={320} height={208}>
       <PasswordInput>
         <Typography variant="subtitle1" fontWeight={300}>
           비밀번호를 설정할 수 있어요.
@@ -44,16 +44,10 @@ export function CreatePasswordModal({
           모임을 수정하거나 확정할 때 사용해요
         </Typography>
         <MaskingInputContainer>
-          <MaskingInput
-            length={4}
-            text={password ?? ''}
-            setText={onChange}
-            size={30}
-            style={{ paddingTop: 10 }}
-          />
+          <MaskingInput length={4} text={password ?? ''} setText={onChange} size={28} />
         </MaskingInputContainer>
       </PasswordInput>
-      <div style={{ height: 50 }}>
+      <div style={{ height: 64, padding: '12px 24px' }}>
         <FullHeightButtonGroup
           fullWidth
           disableElevation
