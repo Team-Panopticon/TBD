@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -48,6 +49,44 @@ export function MeetingVote() {
   const { data } = useMeetingData(meetingId);
 
   const navigate = useNavigate();
+
+  const { mutate: updateVotingMutate } = useMutation({
+    mutationFn: updateVoting,
+    onSuccess: () => {
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    },
+  });
+
+  const { mutate: createVotingMutate } = useMutation({
+    mutationFn: createVoting,
+    onSuccess: (res) => {
+      setCurrentUser({
+        id: res.id,
+        username: res.username,
+      });
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    },
+  });
 
   const {
     voteTableDataList,
@@ -107,57 +146,28 @@ export function MeetingVote() {
     }
 
     // Old user
-    try {
-      await updateVoting({
-        meetingId,
-        votingId: currentUser.id,
-        data: {
-          username: currentUser.username,
-          [data.meeting.type]: currentUserVotingSlots,
-        },
-      });
-      setShowUsernameModal(false);
-      setShowVoteSuccessPopup(true);
-      navigate(`/meetings/${meetingId}`);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorResponseData = error.response?.data as { message: string };
-        alert(errorResponseData?.message);
-      } else {
-        alert(error);
-      }
-    }
+    updateVotingMutate({
+      meetingId,
+      votingId: currentUser.id,
+      data: {
+        username: currentUser.username,
+        [data.meeting.type]: currentUserVotingSlots,
+      },
+    });
   };
 
-  const handleUsernameConfirm = async (username: string) => {
+  const handleUsernameConfirm = (username: string) => {
     if (!data.meeting) {
       return;
     }
 
-    try {
-      const voting = await createVoting({
-        meetingId,
-        data: {
-          username,
-          [data.meeting.type]: currentUserVotingSlots,
-        },
-      });
-
-      setCurrentUser({
-        id: voting.id,
-        username: voting.username,
-      });
-      setShowUsernameModal(false);
-      setShowVoteSuccessPopup(true);
-      navigate(`/meetings/${meetingId}`);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorResponseData = error.response?.data as { message: string };
-        alert(errorResponseData?.message);
-      } else {
-        alert(error);
-      }
-    }
+    createVotingMutate({
+      meetingId,
+      data: {
+        username,
+        [data.meeting.type]: currentUserVotingSlots,
+      },
+    });
   };
 
   if (!data.meeting || !voteTableDataList) {
