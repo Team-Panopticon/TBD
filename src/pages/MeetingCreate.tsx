@@ -1,3 +1,4 @@
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -7,7 +8,7 @@ import { createMeeting } from '../apis/meetings';
 import { warmUpInstance } from '../apis/utils';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
-import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
+import { createMeetingState } from '../stores/createMeeting';
 import { CreatePasswordModal } from '../templates/MeetingEdit/CreatePasswordModal';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
@@ -22,16 +23,23 @@ export function MeetingCreate() {
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
-
-  const meetingeditSteps = useMemo(() => {
-    return getMeetingEditSteps('create');
-  }, [getMeetingEditSteps]);
-
   const navigate = useNavigate();
+  const { mutate } = useMutation({
+    mutationFn: (params: Parameters<typeof createMeeting>[0]) => createMeeting(params),
+    onSuccess: (res) => navigate(`/meetings/${res.id}`),
+    onError: (e) => {
+      const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
+      alert(errMessage);
+    },
+  });
 
   useEffect(() => {
     warmUpInstance();
   }, []);
+
+  const meetingeditSteps = useMemo(() => {
+    return getMeetingEditSteps('create');
+  }, [getMeetingEditSteps]);
 
   const handleMeetingEditComplete = () => {
     setShowPasswordModal(true);
@@ -44,21 +52,11 @@ export function MeetingCreate() {
     }));
   };
 
-  const createMeetingAndNavigate = async ({ usePassword }: { usePassword: boolean }) => {
-    try {
-      const trimmedName = meeting.name?.trim();
-      const response = await createMeeting(
-        { ...meeting, name: trimmedName } as ValidCreateMeetingState,
-        usePassword,
-      );
-      navigate(`/meetings/${response.id}`);
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        alert(e.message);
-      } else {
-        alert('알 수 없는 에러가 발생했습니다');
-      }
-    }
+  const createMeetingAndNavigate = ({ usePassword }: { usePassword: boolean }) => {
+    mutate({
+      meeting: { ...meeting, name: meeting.name?.trim() || '' },
+      setPassword: usePassword,
+    });
   };
 
   const handlePasswordConfirm = () => {
@@ -68,6 +66,7 @@ export function MeetingCreate() {
   const handlePasswordSkip = () => {
     createMeetingAndNavigate({ usePassword: false });
   };
+
   const handlePasswordCancel = () => {
     setShowPasswordModal(false);
     setMeeting((prev) => ({

@@ -33,7 +33,13 @@ const meetingResponseToState = (state: MeetingResponse): Meeting => {
   };
 };
 
-export const createMeeting = async (meeting: ValidCreateMeetingState, setPassword: boolean) => {
+export const createMeeting = async ({
+  meeting,
+  setPassword,
+}: {
+  meeting: ValidCreateMeetingState;
+  setPassword: boolean;
+}) => {
   const meetingRequest = meetingStateToRequest(meeting, setPassword);
 
   const response: AxiosResponse<MeetingResponse> = await api.post('/meetings', meetingRequest);
