@@ -1,17 +1,15 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
-import { Meeting } from '../apis/types';
-import { getVotings, Voting } from '../apis/votes';
+import { Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
+import { useMeetingData } from '../hooks/useMeetingData';
 import { useMeetingResult } from '../hooks/useMeetingResult';
 import useShare from '../hooks/useShare';
 import { votingsState } from '../stores/voting';
@@ -19,32 +17,23 @@ import { getMealLabel } from '../utils/getMealLabel';
 
 export function MeetingResult() {
   const navigate = useNavigate();
-  const [meeting, setMeeting] = useState<Meeting>();
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
-  const { data: meetingData } = useQuery({
-    queryKey: ['meeting', meetingId],
-    queryFn: () => getMeeting(meetingId || ''),
-  });
-  const { data: votings } = useQuery({
-    queryKey: ['votings', meetingId],
-    queryFn: () => getVotings(meetingId || ''),
-  });
+  const { data } = useMeetingData(meetingId || '');
 
   useEffect(() => {
-    if (meetingData && votings) {
-      setVotings(votings);
-      setMeeting(meetingData);
-      setTarget(meetingData);
+    if (data.meeting && data.votings) {
+      setVotings(data.votings);
+      setTarget(data.meeting);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [meetingData, meetingId, setVotings, votings]);
+  }, [data.meeting, data.votings, meetingId, setVotings]);
 
-  const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
+  const { confirmedUserList, missedUserList } = useMeetingResult(data.meeting);
 
-  const meetingDate = meeting?.confirmedDateType?.date;
-  const meetingMeal = meeting?.confirmedDateType?.meal;
+  const meetingDate = data.meeting?.confirmedDateType?.date;
+  const meetingMeal = data.meeting?.confirmedDateType?.meal;
 
   return (
     <Page>
@@ -62,7 +51,7 @@ export function MeetingResult() {
                   </FlexVertical>
                   <Typography variant="h5" fontWeight={300} align="center">
                     <Typography variant="body1" fontWeight={700} align="center">
-                      {meeting?.name && `${meeting?.name}`}{' '}
+                      {data.meeting?.name && `${data.meeting?.name}`}{' '}
                       <span style={{ fontWeight: 'normal' }}>의</span>
                     </Typography>
                     <Typography variant="body1" fontWeight={600} align="center">
@@ -106,7 +95,7 @@ export function MeetingResult() {
           <Button
             color="secondary"
             onClick={() => {
-              meeting?.id && navigate(`/meetings/${meeting?.id}`);
+              data.meeting?.id && navigate(`/meetings/${data.meeting?.id}`);
             }}
           >
             상세보기
