@@ -1,4 +1,5 @@
-import { Modal, styled } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import { styled } from '@mui/material/styles';
 import { PropsWithChildren } from 'react';
 
 export const Container = styled('div')({

@@ -1,4 +1,6 @@
-import { Button, InputLabel, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 
 import { CenterContentModal } from '../../components/CenterContentModal';

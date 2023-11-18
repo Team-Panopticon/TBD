@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 import { Chip } from '../Chip/Chip';
 export const UserListContainer = styled('div')`

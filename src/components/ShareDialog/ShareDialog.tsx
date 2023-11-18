@@ -1,6 +1,10 @@
 import CloseIcon from '@mui/icons-material/Close';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { Drawer, IconButton, Snackbar, TextField, Typography } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Snackbar from '@mui/material/Snackbar';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { useRef, useState } from 'react';
 
 import { MealType, MeetingStatus } from '../../constants/meeting';

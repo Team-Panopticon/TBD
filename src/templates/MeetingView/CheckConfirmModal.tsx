@@ -1,5 +1,7 @@
-import { Close as CloseIcon } from '@mui/icons-material';
-import { Box, Button, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/ButtonBase';
+import Typography from '@mui/material/Typography';
 
 import { VotingSlot } from '../../apis/votes';
 import { CenterContentModal } from '../../components/CenterContentModal';

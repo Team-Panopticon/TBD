@@ -1,4 +1,6 @@
-import { Button, IconButton, styled } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 
 export const UserListWrapper = styled('div')({
   '.user-list': {

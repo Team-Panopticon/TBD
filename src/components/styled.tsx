@@ -1,4 +1,6 @@
-import { Box, ButtonGroup, styled } from '@mui/material';
+import Box from '@mui/material/Box';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import { styled } from '@mui/material/styles';
 
 export const FullHeightButtonGroup = styled(ButtonGroup)`
   height: 100%;

@@ -1,4 +1,4 @@
-import { ToggleButton } from '@mui/material';
+import ToggleButton from '@mui/material/ToggleButton';
 
 import { MeetingType } from '../../constants/meeting';
 import { CustomTogglebuttonGroup, getCustomButtonStyle } from './styled';
