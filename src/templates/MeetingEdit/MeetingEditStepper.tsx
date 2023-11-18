@@ -1,4 +1,4 @@
-import { InputLabel } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
 
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
 import { CreateMeetingState } from '../../stores/createMeeting';

@@ -1,5 +1,5 @@
-import { Close as CloseIcon } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 

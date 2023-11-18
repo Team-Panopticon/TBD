@@ -77,7 +77,7 @@ export function SelectDates(props: Props) {
           value={dates}
           className="date-picker"
           // eslint-disable-next-line @typescript-eslint/no-empty-function, prettier/prettier
-          onChange={() => { }}
+          onChange={() => {}}
           renderDay={renderWeekPickerDay}
           renderInput={(params) => <TextField {...params} />}
           disableHighlightToday={true}

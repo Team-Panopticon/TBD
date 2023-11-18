@@ -1,4 +1,4 @@
-import { styled } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 export const ChipContainer = styled('div')<{ checked?: boolean; focus?: boolean }>((props) => ({
   display: 'inline-flex',

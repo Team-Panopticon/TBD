@@ -1,8 +1,9 @@
-import { EditCalendar } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
+import EditCalendar from '@mui/icons-material/EditCalendar';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import { Drawer, Typography } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
+import Typography from '@mui/material/Typography';
 import React, { useEffect, useState } from 'react';
 
 import { Flex } from '../../../components/styled';

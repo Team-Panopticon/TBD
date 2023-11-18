@@ -1,11 +1,8 @@
-import {
-  Button,
-  keyframes,
-  LinearProgress,
-  styled,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import LinearProgress from '@mui/material/LinearProgress';
+import { keyframes, styled } from '@mui/material/styles';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Typography from '@mui/material/Typography';
 
 import { PRIMARY_COLOR, SECONDARY_COLOR } from '../../theme';
 
