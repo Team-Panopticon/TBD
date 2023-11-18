@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -28,6 +28,15 @@ export function MeetingModify() {
   const [meeting, setMeeting] = useState<Meeting>(initialState);
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const { getMeetingEditSteps } = useMeetingEdit();
+  const navigate = useNavigate();
+  const { mutate } = useMutation({
+    mutationFn: (params: Parameters<typeof updateMeeting>[0]) => updateMeeting(params),
+    onSuccess: (res) => navigate(`/meetings/${res.id}`),
+    onError: (e) => {
+      const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
+      alert(errMessage);
+    },
+  });
 
   const {
     data: initialMeeting,
@@ -48,28 +57,11 @@ export function MeetingModify() {
     return getMeetingEditSteps('modify');
   }, [getMeetingEditSteps]);
 
-  const navigate = useNavigate();
-
   if (!meeting || isLoading || isError) {
     return null;
   }
 
-  const handleMeetingEditComplete = () => {
-    modifyMeetingAndNavigate();
-  };
-
-  const modifyMeetingAndNavigate = async () => {
-    try {
-      const response = await updateMeeting(meeting);
-      navigate(`/meetings/${response.id}`);
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        alert(e.message);
-      } else {
-        alert('알 수 없는 에러가 발생했습니다');
-      }
-    }
-  };
+  const handleMeetingEditComplete = () => mutate(meeting);
 
   return (
     <Page>
