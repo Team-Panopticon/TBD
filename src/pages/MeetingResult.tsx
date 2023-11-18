@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
@@ -22,21 +23,23 @@ export function MeetingResult() {
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
+  const { data: meetingData } = useQuery({
+    queryKey: ['meeting', meetingId],
+    queryFn: () => getMeeting(meetingId || ''),
+  });
+  const { data: votings } = useQuery({
+    queryKey: ['votings', meetingId],
+    queryFn: () => getVotings(meetingId || ''),
+  });
 
   useEffect(() => {
-    (async () => {
-      if (!meetingId) {
-        return;
-      }
-
-      const [meetingData, data] = await Promise.all([getMeeting(meetingId), getVotings(meetingId)]);
-
-      setVotings(data);
+    if (meetingData && votings) {
+      setVotings(votings);
       setMeeting(meetingData);
       setTarget(meetingData);
-    })();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setVotings, meetingId]);
+  }, [meetingData, meetingId, setVotings, votings]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
 
