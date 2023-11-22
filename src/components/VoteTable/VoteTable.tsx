@@ -10,10 +10,10 @@ import {
   ContentWrapper,
   DateContentBox,
   Divider,
-  Header,
-  HeaderBox,
   OpacityProgress,
   VoteTableContainer,
+  VoteTableHeader,
+  VoteTableHeaderBox,
   Wrapper,
 } from './styled';
 
@@ -52,13 +52,13 @@ export const VoteTable: React.FC<Props> = (props) => {
 
   return (
     <VoteTableContainer className={className} style={style}>
-      <Header>
-        <HeaderBox>투표 가능 날짜</HeaderBox>
+      <VoteTableHeader>
+        <VoteTableHeaderBox>투표 가능 날짜</VoteTableHeaderBox>
         <Divider />
         {headers.map((header, idx) => (
-          <HeaderBox key={`vote-table-header-${idx}`}>{header}</HeaderBox>
+          <VoteTableHeaderBox key={`vote-table-header-${idx}`}>{header}</VoteTableHeaderBox>
         ))}
-      </Header>
+      </VoteTableHeader>
       <ContentWrapper>
         {sortedData.map((item, idx) => (
           <VoteTableContent
