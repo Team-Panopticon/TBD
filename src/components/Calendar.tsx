@@ -118,7 +118,11 @@ export const Calender = ({ date, dayOnClick, dates }: ICaledarProps) => {
   return (
     <CalenderWrapper>
       <CalanderHeader>
-        <IconButton size="small" onClick={handleClickPrevMonth}>
+        <IconButton
+          size="small"
+          onClick={handleClickPrevMonth}
+          disabled={dayjs().isSame(currentDate, 'month')}
+        >
           <ArrowBackIos fontSize="small" />
         </IconButton>
         <ThisMonth>{dayjs(currentDate).format('YYYY년 MM월')}</ThisMonth>
