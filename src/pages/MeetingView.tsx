@@ -191,7 +191,7 @@ export function MeetingView() {
               openShare();
             }}
           >
-            공유하기
+            공유
           </Button>
         </FullHeightButtonGroup>
       </Footer>
