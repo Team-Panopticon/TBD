@@ -17,6 +17,7 @@ import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
 import { MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingView } from '../hooks/useMeetingView';
 import { isSameSlot } from '../hooks/useMeetingVote';
+import { useProgress } from '../hooks/useProgress';
 import { votingsState } from '../stores/voting';
 import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
 import { VoteTableWrapper } from '../templates/MeetingView/styled';
@@ -51,9 +52,11 @@ export function MeetingConfirm() {
 
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const { show, hide } = useProgress();
   const queryClient = useQueryClient();
   const comfirmMeetingMutation = useMutation<void, Error, { meetingId: string; slot: VotingSlot }>({
     mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
+    onMutate: () => show(),
     onSuccess: () => {
       queryClient.setQueryData(['meeting', meetingId], {
         ...meeting,
@@ -67,6 +70,7 @@ export function MeetingConfirm() {
       alert(errorMessage);
       setShowConfirmModal(false);
     },
+    onSettled: () => hide(),
   });
 
   // TODO: Recoil로 비동기 데이터 가져오는 것 대체
@@ -99,6 +103,7 @@ export function MeetingConfirm() {
       return;
     }
 
+    show();
     comfirmMeetingMutation.mutate({ meetingId, slot: selectedSlot });
   };
 

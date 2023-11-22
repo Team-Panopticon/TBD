@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -19,6 +20,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
 import { useMeetingData } from '../hooks/useMeetingData';
 import { useMeetingView } from '../hooks/useMeetingView';
+import { useProgress } from '../hooks/useProgress';
 import useShare from '../hooks/useShare';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../stores/adminToken';
@@ -45,12 +47,24 @@ export function MeetingView() {
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
   const { openShare, setTarget } = useShare();
+  const { show, hide } = useProgress();
 
   const { data } = useMeetingData(meetingId);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
     data.meeting,
   );
+
+  const { mutate } = useMutation({
+    mutationFn: async (params: { meetingId: string; destination: string }) =>
+      issuePublicMeetingAdminToken(params.meetingId),
+    onMutate: () => show(),
+    onSuccess: (token, { destination }) => {
+      setAdminToken(token);
+      navigate(destination);
+    },
+    onSettled: () => hide(),
+  });
 
   useEffect(() => {
     if (data.meeting && data.votings) {
@@ -67,15 +81,13 @@ export function MeetingView() {
     }
 
     if (data.meeting?.adminAccess === 'public') {
-      issuePublicMeetingAdminToken(meetingId).then((token) => {
-        setAdminToken(token);
-        navigate(destination);
-      });
+      mutate({ meetingId, destination });
       return;
     }
 
     // Private meeting AND Not yet logged in as admin
     const isInputPasswordResolved = await openInputPasswordModal();
+
     if (isInputPasswordResolved) {
       navigate(destination);
     }

@@ -16,6 +16,7 @@ import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
 import { useMeetingData } from '../hooks/useMeetingData';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
+import { useProgress } from '../hooks/useProgress';
 import { currentUserStateFamily } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
@@ -49,9 +50,11 @@ export function MeetingVote() {
   const { data } = useMeetingData(meetingId);
 
   const navigate = useNavigate();
+  const { show, hide } = useProgress();
 
   const { mutate: updateVotingMutate } = useMutation({
     mutationFn: updateVoting,
+    onMutate: () => show(),
     onSuccess: () => {
       setShowUsernameModal(false);
       setShowVoteSuccessPopup(true);
@@ -65,10 +68,12 @@ export function MeetingVote() {
         alert(error);
       }
     },
+    onSettled: () => hide(),
   });
 
   const { mutate: createVotingMutate } = useMutation({
     mutationFn: createVoting,
+    onMutate: () => show(),
     onSuccess: (res) => {
       setCurrentUser({
         id: res.id,
@@ -86,6 +91,7 @@ export function MeetingVote() {
         alert(error);
       }
     },
+    onSettled: () => hide(),
   });
 
   const {

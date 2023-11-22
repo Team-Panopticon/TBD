@@ -8,6 +8,7 @@ import { Meeting } from '../apis/types';
 import { Page } from '../components/pageLayout';
 import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../constants/meeting';
 import useMeetingEdit from '../hooks/useMeetingEdit';
+import { useProgress } from '../hooks/useProgress';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 interface MeetingViewPathParams {
@@ -29,13 +30,16 @@ export function MeetingModify() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const { getMeetingEditSteps } = useMeetingEdit();
   const navigate = useNavigate();
+  const { show, hide } = useProgress();
   const { mutate } = useMutation({
+    onMutate: () => show(),
     mutationFn: (params: Parameters<typeof updateMeeting>[0]) => updateMeeting(params),
     onSuccess: (res) => navigate(`/meetings/${res.id}`),
     onError: (e) => {
       const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
       alert(errMessage);
     },
+    onSettled: () => hide(),
   });
 
   const {
