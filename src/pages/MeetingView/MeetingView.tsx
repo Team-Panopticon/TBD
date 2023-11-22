@@ -13,6 +13,7 @@ import { issuePublicMeetingAdminToken } from '../../apis/meetings';
 import { Voting } from '../../apis/votes';
 import { ResultPageButton } from '../../components/buttons/ResultPageButton';
 import { VotePageButton } from '../../components/buttons/VotePageButton';
+import { Loading } from '../../components/Loading';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
@@ -49,7 +50,7 @@ function MeetingView() {
   const { openShare, setTarget } = useShare();
   const { show, hide } = useProgress();
 
-  const { data } = useMeetingData(meetingId);
+  const { data, isLoading } = useMeetingData(meetingId);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
     data.meeting,
@@ -118,6 +119,10 @@ function MeetingView() {
     dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: false }));
     setShowPasswordModal(false);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!data.meeting || !voteTableDataList) {
     return null;

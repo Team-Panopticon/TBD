@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { getMeeting, updateMeeting } from '../../apis/meetings';
 import { Meeting } from '../../apis/types';
+import { Loading } from '../../components/Loading';
 import { Page } from '../../components/pageLayout';
 import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../../constants/meeting';
 import useMeetingEdit from '../../hooks/useMeetingEdit';
@@ -61,7 +62,11 @@ function MeetingModify() {
     return getMeetingEditSteps('modify');
   }, [getMeetingEditSteps]);
 
-  if (!meeting || isLoading || isError) {
+  if (!meeting || isLoading) {
+    return <Loading />;
+  }
+
+  if (isError) {
     return null;
   }
 

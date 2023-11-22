@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 
 import { Voting } from '../../apis/votes';
 import { HifiveIcon } from '../../components/IconComponent/HiFive';
+import { Loading } from '../../components/Loading';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
@@ -22,6 +23,7 @@ function MeetingResult() {
   const { openShare, setTarget } = useShare();
   const {
     data: { meeting, votings },
+    isLoading,
   } = useMeetingData(meetingId || '');
 
   useEffect(() => {
@@ -36,6 +38,10 @@ function MeetingResult() {
 
   const meetingDate = meeting?.confirmedDateType?.date;
   const meetingMeal = meeting?.confirmedDateType?.meal;
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Page>

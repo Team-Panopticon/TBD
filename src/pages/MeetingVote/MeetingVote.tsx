@@ -9,6 +9,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState 
 
 import { createVoting, updateVoting } from '../../apis/votes';
 import WritingHands from '../../assets/writing.svg';
+import { Loading } from '../../components/Loading';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList, UserListData } from '../../components/UserList/UserList';
@@ -47,7 +48,7 @@ function MeetingVote() {
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
-  const { data } = useMeetingData(meetingId);
+  const { data, isLoading } = useMeetingData(meetingId);
 
   const navigate = useNavigate();
   const { show, hide } = useProgress();
@@ -175,6 +176,10 @@ function MeetingVote() {
       },
     });
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!data.meeting || !voteTableDataList) {
     return null;
