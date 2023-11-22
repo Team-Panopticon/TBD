@@ -1,6 +1,8 @@
-import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { IconButton, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import ArrowBackIos from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos';
+import IconButton from '@mui/material/IconButton';
+import styled from '@mui/material/styles/styled';
+import Typography from '@mui/material/Typography';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
