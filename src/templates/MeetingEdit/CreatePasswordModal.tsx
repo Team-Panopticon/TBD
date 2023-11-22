@@ -55,10 +55,10 @@ export function CreatePasswordModal({
           aria-label="Disabled elevation buttons"
         >
           <Button color="secondary" onClick={onCancel}>
-            취소하기
+            취소
           </Button>
           <Button onClick={onConfirm} disabled={!isPasswordValid}>
-            설정하기
+            설정
           </Button>
         </FullHeightButtonGroup>
       </div>

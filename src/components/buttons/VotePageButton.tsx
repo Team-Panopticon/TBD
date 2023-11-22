@@ -16,7 +16,7 @@ export function VotePageButton({ meetingId, isLoggedIn }: VotePageButtonProps) {
         navigate(`/meetings/${meetingId}/vote`);
       }}
     >
-      {isLoggedIn ? '다시 투표하러 가기' : '투표하러 가기'}
+      {isLoggedIn ? '다시 투표' : '투표'}
     </Button>
   );
 }

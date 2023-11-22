@@ -235,14 +235,14 @@ export function MeetingVote() {
               navigate(`/meetings/${meetingId}`);
             }}
           >
-            다음에하기
+            다음에
           </Button>
           <Button
             onClick={() => {
               handleClickVote();
             }}
           >
-            투표하기
+            투표
           </Button>
         </FullHeightButtonGroup>
       </Footer>
