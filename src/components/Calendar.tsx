@@ -57,7 +57,10 @@ const RenderCells = ({
       days.push(
         <CalanderDay key={`${date.toString()},${i}`}>
           <CalanderDayBtn
-            disabled={targetDate.get('month') !== dayjs(memoDate).get('month')}
+            disabled={
+              targetDate.get('month') !== dayjs(memoDate).get('month') ||
+              memoDate.isBefore(dayjs().add(-1, 'day'))
+            }
             today={dayjs().isSame(memoDate, 'day')}
             onClick={() => {
               dayOnClick(memoDate, isSelected);
