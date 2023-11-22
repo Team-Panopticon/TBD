@@ -1,9 +1,10 @@
 import { AxiosError } from 'axios';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { createMeeting } from '../apis/meetings';
+import { warmUpInstance } from '../apis/utils';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
 import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
@@ -27,6 +28,10 @@ export function MeetingCreate() {
   }, [getMeetingEditSteps]);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    warmUpInstance();
+  }, []);
 
   const handleMeetingEditComplete = () => {
     setShowPasswordModal(true);
