@@ -212,7 +212,12 @@ export function MeetingVote() {
         </HeaderContainer>
       </Header>
       <Contents>
-        <UserList className="user-list" users={checkedUserList} onClick={handleClickUser}>
+        <UserList
+          className="user-list"
+          users={checkedUserList}
+          onClick={handleClickUser}
+          selectedTooltipText="새로운 유저로 투표하려면 다시 클릭해주세요"
+        >
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>
         <VoteTableWrapper>
