@@ -11,14 +11,14 @@ export const Page = styled('div')`
   overflow: auto;
 `;
 
-export const Header = styled('header')`
+const HeaderWrapper = styled('header')`
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
   flex: 0;
 `;
 
-export const HeaderContainer = styled('div')({
+const HeaderBox = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   height: '100%',
@@ -36,6 +36,14 @@ export const HeaderContainer = styled('div')({
     marginTop: '4px',
   },
 });
+
+export const Header = ({ children }: { children: ReactNode }) => {
+  return (
+    <HeaderWrapper>
+      <HeaderBox>{children}</HeaderBox>
+    </HeaderWrapper>
+  );
+};
 
 const ContentsWrapper = styled(Box)`
   padding: 16px 32px;

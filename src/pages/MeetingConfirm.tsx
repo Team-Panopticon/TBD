@@ -10,7 +10,7 @@ import { useSetRecoilState } from 'recoil';
 
 import { confirmMeeting, getMeeting } from '../apis/meetings';
 import { getVotings, Voting, VotingSlot } from '../apis/votes';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { Contents, Footer, Header, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
@@ -106,29 +106,27 @@ export function MeetingConfirm() {
   return (
     <Page>
       <Header>
-        <HeaderContainer>
-          <FlexVertical flex={1} alignItems={'center'} gap={1}>
-            <FlexVertical flex={1} gap={1} width={'100%'}>
-              <Box
-                display={'flex'}
-                flexDirection={'row'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                gap={1}
-              >
-                <Typography variant="h5" fontWeight={700}>
-                  {meeting.name}
-                </Typography>
-              </Box>
-              <FlexVertical alignItems={'center'}>
-                <EventAvailableIcon sx={{ fontSize: 110 }} />
-              </FlexVertical>
-              <Typography variant="h6" fontWeight={400} align="center">
-                모임시간을 골라서 확정해주세요
+        <FlexVertical flex={1} alignItems={'center'} gap={1}>
+          <FlexVertical flex={1} gap={1} width={'100%'}>
+            <Box
+              display={'flex'}
+              flexDirection={'row'}
+              justifyContent={'center'}
+              alignItems={'center'}
+              gap={1}
+            >
+              <Typography variant="h5" fontWeight={700}>
+                {meeting.name}
               </Typography>
+            </Box>
+            <FlexVertical alignItems={'center'}>
+              <EventAvailableIcon sx={{ fontSize: 110 }} />
             </FlexVertical>
+            <Typography variant="h6" fontWeight={400} align="center">
+              모임시간을 골라서 확정해주세요
+            </Typography>
           </FlexVertical>
-        </HeaderContainer>
+        </FlexVertical>
       </Header>
       <Contents>
         <UserList users={userList} isSticky>

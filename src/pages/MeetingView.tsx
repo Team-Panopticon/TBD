@@ -13,7 +13,7 @@ import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { ResultPageButton } from '../components/buttons/ResultPageButton';
 import { VotePageButton } from '../components/buttons/VotePageButton';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { Contents, Footer, Header, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
@@ -123,41 +123,39 @@ export function MeetingView() {
   return (
     <Page>
       <Header>
-        <HeaderContainer>
-          <FlexVertical flex={1} alignItems={'center'} gap={1}>
-            <FlexVertical flex={1} gap={1} width={'100%'}>
-              <Box
-                display={'flex'}
-                flexDirection={'row'}
-                justifyContent={'center'}
-                alignItems={'center'}
-              >
-                <Typography variant="h5" fontWeight={700}>
-                  {meeting.name}
-                </Typography>
-                {meeting.status === MeetingStatus.inProgress && (
-                  <Dropdown
-                    onClickConfirmButton={() =>
-                      handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
-                    }
-                    onClickEditButton={() =>
-                      handleClickSettingsButton(`/meetings/${meetingId}/modify`)
-                    }
-                  />
-                )}
-              </Box>
-              <FlexVertical alignItems={'center'}>
-                <img height={110} src={GreetingHands} alt="" />
-              </FlexVertical>
-              {currentUser ? (
-                <Typography variant="h5" fontWeight={500} align="center">
-                  <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님
-                  안녕하세요
-                </Typography>
-              ) : null}
+        <FlexVertical flex={1} alignItems={'center'} gap={1}>
+          <FlexVertical flex={1} gap={1} width={'100%'}>
+            <Box
+              display={'flex'}
+              flexDirection={'row'}
+              justifyContent={'center'}
+              alignItems={'center'}
+            >
+              <Typography variant="h5" fontWeight={700}>
+                {meeting.name}
+              </Typography>
+              {meeting.status === MeetingStatus.inProgress && (
+                <Dropdown
+                  onClickConfirmButton={() =>
+                    handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
+                  }
+                  onClickEditButton={() =>
+                    handleClickSettingsButton(`/meetings/${meetingId}/modify`)
+                  }
+                />
+              )}
+            </Box>
+            <FlexVertical alignItems={'center'}>
+              <img height={110} src={GreetingHands} alt="" />
             </FlexVertical>
+            {currentUser ? (
+              <Typography variant="h5" fontWeight={500} align="center">
+                <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님
+                안녕하세요
+              </Typography>
+            ) : null}
           </FlexVertical>
-        </HeaderContainer>
+        </FlexVertical>
       </Header>
       <Contents>
         <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>

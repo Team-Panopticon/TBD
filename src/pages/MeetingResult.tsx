@@ -8,7 +8,7 @@ import { getMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { HifiveIcon } from '../components/IconComponent/HiFive';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
+import { Contents, Footer, Header, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { useMeetingResult } from '../hooks/useMeetingResult';
@@ -48,35 +48,33 @@ export function MeetingResult() {
       <Contents>
         <FlexVertical gap={1}>
           <Header>
-            <HeaderContainer>
-              <FlexVertical flex={1} alignItems={'center'} gap={1}>
-                <FlexVertical flex={1} gap={1}>
-                  <Typography variant="h5" fontWeight={700} alignSelf={'center'}>
-                    축하합니다!
-                  </Typography>
-                  <FlexVertical alignItems={'center'}>
-                    <HifiveIcon width={100} height={100}></HifiveIcon>
-                  </FlexVertical>
-                  <Typography variant="h5" fontWeight={300} align="center">
-                    <Typography variant="body1" fontWeight={700} align="center">
-                      {meeting?.name && `${meeting?.name}`}{' '}
-                      <span style={{ fontWeight: 'normal' }}>의</span>
-                    </Typography>
-                    <Typography variant="body1" fontWeight={600} align="center">
-                      날짜가 정해졌어요
-                    </Typography>
-                  </Typography>
+            <FlexVertical flex={1} alignItems={'center'} gap={1}>
+              <FlexVertical flex={1} gap={1}>
+                <Typography variant="h5" fontWeight={700} alignSelf={'center'}>
+                  축하합니다!
+                </Typography>
+                <FlexVertical alignItems={'center'}>
+                  <HifiveIcon width={100} height={100}></HifiveIcon>
                 </FlexVertical>
-                <FlexVertical>
-                  <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
-                    {meetingDate?.format('M/DD')} {getMealLabel(meetingMeal)}
+                <Typography variant="h5" fontWeight={300} align="center">
+                  <Typography variant="body1" fontWeight={700} align="center">
+                    {meeting?.name && `${meeting?.name}`}{' '}
+                    <span style={{ fontWeight: 'normal' }}>의</span>
                   </Typography>
-                  <Typography variant="h5" color={'primary'} align="center">
-                    {`[${meetingDate?.format('dddd') || ''}]`}
+                  <Typography variant="body1" fontWeight={600} align="center">
+                    날짜가 정해졌어요
                   </Typography>
-                </FlexVertical>
+                </Typography>
               </FlexVertical>
-            </HeaderContainer>
+              <FlexVertical>
+                <Typography variant="h2" color={'primary'} fontWeight={500} align="center">
+                  {meetingDate?.format('M/DD')} {getMealLabel(meetingMeal)}
+                </Typography>
+                <Typography variant="h5" color={'primary'} align="center">
+                  {`[${meetingDate?.format('dddd') || ''}]`}
+                </Typography>
+              </FlexVertical>
+            </FlexVertical>
           </Header>
 
           <FlexVertical gap={1}>
