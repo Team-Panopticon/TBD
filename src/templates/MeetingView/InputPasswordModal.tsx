@@ -1,11 +1,13 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
 import { issuePrivateMeetingAdminToken } from '../../apis/meetings';
 import { CenterContentModal } from '../../components/CenterContentModal';
 import { MaskingInput } from '../../components/MaskingInput';
+import { useProgress } from '../../hooks/useProgress';
 import { adminTokenStateFamily } from '../../stores/adminToken';
 import { validatePassword } from '../../stores/createMeeting';
 import { MaskingInputContainer, PasswordInput } from '../MeetingEdit/styled';
@@ -26,6 +28,20 @@ interface Props {
 export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Props) {
   const [password, setPassword] = useState<string>('');
   const setAdminToken = useSetRecoilState(adminTokenStateFamily(meetingId));
+  const { show: showProgress, hide: hideProgress } = useProgress();
+  const { mutate } = useMutation({
+    mutationFn: issuePrivateMeetingAdminToken,
+    onMutate: () => showProgress(),
+    onSuccess: (adminToken) => {
+      setAdminToken(adminToken);
+      onConfirm();
+    },
+    onError: () => {
+      // TODO: password 틀림을 표시 UI 효과
+      setPassword('');
+    },
+    onSettled: () => hideProgress(),
+  });
 
   const handlePasswordChange = (newPassword: string) => {
     if (newPassword.length >= 4) {
@@ -46,21 +62,10 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
   };
 
   useEffect(() => {
-    const issueAdminToken = async () => {
-      try {
-        const adminToken = await issuePrivateMeetingAdminToken(meetingId, password);
-        setAdminToken(adminToken);
-        onConfirm();
-      } catch {
-        // TODO: password 틀림을 표시 UI 효과
-        setPassword('');
-      }
-    };
-
     if (password.length === 4) {
-      issueAdminToken();
+      mutate({ meetingId, password });
     }
-  }, [meetingId, password, onConfirm, setAdminToken]);
+  }, [meetingId, password, mutate]);
 
   return (
     <CenterContentModal open={show} width={320} height={180}>
