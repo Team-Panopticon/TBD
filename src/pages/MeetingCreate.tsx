@@ -8,6 +8,7 @@ import { createMeeting } from '../apis/meetings';
 import { warmUpInstance } from '../apis/utils';
 import { Page } from '../components/pageLayout';
 import useMeetingEdit from '../hooks/useMeetingEdit';
+import { useProgress } from '../hooks/useProgress';
 import { createMeetingState } from '../stores/createMeeting';
 import { CreatePasswordModal } from '../templates/MeetingEdit/CreatePasswordModal';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
@@ -24,13 +25,16 @@ export function MeetingCreate() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const navigate = useNavigate();
+  const { show, hide } = useProgress();
   const { mutate } = useMutation({
     mutationFn: (params: Parameters<typeof createMeeting>[0]) => createMeeting(params),
+    onMutate: () => show(),
     onSuccess: (res) => navigate(`/meetings/${res.id}`),
     onError: (e) => {
       const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
       alert(errMessage);
     },
+    onSettled: () => hide(),
   });
 
   useEffect(() => {
