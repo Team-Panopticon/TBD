@@ -60,17 +60,30 @@ const getChildrenOfType = (children: ReactNode, type: JSX.Element['type']) => {
 };
 const UserListMain: React.FC<Props> = (props) => {
   const { users, style, className, onClick, children, isSticky, selectedTooltipText } = props;
-  const [showSelectedTooltip, setShowSelectedTooltip] = useState(!!selectedTooltipText);
+  const isUserSelected = users.some((user) => user.checked);
+
+  const [tooltipSeen, setTooltipSeen] = useState(false);
+  const [showSelectedTooltip, setShowSelectedTooltip] = useState(false);
+
+  const displaySelectedTooltip = () => {
+    setTooltipSeen(true);
+    setShowSelectedTooltip(true);
+    setTimeout(() => {
+      document.addEventListener(
+        'click',
+        () => {
+          setShowSelectedTooltip(false);
+        },
+        { once: true },
+      );
+    });
+  };
 
   useEffect(() => {
-    document.addEventListener(
-      'click',
-      () => {
-        setShowSelectedTooltip(false);
-      },
-      { once: true },
-    );
-  }, []);
+    if (!tooltipSeen && isUserSelected) {
+      displaySelectedTooltip();
+    }
+  }, [isUserSelected, tooltipSeen]);
 
   const title = getChildrenOfType(children, UserListTitleType);
 
@@ -109,6 +122,9 @@ const UserListMain: React.FC<Props> = (props) => {
               showTooltip={targetUser.checked && showSelectedTooltip}
               tooltipText={selectedTooltipText}
               onClick={(checked: boolean) => {
+                if (checked && !tooltipSeen) {
+                  setShowSelectedTooltip(true);
+                }
                 onClick?.(checked, targetUser);
               }}
             >
