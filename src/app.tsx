@@ -1,19 +1,21 @@
 import { ThemeProvider } from '@mui/material/styles';
 import dayjs from 'dayjs';
+import { Suspense } from 'react';
 import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
 
+import { Loading } from './components/Loading';
 import { Progress } from './components/Progress';
 import { ProtectedAdminRoute } from './components/routes/ProtectedAdminRoute';
 import { RedirectIfConfirmedRoute } from './components/routes/RedirectIfConfirmedRoute';
 import { RedirectIfInProgressRoute } from './components/routes/RedirectIfInProgressRoute';
 import { ShareDialog } from './components/ShareDialog/ShareDialog';
 import { GlobalStyle } from './GlobalStyle';
-import { MeetingConfirm } from './pages/MeetingConfirm';
-import { MeetingCreate } from './pages/MeetingCreate';
-import { MeetingModify } from './pages/MeetingModify';
-import { MeetingResult } from './pages/MeetingResult';
-import { MeetingView } from './pages/MeetingView';
-import { MeetingVote } from './pages/MeetingVote';
+import MeetingConfirm from './pages/MeetingConfirm';
+import MeetingCreate from './pages/MeetingCreate';
+import MeetingModify from './pages/MeetingModify';
+import MeetingResult from './pages/MeetingResult';
+import MeetingView from './pages/MeetingView';
+import MeetingVote from './pages/MeetingVote';
 import { theme } from './theme';
 
 dayjs.locale('ko');
@@ -77,7 +79,9 @@ export function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <RouterProvider router={router} />
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={router} />
+      </Suspense>
       <Progress />
       <ShareDialog />
     </ThemeProvider>

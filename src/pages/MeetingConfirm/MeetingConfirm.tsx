@@ -8,25 +8,25 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
-import { confirmMeeting, getMeeting } from '../apis/meetings';
-import { getVotings, Voting, VotingSlot } from '../apis/votes';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
-import { UserList } from '../components/UserList/UserList';
-import { VoteTable, VoteTableVoting } from '../components/VoteTable/VoteTable';
-import { MeetingStatus, MeetingType } from '../constants/meeting';
-import { useMeetingView } from '../hooks/useMeetingView';
-import { isSameSlot } from '../hooks/useMeetingVote';
-import { useProgress } from '../hooks/useProgress';
-import { votingsState } from '../stores/voting';
-import { CheckConfirmModal } from '../templates/MeetingView/CheckConfirmModal';
-import { VoteTableWrapper } from '../templates/MeetingView/styled';
+import { confirmMeeting, getMeeting } from '../../apis/meetings';
+import { getVotings, Voting, VotingSlot } from '../../apis/votes';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { UserList } from '../../components/UserList/UserList';
+import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
+import { MeetingStatus, MeetingType } from '../../constants/meeting';
+import { useMeetingView } from '../../hooks/useMeetingView';
+import { isSameSlot } from '../../hooks/useMeetingVote';
+import { useProgress } from '../../hooks/useProgress';
+import { votingsState } from '../../stores/voting';
+import { CheckConfirmModal } from '../../templates/MeetingView/CheckConfirmModal';
+import { VoteTableWrapper } from '../../templates/MeetingView/styled';
 
 interface MeetingConfirmPathParams {
   meetingId: string;
 }
 
-export function MeetingConfirm() {
+function MeetingConfirm() {
   const navigate = useNavigate();
 
   const { meetingId } = useParams<keyof MeetingConfirmPathParams>() as MeetingConfirmPathParams;
@@ -183,3 +183,5 @@ export function MeetingConfirm() {
     </Page>
   );
 }
+
+export default MeetingConfirm;

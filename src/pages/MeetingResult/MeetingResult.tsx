@@ -4,18 +4,18 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { Voting } from '../apis/votes';
-import { HifiveIcon } from '../components/IconComponent/HiFive';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
-import { UserList } from '../components/UserList/UserList';
-import { useMeetingData } from '../hooks/useMeetingData';
-import { useMeetingResult } from '../hooks/useMeetingResult';
-import useShare from '../hooks/useShare';
-import { votingsState } from '../stores/voting';
-import { getMealLabel } from '../utils/getMealLabel';
+import { Voting } from '../../apis/votes';
+import { HifiveIcon } from '../../components/IconComponent/HiFive';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { UserList } from '../../components/UserList/UserList';
+import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeetingResult } from '../../hooks/useMeetingResult';
+import useShare from '../../hooks/useShare';
+import { votingsState } from '../../stores/voting';
+import { getMealLabel } from '../../utils/getMealLabel';
 
-export function MeetingResult() {
+function MeetingResult() {
   const navigate = useNavigate();
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
@@ -114,3 +114,5 @@ export function MeetingResult() {
     </Page>
   );
 }
+
+export default MeetingResult;

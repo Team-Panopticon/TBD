@@ -3,13 +3,13 @@ import { AxiosError } from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { getMeeting, updateMeeting } from '../apis/meetings';
-import { Meeting } from '../apis/types';
-import { Page } from '../components/pageLayout';
-import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../constants/meeting';
-import useMeetingEdit from '../hooks/useMeetingEdit';
-import { useProgress } from '../hooks/useProgress';
-import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
+import { getMeeting, updateMeeting } from '../../apis/meetings';
+import { Meeting } from '../../apis/types';
+import { Page } from '../../components/pageLayout';
+import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../../constants/meeting';
+import useMeetingEdit from '../../hooks/useMeetingEdit';
+import { useProgress } from '../../hooks/useProgress';
+import { MeetingEditTemplate } from '../../templates/MeetingEdit/MeetingEditTemplate';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -25,7 +25,7 @@ export const initialState: Meeting = {
   password: undefined,
 };
 
-export function MeetingModify() {
+function MeetingModify() {
   const [meeting, setMeeting] = useState<Meeting>(initialState);
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const { getMeetingEditSteps } = useMeetingEdit();
@@ -80,3 +80,5 @@ export function MeetingModify() {
     </Page>
   );
 }
+
+export default MeetingModify;
