@@ -43,6 +43,10 @@ function MeetingResult() {
     return <Loading />;
   }
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <Page>
       <Contents>
