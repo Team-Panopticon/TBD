@@ -20,20 +20,22 @@ export function MeetingResult() {
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
-  const { data } = useMeetingData(meetingId || '');
+  const {
+    data: { meeting, votings },
+  } = useMeetingData(meetingId || '');
 
   useEffect(() => {
-    if (data.meeting && data.votings) {
-      setVotings(data.votings);
-      setTarget(data.meeting);
+    if (meeting && votings) {
+      setVotings(votings);
+      setTarget(meeting);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data.meeting, data.votings, meetingId, setVotings]);
+  }, [meeting, votings, meetingId, setVotings]);
 
-  const { confirmedUserList, missedUserList } = useMeetingResult(data.meeting);
+  const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
 
-  const meetingDate = data.meeting?.confirmedDateType?.date;
-  const meetingMeal = data.meeting?.confirmedDateType?.meal;
+  const meetingDate = meeting?.confirmedDateType?.date;
+  const meetingMeal = meeting?.confirmedDateType?.meal;
 
   return (
     <Page>
@@ -51,7 +53,7 @@ export function MeetingResult() {
                   </FlexVertical>
                   <Typography variant="h5" fontWeight={300} align="center">
                     <Typography variant="body1" fontWeight={700} align="center">
-                      {data.meeting?.name && `${data.meeting?.name}`}{' '}
+                      {meeting?.name && `${meeting?.name}`}{' '}
                       <span style={{ fontWeight: 'normal' }}>의</span>
                     </Typography>
                     <Typography variant="body1" fontWeight={600} align="center">
@@ -95,7 +97,7 @@ export function MeetingResult() {
           <Button
             color="secondary"
             onClick={() => {
-              data.meeting?.id && navigate(`/meetings/${data.meeting?.id}`);
+              meeting?.id && navigate(`/meetings/${meeting?.id}`);
             }}
           >
             상세보기

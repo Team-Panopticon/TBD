@@ -73,7 +73,6 @@ export function MeetingConfirm() {
     onSettled: () => hide(),
   });
 
-  // TODO: Recoil로 비동기 데이터 가져오는 것 대체
   useEffect(() => {
     if (votings) {
       setVotings(votings);
