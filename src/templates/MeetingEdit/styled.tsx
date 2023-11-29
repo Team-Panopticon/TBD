@@ -60,7 +60,7 @@ export const StepBoxContainer = styled('div')({
 });
 
 export const PasswordInput = styled('div')({
-  padding: '25px 35px',
+  padding: '25px 35px 0',
 
   display: 'flex',
   flexDirection: 'column',

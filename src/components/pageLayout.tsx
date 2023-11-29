@@ -75,6 +75,7 @@ export const Footer = styled('footer')({
   position: 'fixed',
   bottom: 0,
   width: '100%',
-  height: '56px',
+  height: '64px',
   flexShrink: 0,
+  padding: '8px 32px',
 });

@@ -61,7 +61,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
           <FullHeightButtonGroup
             fullWidth
             variant="contained"
-            style={{ height: 45, position: 'absolute', bottom: 0 }}
+            style={{ height: 52, position: 'absolute', bottom: 0, padding: '8px 12px' }}
           >
             <Button color="secondary" onClick={onCancel}>
               다음에

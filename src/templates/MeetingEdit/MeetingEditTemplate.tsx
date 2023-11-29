@@ -104,7 +104,7 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
         >
           {pageType === 'modify' && (
             <Button onClick={onClickBack} color="secondary">
-              다음에하기
+              다음에
             </Button>
           )}
           {currentStep < meetingEditSteps.length - 1 ? (
