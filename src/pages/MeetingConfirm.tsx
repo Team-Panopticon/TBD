@@ -154,7 +154,7 @@ export function MeetingConfirm() {
               navigate(`/meetings/${meetingId}`);
             }}
           >
-            취소하기
+            취소
           </Button>
           <Button
             color="primary"
@@ -163,7 +163,7 @@ export function MeetingConfirm() {
               setShowConfirmModal(true);
             }}
           >
-            모임시간 확정
+            모임 확정
           </Button>
         </FullHeightButtonGroup>
       </Footer>
