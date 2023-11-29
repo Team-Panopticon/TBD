@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import { UIEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -12,6 +12,7 @@ import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { getVotings, Voting } from '../apis/votes';
 import { ResultPageButton } from '../components/buttons/ResultPageButton';
+import { ScrollDownFloatingButton } from '../components/buttons/ScrollDownFloatingButton';
 import { VotePageButton } from '../components/buttons/VotePageButton';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
@@ -38,12 +39,14 @@ export function MeetingView() {
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
+  const pageElementRef = useRef<HTMLDivElement>(null);
 
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
   const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
+  const [hasMoreBottomScroll, setHasMoreBottomScroll] = useState<boolean>(false);
 
   const { openShare, setTarget } = useShare();
 
@@ -116,12 +119,31 @@ export function MeetingView() {
     setShowPasswordModal(false);
   };
 
+  const handlePageScroll = (event: UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+  };
+
+  const handleScollDownButtonClick = () => {
+    if (!pageElementRef.current) {
+      return;
+    }
+
+    const viewportHeight = window.innerHeight;
+    const scrollAmount = viewportHeight * 0.5;
+
+    pageElementRef.current.scrollTo({
+      top: pageElementRef.current.scrollTop + scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
   if (!meeting || !voteTableDataList) {
     return null;
   }
 
   return (
-    <Page>
+    <Page onScroll={handlePageScroll} ref={pageElementRef}>
       <Header>
         <HeaderContainer>
           <FlexVertical flex={1} alignItems={'center'} gap={1}>
@@ -221,6 +243,7 @@ export function MeetingView() {
           </IconButton>
         }
       />
+      <ScrollDownFloatingButton onClick={handleScollDownButtonClick} show={hasMoreBottomScroll} />
     </Page>
   );
 }
