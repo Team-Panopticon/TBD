@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { UIEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
@@ -10,6 +10,7 @@ import { getMeeting } from '../apis/meetings';
 import { Meeting } from '../apis/types';
 import { createVoting, getVotings, updateVoting } from '../apis/votes';
 import WritingHands from '../assets/writing.svg';
+import { ScrollDownFloatingButton } from '../components/buttons/ScrollDownFloatingButton';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList, UserListData } from '../components/UserList/UserList';
@@ -30,6 +31,7 @@ interface MeetingVoteRouteParams {
 export function MeetingVote() {
   const [searchParams] = useSearchParams();
   const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
+  const pageElementRef = useRef<HTMLDivElement>(null);
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
   const resetCurrentUser = useResetRecoilState(currentUserStateFamily(meetingId));
@@ -46,6 +48,7 @@ export function MeetingVote() {
   }));
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
+  const [hasMoreBottomScroll, setHasMoreBottomScroll] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -166,12 +169,31 @@ export function MeetingVote() {
     }
   };
 
+  const handlePageScroll = (event: UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+  };
+
+  const handleScollDownButtonClick = () => {
+    if (!pageElementRef.current) {
+      return;
+    }
+
+    const viewportHeight = window.innerHeight;
+    const scrollAmount = viewportHeight * 0.5;
+
+    pageElementRef.current.scrollTo({
+      top: pageElementRef.current.scrollTop + scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
   if (!meeting || !voteTableDataList) {
     return null;
   }
 
   return (
-    <Page>
+    <Page onScroll={handlePageScroll} ref={pageElementRef}>
       <Header>
         <HeaderContainer>
           <FlexVertical flex={1} alignItems={'center'} gap={1}>
@@ -259,6 +281,7 @@ export function MeetingVote() {
         onConfirm={handleUsernameConfirm}
         onCancel={() => setShowUsernameModal(false)}
       />
+      <ScrollDownFloatingButton onClick={handleScollDownButtonClick} show={hasMoreBottomScroll} />
     </Page>
   );
 }
