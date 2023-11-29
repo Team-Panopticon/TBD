@@ -4,14 +4,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { createMeeting } from '../apis/meetings';
-import { warmUpInstance } from '../apis/utils';
-import { Page } from '../components/pageLayout';
-import useMeetingEdit from '../hooks/useMeetingEdit';
-import { useProgress } from '../hooks/useProgress';
-import { createMeetingState } from '../stores/createMeeting';
-import { CreatePasswordModal } from '../templates/MeetingEdit/CreatePasswordModal';
-import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
+import { createMeeting } from '../../apis/meetings';
+import { warmUpInstance } from '../../apis/utils';
+import { Page } from '../../components/pageLayout';
+import useMeetingEdit from '../../hooks/useMeetingEdit';
+import { useProgress } from '../../hooks/useProgress';
+import { createMeetingState } from '../../stores/createMeeting';
+import { CreatePasswordModal } from '../../templates/MeetingEdit/CreatePasswordModal';
+import { MeetingEditTemplate } from '../../templates/MeetingEdit/MeetingEditTemplate';
 
 /**
  * 모임생성 최상위 페이지
@@ -19,7 +19,7 @@ import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplat
  * - 모임생성 API 호출
  * - 모임의 수정과 겹치는 공통 로직은 MeetingEditTemplate에서 처리
  */
-export function MeetingCreate() {
+function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -101,3 +101,5 @@ export function MeetingCreate() {
     </Page>
   );
 }
+
+export default MeetingCreate;

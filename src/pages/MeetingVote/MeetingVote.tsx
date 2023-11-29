@@ -7,28 +7,29 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
-import { createVoting, updateVoting } from '../apis/votes';
-import WritingHands from '../assets/writing.svg';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
-import { UserList, UserListData } from '../components/UserList/UserList';
-import { VoteTable } from '../components/VoteTable/VoteTable';
-import { MeetingType } from '../constants/meeting';
-import { useMeetingData } from '../hooks/useMeetingData';
-import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
-import { useProgress } from '../hooks/useProgress';
-import { currentUserStateFamily } from '../stores/currentUser';
-import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
-import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
-import { userListState, votingsState } from '../stores/voting';
-import { InputUsernameModal } from '../templates/MeetingView/InputUsernameModal';
-import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { createVoting, updateVoting } from '../../apis/votes';
+import WritingHands from '../../assets/writing.svg';
+import { Loading } from '../../components/Loading';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { UserList, UserListData } from '../../components/UserList/UserList';
+import { VoteTable } from '../../components/VoteTable/VoteTable';
+import { MeetingType } from '../../constants/meeting';
+import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeetingViewVoteMode } from '../../hooks/useMeetingVote';
+import { useProgress } from '../../hooks/useProgress';
+import { currentUserStateFamily } from '../../stores/currentUser';
+import { currentUserVotingSlotsState } from '../../stores/currentUserVotingSlots';
+import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
+import { userListState, votingsState } from '../../stores/voting';
+import { InputUsernameModal } from '../../templates/MeetingView/InputUsernameModal';
+import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
 
 interface MeetingVoteRouteParams {
   meetingId: string;
 }
 
-export function MeetingVote() {
+function MeetingVote() {
   const [searchParams] = useSearchParams();
   const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
 
@@ -47,7 +48,7 @@ export function MeetingVote() {
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
-  const { data } = useMeetingData(meetingId);
+  const { data, isLoading } = useMeetingData(meetingId);
 
   const navigate = useNavigate();
   const { show, hide } = useProgress();
@@ -176,6 +177,10 @@ export function MeetingVote() {
     });
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   if (!data.meeting || !voteTableDataList) {
     return null;
   }
@@ -272,3 +277,5 @@ export function MeetingVote() {
     </Page>
   );
 }
+
+export default MeetingVote;

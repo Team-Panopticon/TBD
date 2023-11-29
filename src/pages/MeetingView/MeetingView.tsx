@@ -9,33 +9,34 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { issuePublicMeetingAdminToken } from '../apis/meetings';
-import { Voting } from '../apis/votes';
-import { ResultPageButton } from '../components/buttons/ResultPageButton';
-import { VotePageButton } from '../components/buttons/VotePageButton';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
-import { UserList } from '../components/UserList/UserList';
-import { VoteTable } from '../components/VoteTable/VoteTable';
-import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
-import { useMeetingData } from '../hooks/useMeetingData';
-import { useMeetingView } from '../hooks/useMeetingView';
-import { useProgress } from '../hooks/useProgress';
-import useShare from '../hooks/useShare';
-import GreetingHands from '../images/greeting-hands.png';
-import { adminTokenStateFamily } from '../stores/adminToken';
-import { currentUserStateFamily } from '../stores/currentUser';
-import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
-import { votingsState } from '../stores/voting';
-import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
-import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
-import { PrimaryBold, VoteTableWrapper } from '../templates/MeetingView/styled';
+import { issuePublicMeetingAdminToken } from '../../apis/meetings';
+import { Voting } from '../../apis/votes';
+import { ResultPageButton } from '../../components/buttons/ResultPageButton';
+import { VotePageButton } from '../../components/buttons/VotePageButton';
+import { Loading } from '../../components/Loading';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { UserList } from '../../components/UserList/UserList';
+import { VoteTable } from '../../components/VoteTable/VoteTable';
+import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../../constants/meeting';
+import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeetingView } from '../../hooks/useMeetingView';
+import { useProgress } from '../../hooks/useProgress';
+import useShare from '../../hooks/useShare';
+import GreetingHands from '../../images/greeting-hands.png';
+import { adminTokenStateFamily } from '../../stores/adminToken';
+import { currentUserStateFamily } from '../../stores/currentUser';
+import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
+import { votingsState } from '../../stores/voting';
+import { Dropdown } from '../../templates/MeetingView/Dropdown/Dropdown';
+import { InputPasswordModal } from '../../templates/MeetingView/InputPasswordModal';
+import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
 
 interface MeetingViewPathParams {
   meetingId: string;
 }
 
-export function MeetingView() {
+function MeetingView() {
   const navigate = useNavigate();
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
@@ -49,7 +50,7 @@ export function MeetingView() {
   const { openShare, setTarget } = useShare();
   const { show, hide } = useProgress();
 
-  const { data } = useMeetingData(meetingId);
+  const { data, isLoading } = useMeetingData(meetingId);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
     data.meeting,
@@ -118,6 +119,10 @@ export function MeetingView() {
     dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: false }));
     setShowPasswordModal(false);
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   if (!data.meeting || !voteTableDataList) {
     return null;
@@ -227,3 +232,5 @@ export function MeetingView() {
     </Page>
   );
 }
+
+export default MeetingView;
