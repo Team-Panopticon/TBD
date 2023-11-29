@@ -18,12 +18,18 @@ const HeaderWrapper = styled('header')`
   flex: 0;
 `;
 
+const HeaderContainer = styled('div')`
+  width: '100%';
+  height: '64px';
+  padding: '20px';
+`;
+
 const HeaderBox = styled('div')({
   display: 'flex',
   flexDirection: 'row',
   height: '100%',
   gap: '8px',
-  padding: '32px',
+  padding: '0 32px 32px',
 
   h1: {
     display: 'flex',
@@ -40,6 +46,7 @@ const HeaderBox = styled('div')({
 export const Header = ({ children }: { children: ReactNode }) => {
   return (
     <HeaderWrapper>
+      <HeaderContainer>로고</HeaderContainer>
       <HeaderBox>{children}</HeaderBox>
     </HeaderWrapper>
   );
