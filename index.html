@@ -15,75 +15,10 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>
-      html,
-      body {
-        margin: 0;
-      }
-      .progress_container {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        background-color: rgba(0, 0, 0, 0.5);
-      }
-
-      .progress_span {
-        width: 40px;
-        height: 40px;
-
-        display: inline-block;
-
-        -webkit-animation: rotate 1.4s linear infinite;
-        animation: rotate 1.4s linear infinite;
-      }
-
-      .progress_svg {
-        display: block;
-      }
-
-      .progress_circle {
-        display: block;
-        color: #66d6b4;
-
-        stroke: currentColor;
-        stroke-dasharray: 80px, 200px;
-        stroke-dashoffset: 0;
-        -webkit-animation: dash 1.4s ease-in-out infinite;
-        animation: dash 1.4s ease-in-out infinite;
-      }
-
-      @keyframes rotate {
-        0% {
-          transform: rotate(0deg);
-        }
-
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-
-      @keyframes dash {
-        0% {
-          stroke-dasharray: 1px, 200px;
-          stroke-dashoffset: 0;
-        }
-
-        50% {
-          stroke-dasharray: 100px, 200px;
-          stroke-dashoffset: -15px;
-        }
-
-        100% {
-          stroke-dasharray: 100px, 200px;
-          stroke-dashoffset: -125px;
-        }
-      }
-    </style>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>To Be Determined</title>
     <script
       src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"

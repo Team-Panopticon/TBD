@@ -1,47 +1,47 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
-import { Meeting } from '../apis/types';
-import { getVotings, Voting } from '../apis/votes';
-import { HifiveIcon } from '../components/IconComponent/HiFive';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
-import { UserList } from '../components/UserList/UserList';
-import { useMeetingResult } from '../hooks/useMeetingResult';
-import useShare from '../hooks/useShare';
-import { votingsState } from '../stores/voting';
-import { getMealLabel } from '../utils/getMealLabel';
+import { Voting } from '../../apis/votes';
+import { HifiveIcon } from '../../components/IconComponent/HiFive';
+import { Loading } from '../../components/Loading';
+import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { UserList } from '../../components/UserList/UserList';
+import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeetingResult } from '../../hooks/useMeetingResult';
+import useShare from '../../hooks/useShare';
+import { votingsState } from '../../stores/voting';
+import { getMealLabel } from '../../utils/getMealLabel';
 
-export function MeetingResult() {
+function MeetingResult() {
   const navigate = useNavigate();
-  const [meeting, setMeeting] = useState<Meeting>();
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
+  const {
+    data: { meeting, votings },
+    isLoading,
+  } = useMeetingData(meetingId || '');
 
   useEffect(() => {
-    (async () => {
-      if (!meetingId) {
-        return;
-      }
-
-      const [meetingData, data] = await Promise.all([getMeeting(meetingId), getVotings(meetingId)]);
-
-      setVotings(data);
-      setMeeting(meetingData);
-      setTarget(meetingData);
-    })();
+    if (meeting && votings) {
+      setVotings(votings);
+      setTarget(meeting);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setVotings, meetingId]);
+  }, [meeting, votings, meetingId, setVotings]);
 
   const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
 
   const meetingDate = meeting?.confirmedDateType?.date;
   const meetingMeal = meeting?.confirmedDateType?.meal;
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Page>
@@ -120,3 +120,5 @@ export function MeetingResult() {
     </Page>
   );
 }
+
+export default MeetingResult;

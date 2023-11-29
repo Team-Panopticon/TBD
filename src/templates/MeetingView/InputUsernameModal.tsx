@@ -14,7 +14,7 @@ enum InvalidText {
 interface Props {
   show: boolean;
   usernameList: string[];
-  onConfirm: (username: string) => Promise<void>;
+  onConfirm: (username: string) => void;
   onCancel: () => void;
 }
 

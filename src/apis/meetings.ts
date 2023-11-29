@@ -33,7 +33,13 @@ const meetingResponseToState = (state: MeetingResponse): Meeting => {
   };
 };
 
-export const createMeeting = async (meeting: ValidCreateMeetingState, setPassword: boolean) => {
+export const createMeeting = async ({
+  meeting,
+  setPassword,
+}: {
+  meeting: ValidCreateMeetingState;
+  setPassword: boolean;
+}) => {
   const meetingRequest = meetingStateToRequest(meeting, setPassword);
 
   const response: AxiosResponse<MeetingResponse> = await api.post('/meetings', meetingRequest);
@@ -84,7 +90,13 @@ export const confirmMeeting = async (meetingId: string, slot: VotingSlot) => {
   });
 };
 
-export const issuePrivateMeetingAdminToken = async (meetingId: string, password: string) => {
+export const issuePrivateMeetingAdminToken = async ({
+  meetingId,
+  password,
+}: {
+  meetingId: string;
+  password: string;
+}) => {
   const response: AxiosResponse<{ token: string }> = await api.post(`/meetings/${meetingId}/auth`, {
     password,
   });
