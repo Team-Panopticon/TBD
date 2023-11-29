@@ -4,13 +4,13 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
-import { getMeeting, issuePublicMeetingAdminToken } from '../apis/meetings';
-import { Meeting } from '../apis/types';
-import { getVotings, Voting } from '../apis/votes';
+import { issuePublicMeetingAdminToken } from '../apis/meetings';
+import { Voting } from '../apis/votes';
 import { ResultPageButton } from '../components/buttons/ResultPageButton';
 import { VotePageButton } from '../components/buttons/VotePageButton';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
@@ -18,7 +18,9 @@ import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../constants/meeting';
+import { useMeetingData } from '../hooks/useMeetingData';
 import { useMeetingView } from '../hooks/useMeetingView';
+import { useProgress } from '../hooks/useProgress';
 import useShare from '../hooks/useShare';
 import GreetingHands from '../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../stores/adminToken';
@@ -41,32 +43,35 @@ export function MeetingView() {
 
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
 
-  const [meeting, setMeeting] = useState<Meeting>();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
   const { openShare, setTarget } = useShare();
+  const { show, hide } = useProgress();
 
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingView(meeting);
+  const { data } = useMeetingData(meetingId);
+
+  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
+    data.meeting,
+  );
+
+  const { mutate } = useMutation({
+    mutationFn: async (params: { meetingId: string; destination: string }) =>
+      issuePublicMeetingAdminToken(params.meetingId),
+    onMutate: () => show(),
+    onSuccess: (token, { destination }) => {
+      setAdminToken(token);
+      navigate(destination);
+    },
+    onSettled: () => hide(),
+  });
 
   useEffect(() => {
-    (async () => {
-      if (!meetingId) {
-        return;
-      }
-
-      const [votingsData, meetingData] = await Promise.all([
-        getVotings(meetingId),
-        getMeeting(meetingId),
-      ]);
-
-      setMeeting(meetingData);
-      setVotings(votingsData);
-
-      setTarget(meetingData);
-    })();
-  }, [setVotings, meetingId]);
+    if (data.meeting && data.votings) {
+      setVotings(data.votings);
+      setTarget(data.meeting);
+    }
+  }, [data.meeting, data.votings, setVotings, meetingId]);
 
   const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;
@@ -75,16 +80,14 @@ export function MeetingView() {
       return;
     }
 
-    if (meeting?.adminAccess === 'public') {
-      issuePublicMeetingAdminToken(meetingId).then((token) => {
-        setAdminToken(token);
-        navigate(destination);
-      });
+    if (data.meeting?.adminAccess === 'public') {
+      mutate({ meetingId, destination });
       return;
     }
 
     // Private meeting AND Not yet logged in as admin
     const isInputPasswordResolved = await openInputPasswordModal();
+
     if (isInputPasswordResolved) {
       navigate(destination);
     }
@@ -116,7 +119,7 @@ export function MeetingView() {
     setShowPasswordModal(false);
   };
 
-  if (!meeting || !voteTableDataList) {
+  if (!data.meeting || !voteTableDataList) {
     return null;
   }
 
@@ -133,9 +136,9 @@ export function MeetingView() {
                 alignItems={'center'}
               >
                 <Typography variant="h5" fontWeight={700}>
-                  {meeting.name}
+                  {data.meeting.name}
                 </Typography>
-                {meeting.status === MeetingStatus.inProgress && (
+                {data.meeting.status === MeetingStatus.inProgress && (
                   <Dropdown
                     onClickConfirmButton={() =>
                       handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
@@ -168,7 +171,7 @@ export function MeetingView() {
           <VoteTable
             onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
-            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            headers={data.meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
             className="vote-table"
           />
         </VoteTableWrapper>
@@ -180,7 +183,7 @@ export function MeetingView() {
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
-          {meeting.status === MeetingStatus.inProgress ? (
+          {data.meeting.status === MeetingStatus.inProgress ? (
             <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
           ) : (
             <ResultPageButton meetingId={meetingId} />

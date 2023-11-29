@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import { Meeting } from '../apis/types';
 import { Page } from '../components/pageLayout';
 import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../constants/meeting';
 import useMeetingEdit from '../hooks/useMeetingEdit';
+import { useProgress } from '../hooks/useProgress';
 import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
 
 interface MeetingViewPathParams {
@@ -28,6 +29,18 @@ export function MeetingModify() {
   const [meeting, setMeeting] = useState<Meeting>(initialState);
   const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const { getMeetingEditSteps } = useMeetingEdit();
+  const navigate = useNavigate();
+  const { show, hide } = useProgress();
+  const { mutate } = useMutation({
+    onMutate: () => show(),
+    mutationFn: (params: Parameters<typeof updateMeeting>[0]) => updateMeeting(params),
+    onSuccess: (res) => navigate(`/meetings/${res.id}`),
+    onError: (e) => {
+      const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
+      alert(errMessage);
+    },
+    onSettled: () => hide(),
+  });
 
   const {
     data: initialMeeting,
@@ -48,28 +61,11 @@ export function MeetingModify() {
     return getMeetingEditSteps('modify');
   }, [getMeetingEditSteps]);
 
-  const navigate = useNavigate();
-
   if (!meeting || isLoading || isError) {
     return null;
   }
 
-  const handleMeetingEditComplete = () => {
-    modifyMeetingAndNavigate();
-  };
-
-  const modifyMeetingAndNavigate = async () => {
-    try {
-      const response = await updateMeeting(meeting);
-      navigate(`/meetings/${response.id}`);
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        alert(e.message);
-      } else {
-        alert('알 수 없는 에러가 발생했습니다');
-      }
-    }
-  };
+  const handleMeetingEditComplete = () => mutate(meeting);
 
   return (
     <Page>

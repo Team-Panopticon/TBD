@@ -1,21 +1,22 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
-import { getMeeting } from '../apis/meetings';
-import { Meeting } from '../apis/types';
-import { createVoting, getVotings, updateVoting } from '../apis/votes';
+import { createVoting, updateVoting } from '../apis/votes';
 import WritingHands from '../assets/writing.svg';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../components/styled';
 import { UserList, UserListData } from '../components/UserList/UserList';
 import { VoteTable } from '../components/VoteTable/VoteTable';
 import { MeetingType } from '../constants/meeting';
+import { useMeetingData } from '../hooks/useMeetingData';
 import { useMeetingViewVoteMode } from '../hooks/useMeetingVote';
+import { useProgress } from '../hooks/useProgress';
 import { currentUserStateFamily } from '../stores/currentUser';
 import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../stores/showVoteSuccessPopup';
@@ -37,7 +38,6 @@ export function MeetingVote() {
   const setShowVoteSuccessPopup = useSetRecoilState(showVoteSuccessPopupState);
   const isNewUser = !currentUser;
 
-  const [meeting, setMeeting] = useState<Meeting>();
   const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
   const checkedUserList = userList.map((user) => ({
@@ -47,14 +47,59 @@ export function MeetingVote() {
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
+  const { data } = useMeetingData(meetingId);
+
   const navigate = useNavigate();
+  const { show, hide } = useProgress();
+
+  const { mutate: updateVotingMutate } = useMutation({
+    mutationFn: updateVoting,
+    onMutate: () => show(),
+    onSuccess: () => {
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    },
+    onSettled: () => hide(),
+  });
+
+  const { mutate: createVotingMutate } = useMutation({
+    mutationFn: createVoting,
+    onMutate: () => show(),
+    onSuccess: (res) => {
+      setCurrentUser({
+        id: res.id,
+        username: res.username,
+      });
+      setShowUsernameModal(false);
+      setShowVoteSuccessPopup(true);
+      navigate(`/meetings/${meetingId}`);
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        const errorResponseData = error.response?.data as { message: string };
+        alert(errorResponseData?.message);
+      } else {
+        alert(error);
+      }
+    },
+    onSettled: () => hide(),
+  });
 
   const {
     voteTableDataList,
     currentUserVotingSlots,
     handleClickVoteTableSlot,
     handleClickVoteTableDate,
-  } = useMeetingViewVoteMode(meeting);
+  } = useMeetingViewVoteMode(data.meeting);
 
   useEffect(() => {
     const isFromSharedURL = searchParams.get('ref') === 'share';
@@ -64,22 +109,16 @@ export function MeetingVote() {
   }, [isNewUser, meetingId, navigate, searchParams]);
 
   useEffect(() => {
-    (async () => {
-      const [votingsData, meetingData] = await Promise.all([
-        getVotings(meetingId),
-        getMeeting(meetingId),
-      ]);
-
-      setMeeting(meetingData);
-      setVotings(votingsData);
-      const currentUserVoting = votingsData.find((voting) => voting.id === currentUser?.id);
-      const currentUserVotingSlots = currentUserVoting?.[meetingData.type];
+    if (data.meeting && data.votings) {
+      setVotings(data.votings);
+      const currentUserVoting = data.votings.find((voting) => voting.id === currentUser?.id);
+      const currentUserVotingSlots = currentUserVoting?.[data.meeting.type];
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
-    })();
-  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser]);
+    }
+  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, data.votings, data.meeting]);
 
   const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
-    if (!meeting) {
+    if (!data.meeting) {
       return;
     }
 
@@ -97,13 +136,13 @@ export function MeetingVote() {
     });
 
     const previousVoting = votings.find((voting) => voting.username === clickedUser.username);
-    const previousVotingSlots = previousVoting?.[meeting.type];
+    const previousVotingSlots = previousVoting?.[data.meeting.type];
     setCurrentUserVotingSlots(previousVotingSlots ?? []);
   };
 
   // eslint-disable-next-line @typescript-eslint/require-await
   const handleClickVote = async () => {
-    if (!meeting) {
+    if (!data.meeting) {
       return;
     }
 
@@ -113,60 +152,31 @@ export function MeetingVote() {
     }
 
     // Old user
-    try {
-      await updateVoting({
-        meetingId,
-        votingId: currentUser.id,
-        data: {
-          username: currentUser.username,
-          [meeting.type]: currentUserVotingSlots,
-        },
-      });
-      setShowUsernameModal(false);
-      setShowVoteSuccessPopup(true);
-      navigate(`/meetings/${meetingId}`);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorResponseData = error.response?.data as { message: string };
-        alert(errorResponseData?.message);
-      } else {
-        alert(error);
-      }
-    }
+    updateVotingMutate({
+      meetingId,
+      votingId: currentUser.id,
+      data: {
+        username: currentUser.username,
+        [data.meeting.type]: currentUserVotingSlots,
+      },
+    });
   };
 
-  const handleUsernameConfirm = async (username: string) => {
-    if (!meeting) {
+  const handleUsernameConfirm = (username: string) => {
+    if (!data.meeting) {
       return;
     }
 
-    try {
-      const voting = await createVoting({
-        meetingId,
-        data: {
-          username,
-          [meeting.type]: currentUserVotingSlots,
-        },
-      });
-
-      setCurrentUser({
-        id: voting.id,
-        username: voting.username,
-      });
-      setShowUsernameModal(false);
-      setShowVoteSuccessPopup(true);
-      navigate(`/meetings/${meetingId}`);
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        const errorResponseData = error.response?.data as { message: string };
-        alert(errorResponseData?.message);
-      } else {
-        alert(error);
-      }
-    }
+    createVotingMutate({
+      meetingId,
+      data: {
+        username,
+        [data.meeting.type]: currentUserVotingSlots,
+      },
+    });
   };
 
-  if (!meeting || !voteTableDataList) {
+  if (!data.meeting || !voteTableDataList) {
     return null;
   }
 
@@ -184,7 +194,7 @@ export function MeetingVote() {
                 gap={1}
               >
                 <Typography variant="h5" fontWeight={700}>
-                  {meeting.name}
+                  {data.meeting.name}
                 </Typography>
               </Box>
               <FlexVertical alignItems={'center'}>
@@ -225,7 +235,7 @@ export function MeetingVote() {
             onDateClick={handleClickVoteTableDate}
             onSlotClick={handleClickVoteTableSlot}
             data={voteTableDataList}
-            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            headers={data.meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
         </VoteTableWrapper>
       </Contents>
