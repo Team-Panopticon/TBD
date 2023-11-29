@@ -23,7 +23,7 @@ function MeetingResult() {
   const { openShare, setTarget } = useShare();
   const {
     data: { meeting, votings },
-    isLoading,
+    isFetching,
   } = useMeetingData(meetingId || '');
 
   useEffect(() => {
@@ -39,11 +39,7 @@ function MeetingResult() {
   const meetingDate = meeting?.confirmedDateType?.date;
   const meetingMeal = meeting?.confirmedDateType?.meal;
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 

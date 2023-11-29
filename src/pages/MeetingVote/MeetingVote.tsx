@@ -48,7 +48,7 @@ function MeetingVote() {
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
 
-  const { data, isLoading } = useMeetingData(meetingId);
+  const { data, isFetching } = useMeetingData(meetingId);
 
   const navigate = useNavigate();
   const { show, hide } = useProgress();
@@ -177,7 +177,7 @@ function MeetingVote() {
     });
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 

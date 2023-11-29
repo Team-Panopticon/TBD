@@ -50,7 +50,7 @@ function MeetingView() {
   const { openShare, setTarget } = useShare();
   const { show, hide } = useProgress();
 
-  const { data, isLoading } = useMeetingData(meetingId);
+  const { data, isFetching } = useMeetingData(meetingId);
 
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
     data.meeting,
@@ -120,7 +120,7 @@ function MeetingView() {
     setShowPasswordModal(false);
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 

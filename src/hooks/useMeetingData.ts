@@ -4,11 +4,11 @@ import { getMeeting } from '../apis/meetings';
 import { getVotings } from '../apis/votes';
 
 export const useMeetingData = (meetingId: string) => {
-  const { data: meeting, isLoading: isMeetingLoading } = useQuery({
+  const { data: meeting, isFetching: isMeetingFetching } = useQuery({
     queryKey: ['meeting', meetingId],
     queryFn: () => getMeeting(meetingId),
   });
-  const { data: votings, isLoading: isVotingsLoading } = useQuery({
+  const { data: votings, isFetching: isVotingsFetching } = useQuery({
     queryKey: ['votings', meetingId],
     queryFn: () => getVotings(meetingId),
   });
@@ -18,6 +18,6 @@ export const useMeetingData = (meetingId: string) => {
       meeting,
       votings,
     },
-    isLoading: isMeetingLoading && isVotingsLoading,
+    isFetching: isMeetingFetching && isVotingsFetching,
   };
 };

@@ -32,7 +32,7 @@ function MeetingConfirm() {
   const navigate = useNavigate();
 
   const { meetingId } = useParams<keyof MeetingConfirmPathParams>() as MeetingConfirmPathParams;
-  const { data, isLoading } = useMeetingData(meetingId);
+  const { data, isFetching } = useMeetingData(meetingId);
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const {
@@ -93,7 +93,7 @@ function MeetingConfirm() {
     comfirmMeetingMutation.mutate({ meetingId, slot: selectedSlot });
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 
