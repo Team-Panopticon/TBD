@@ -19,10 +19,11 @@ import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable } from '../../components/VoteTable/VoteTable';
 import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../../constants/meeting';
-import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeeting } from '../../hooks/useMeeting';
 import { useMeetingView } from '../../hooks/useMeetingView';
 import { useProgress } from '../../hooks/useProgress';
 import useShare from '../../hooks/useShare';
+import { useVotings } from '../../hooks/useVotings';
 import GreetingHands from '../../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../../stores/adminToken';
 import { currentUserStateFamily } from '../../stores/currentUser';
@@ -33,7 +34,10 @@ import { InputPasswordModal } from '../../templates/MeetingView/InputPasswordMod
 import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
 
 function MeetingView() {
-  const { meeting, votings, meetingId, isFetching } = useMeetingData();
+  const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const isFetching = isMeetingFetching && isVotingsFetcing;
+
   const navigate = useNavigate();
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);

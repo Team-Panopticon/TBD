@@ -16,10 +16,11 @@ import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
 import { MeetingStatus, MeetingType } from '../../constants/meeting';
-import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeeting } from '../../hooks/useMeeting';
 import { useMeetingView } from '../../hooks/useMeetingView';
 import { isSameSlot } from '../../hooks/useMeetingVote';
 import { useProgress } from '../../hooks/useProgress';
+import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
 import { CheckConfirmModal } from '../../templates/MeetingView/CheckConfirmModal';
 import { VoteTableWrapper } from '../../templates/MeetingView/styled';
@@ -27,7 +28,9 @@ import { VoteTableWrapper } from '../../templates/MeetingView/styled';
 function MeetingConfirm() {
   const navigate = useNavigate();
 
-  const { meeting, votings, meetingId, isFetching } = useMeetingData();
+  const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const isFetching = isMeetingFetching && isVotingsFetcing;
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const {

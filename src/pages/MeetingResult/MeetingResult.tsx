@@ -10,9 +10,10 @@ import { Loading } from '../../components/Loading';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
-import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeeting } from '../../hooks/useMeeting';
 import { useMeetingResult } from '../../hooks/useMeetingResult';
 import useShare from '../../hooks/useShare';
+import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
 import { getMealLabel } from '../../utils/getMealLabel';
 
@@ -20,7 +21,9 @@ function MeetingResult() {
   const navigate = useNavigate();
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
   const { openShare, setTarget } = useShare();
-  const { meeting, votings, meetingId, isFetching } = useMeetingData();
+  const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const isFetching = isMeetingFetching && isVotingsFetcing;
 
   useEffect(() => {
     if (meeting && votings) {

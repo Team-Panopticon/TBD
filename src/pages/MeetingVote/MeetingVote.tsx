@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import { createVoting, updateVoting } from '../../apis/votes';
@@ -15,23 +15,22 @@ import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList, UserListData } from '../../components/UserList/UserList';
 import { VoteTable } from '../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../constants/meeting';
-import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeeting } from '../../hooks/useMeeting';
 import { useMeetingViewVoteMode } from '../../hooks/useMeetingVote';
 import { useProgress } from '../../hooks/useProgress';
+import { useVotings } from '../../hooks/useVotings';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import { currentUserVotingSlotsState } from '../../stores/currentUserVotingSlots';
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
-import { userListState, votingsState } from '../../stores/voting';
+import { userListState, votingsState as votingRecoilState } from '../../stores/voting';
 import { InputUsernameModal } from '../../templates/MeetingView/InputUsernameModal';
 import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
 
-interface MeetingVoteRouteParams {
-  meetingId: string;
-}
-
 function MeetingVote() {
   const [searchParams] = useSearchParams();
-  const { meetingId } = useParams<keyof MeetingVoteRouteParams>() as MeetingVoteRouteParams;
+  const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const isFetching = isMeetingFetching && isVotingsFetcing;
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
   const resetCurrentUser = useResetRecoilState(currentUserStateFamily(meetingId));
@@ -39,7 +38,7 @@ function MeetingVote() {
   const setShowVoteSuccessPopup = useSetRecoilState(showVoteSuccessPopupState);
   const isNewUser = !currentUser;
 
-  const [votings, setVotings] = useRecoilState(votingsState);
+  const [votingsState, setVotingsState] = useRecoilState(votingRecoilState);
   const userList = useRecoilValue(userListState);
   const checkedUserList = userList.map((user) => ({
     ...user,
@@ -47,8 +46,6 @@ function MeetingVote() {
   }));
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
-
-  const { data, isFetching } = useMeetingData(meetingId);
 
   const navigate = useNavigate();
   const { show, hide } = useProgress();
@@ -100,7 +97,7 @@ function MeetingVote() {
     currentUserVotingSlots,
     handleClickVoteTableSlot,
     handleClickVoteTableDate,
-  } = useMeetingViewVoteMode(data.meeting);
+  } = useMeetingViewVoteMode(meeting);
 
   useEffect(() => {
     const isFromSharedURL = searchParams.get('ref') === 'share';
@@ -110,16 +107,16 @@ function MeetingVote() {
   }, [isNewUser, meetingId, navigate, searchParams]);
 
   useEffect(() => {
-    if (data.meeting && data.votings) {
-      setVotings(data.votings);
-      const currentUserVoting = data.votings.find((voting) => voting.id === currentUser?.id);
-      const currentUserVotingSlots = currentUserVoting?.[data.meeting.type];
+    if (meeting && votings) {
+      setVotingsState(votings);
+      const currentUserVoting = votings.find((voting) => voting.id === currentUser?.id);
+      const currentUserVotingSlots = currentUserVoting?.[meeting.type];
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
     }
-  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, data.votings, data.meeting]);
+  }, [meetingId, setVotingsState, setCurrentUserVotingSlots, currentUser, votings, meeting]);
 
   const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
-    if (!data.meeting) {
+    if (!meeting) {
       return;
     }
 
@@ -136,14 +133,14 @@ function MeetingVote() {
       username: clickedUser.username,
     });
 
-    const previousVoting = votings.find((voting) => voting.username === clickedUser.username);
-    const previousVotingSlots = previousVoting?.[data.meeting.type];
+    const previousVoting = votingsState.find((voting) => voting.username === clickedUser.username);
+    const previousVotingSlots = previousVoting?.[meeting.type];
     setCurrentUserVotingSlots(previousVotingSlots ?? []);
   };
 
   // eslint-disable-next-line @typescript-eslint/require-await
   const handleClickVote = async () => {
-    if (!data.meeting) {
+    if (!meeting) {
       return;
     }
 
@@ -158,13 +155,13 @@ function MeetingVote() {
       votingId: currentUser.id,
       data: {
         username: currentUser.username,
-        [data.meeting.type]: currentUserVotingSlots,
+        [meeting.type]: currentUserVotingSlots,
       },
     });
   };
 
   const handleUsernameConfirm = (username: string) => {
-    if (!data.meeting) {
+    if (!meeting) {
       return;
     }
 
@@ -172,7 +169,7 @@ function MeetingVote() {
       meetingId,
       data: {
         username,
-        [data.meeting.type]: currentUserVotingSlots,
+        [meeting.type]: currentUserVotingSlots,
       },
     });
   };
@@ -181,7 +178,7 @@ function MeetingVote() {
     return <Loading />;
   }
 
-  if (!data.meeting || !voteTableDataList) {
+  if (!meeting || !voteTableDataList) {
     return null;
   }
 
@@ -199,7 +196,7 @@ function MeetingVote() {
                 gap={1}
               >
                 <Typography variant="h5" fontWeight={700}>
-                  {data.meeting.name}
+                  {meeting.name}
                 </Typography>
               </Box>
               <FlexVertical alignItems={'center'}>
@@ -240,7 +237,7 @@ function MeetingVote() {
             onDateClick={handleClickVoteTableDate}
             onSlotClick={handleClickVoteTableSlot}
             data={voteTableDataList}
-            headers={data.meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
         </VoteTableWrapper>
       </Contents>
