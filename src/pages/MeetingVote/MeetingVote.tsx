@@ -29,7 +29,7 @@ import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/style
 function MeetingVote() {
   const [searchParams] = useSearchParams();
   const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
-  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const { votings, isFetching: isVotingsFetcing, invalidateVotings } = useVotings();
   const isFetching = isMeetingFetching && isVotingsFetcing;
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
@@ -53,9 +53,10 @@ function MeetingVote() {
   const { mutate: updateVotingMutate } = useMutation({
     mutationFn: updateVoting,
     onMutate: () => show(),
-    onSuccess: () => {
+    onSuccess: async () => {
       setShowUsernameModal(false);
       setShowVoteSuccessPopup(true);
+      await invalidateVotings();
       navigate(`/meetings/${meetingId}`);
     },
     onError: (error) => {
@@ -72,13 +73,14 @@ function MeetingVote() {
   const { mutate: createVotingMutate } = useMutation({
     mutationFn: createVoting,
     onMutate: () => show(),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
       setCurrentUser({
         id: res.id,
         username: res.username,
       });
       setShowUsernameModal(false);
       setShowVoteSuccessPopup(true);
+      await invalidateVotings();
       navigate(`/meetings/${meetingId}`);
     },
     onError: (error) => {
