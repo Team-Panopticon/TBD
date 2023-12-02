@@ -16,7 +16,7 @@ import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
 import { MeetingStatus, MeetingType } from '../../constants/meeting';
-import { useMeeting } from '../../hooks/useMeeting';
+import { MEETING_QUERY_KEY, useMeeting } from '../../hooks/useMeeting';
 import { useMeetingView } from '../../hooks/useMeetingView';
 import { isSameSlot } from '../../hooks/useMeetingVote';
 import { useProgress } from '../../hooks/useProgress';
@@ -47,7 +47,7 @@ function MeetingConfirm() {
     mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
     onMutate: () => show(),
     onSuccess: () => {
-      queryClient.setQueryData(['meeting', meetingId], {
+      queryClient.setQueryData([MEETING_QUERY_KEY, meetingId], {
         ...meeting,
         status: MeetingStatus.done,
       });
