@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { Voting } from '../../apis/votes';
@@ -19,12 +19,8 @@ import { getMealLabel } from '../../utils/getMealLabel';
 function MeetingResult() {
   const navigate = useNavigate();
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
-  const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
-  const {
-    data: { meeting, votings },
-    isFetching,
-  } = useMeetingData(meetingId || '');
+  const { meeting, votings, meetingId, isFetching } = useMeetingData();
 
   useEffect(() => {
     if (meeting && votings) {

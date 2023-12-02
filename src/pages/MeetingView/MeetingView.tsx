@@ -6,7 +6,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { issuePublicMeetingAdminToken } from '../../apis/meetings';
@@ -32,13 +32,9 @@ import { Dropdown } from '../../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../../templates/MeetingView/InputPasswordModal';
 import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
 
-interface MeetingViewPathParams {
-  meetingId: string;
-}
-
 function MeetingView() {
+  const { meeting, votings, meetingId, isFetching } = useMeetingData();
   const navigate = useNavigate();
-  const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
 
@@ -50,11 +46,8 @@ function MeetingView() {
   const { openShare, setTarget } = useShare();
   const { show, hide } = useProgress();
 
-  const { data, isFetching } = useMeetingData(meetingId);
-
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
-    data.meeting,
-  );
+  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
+    useMeetingView(meeting);
 
   const { mutate } = useMutation({
     mutationFn: async (params: { meetingId: string; destination: string }) =>
@@ -68,11 +61,11 @@ function MeetingView() {
   });
 
   useEffect(() => {
-    if (data.meeting && data.votings) {
-      setVotings(data.votings);
-      setTarget(data.meeting);
+    if (meeting && votings) {
+      setVotings(votings);
+      setTarget(meeting);
     }
-  }, [data.meeting, data.votings, setVotings, meetingId]);
+  }, [meeting, votings, setVotings, meetingId]);
 
   const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;
@@ -81,7 +74,7 @@ function MeetingView() {
       return;
     }
 
-    if (data.meeting?.adminAccess === 'public') {
+    if (meeting?.adminAccess === 'public') {
       mutate({ meetingId, destination });
       return;
     }
@@ -124,7 +117,7 @@ function MeetingView() {
     return <Loading />;
   }
 
-  if (!data.meeting || !voteTableDataList) {
+  if (!meeting || !voteTableDataList) {
     return null;
   }
 
@@ -141,9 +134,9 @@ function MeetingView() {
                 alignItems={'center'}
               >
                 <Typography variant="h5" fontWeight={700}>
-                  {data.meeting.name}
+                  {meeting.name}
                 </Typography>
-                {data.meeting.status === MeetingStatus.inProgress && (
+                {meeting.status === MeetingStatus.inProgress && (
                   <Dropdown
                     onClickConfirmButton={() =>
                       handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
@@ -176,7 +169,7 @@ function MeetingView() {
           <VoteTable
             onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
-            headers={data.meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
             className="vote-table"
           />
         </VoteTableWrapper>
@@ -188,7 +181,7 @@ function MeetingView() {
           variant="contained"
           aria-label="Disabled elevation buttons"
         >
-          {data.meeting.status === MeetingStatus.inProgress ? (
+          {meeting.status === MeetingStatus.inProgress ? (
             <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
           ) : (
             <ResultPageButton meetingId={meetingId} />

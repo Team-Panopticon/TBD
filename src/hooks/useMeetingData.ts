@@ -1,9 +1,16 @@
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 import { getMeeting } from '../apis/meetings';
 import { getVotings } from '../apis/votes';
 
-export const useMeetingData = (meetingId: string) => {
+interface MeetingViewPathParams {
+  meetingId: string;
+}
+
+export const useMeetingData = () => {
+  const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
+
   const { data: meeting, isFetching: isMeetingFetching } = useQuery({
     queryKey: ['meeting', meetingId],
     queryFn: () => getMeeting(meetingId),
@@ -14,10 +21,9 @@ export const useMeetingData = (meetingId: string) => {
   });
 
   return {
-    data: {
-      meeting,
-      votings,
-    },
+    meeting,
+    votings,
+    meetingId,
     isFetching: isMeetingFetching && isVotingsFetching,
   };
 };

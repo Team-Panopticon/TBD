@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { confirmMeeting } from '../../apis/meetings';
@@ -24,22 +24,17 @@ import { votingsState } from '../../stores/voting';
 import { CheckConfirmModal } from '../../templates/MeetingView/CheckConfirmModal';
 import { VoteTableWrapper } from '../../templates/MeetingView/styled';
 
-interface MeetingConfirmPathParams {
-  meetingId: string;
-}
-
 function MeetingConfirm() {
   const navigate = useNavigate();
 
-  const { meetingId } = useParams<keyof MeetingConfirmPathParams>() as MeetingConfirmPathParams;
-  const { data, isFetching } = useMeetingData(meetingId);
+  const { meeting, votings, meetingId, isFetching } = useMeetingData();
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const {
     handleClickVoteTable: handleVoteTableClickHightlight,
     userList,
     voteTableDataList,
-  } = useMeetingView(data.meeting);
+  } = useMeetingView(meeting);
 
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -50,7 +45,7 @@ function MeetingConfirm() {
     onMutate: () => show(),
     onSuccess: () => {
       queryClient.setQueryData(['meeting', meetingId], {
-        ...data.meeting,
+        ...meeting,
         status: MeetingStatus.done,
       });
       navigate(`/meetings/${meetingId}/result`);
@@ -65,10 +60,10 @@ function MeetingConfirm() {
   });
 
   useEffect(() => {
-    if (data.votings) {
-      setVotings(data.votings);
+    if (votings) {
+      setVotings(votings);
     }
-  }, [setVotings, data.votings]);
+  }, [setVotings, votings]);
 
   const handleClickVoteTable = (
     date: Dayjs,
@@ -111,7 +106,7 @@ function MeetingConfirm() {
                 gap={1}
               >
                 <Typography variant="h5" fontWeight={700}>
-                  {data.meeting?.name}
+                  {meeting?.name}
                 </Typography>
               </Box>
               <FlexVertical alignItems={'center'}>
@@ -133,7 +128,7 @@ function MeetingConfirm() {
           <VoteTable
             onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
-            headers={data.meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            headers={meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
         </VoteTableWrapper>
       </Contents>
