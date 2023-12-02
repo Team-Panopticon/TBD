@@ -11,6 +11,7 @@ import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../../constants/
 import { useMeeting } from '../../hooks/useMeeting';
 import useMeetingEdit from '../../hooks/useMeetingEdit';
 import { useProgress } from '../../hooks/useProgress';
+import { useVotings } from '../../hooks/useVotings';
 import { MeetingEditTemplate } from '../../templates/MeetingEdit/MeetingEditTemplate';
 
 export const initialState: Meeting = {
@@ -26,6 +27,7 @@ export const initialState: Meeting = {
 function MeetingModify() {
   const [meeting, setMeeting] = useState<Meeting>(initialState);
   const { meeting: initialMeeting, isLoading, isError, invalidateMeeting } = useMeeting();
+  const { invalidateVotings } = useVotings();
   const { getMeetingEditSteps } = useMeetingEdit();
   const navigate = useNavigate();
   const { show, hide } = useProgress();
@@ -33,7 +35,7 @@ function MeetingModify() {
     onMutate: () => show(),
     mutationFn: (params: Parameters<typeof updateMeeting>[0]) => updateMeeting(params),
     onSuccess: async (res) => {
-      await invalidateMeeting();
+      await Promise.all([invalidateMeeting(), invalidateVotings()]);
       navigate(`/meetings/${res.id}`);
     },
     onError: (e) => {
