@@ -21,7 +21,8 @@ export const useVotings = () => {
   } = useQuery({
     queryKey: ['votings', meetingId],
     queryFn: () => getVotings(meetingId),
-    retryOnMount: false,
+    refetchOnMount: true,
+    staleTime: 5000,
   });
 
   return {

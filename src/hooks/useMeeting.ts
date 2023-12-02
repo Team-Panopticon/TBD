@@ -21,7 +21,8 @@ export const useMeeting = () => {
   } = useQuery({
     queryKey: [MEETING_QUERY_KEY, meetingId],
     queryFn: () => getMeeting(meetingId),
-    refetchOnMount: false,
+    refetchOnMount: true,
+    staleTime: 5000,
   });
 
   return {
