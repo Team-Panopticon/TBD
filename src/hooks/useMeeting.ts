@@ -30,6 +30,7 @@ export const useMeeting = () => {
     isFetching,
     isLoading,
     isError,
-    invalidate: () => queryClient.invalidateQueries({ queryKey: [MEETING_QUERY_KEY, meetingId] }),
+    invalidateMeeting: () =>
+      queryClient.invalidateQueries({ queryKey: [MEETING_QUERY_KEY, meetingId] }),
   };
 };

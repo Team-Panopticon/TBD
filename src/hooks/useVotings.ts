@@ -30,6 +30,7 @@ export const useVotings = () => {
     isFetching,
     isLoading,
     isError,
-    invalidate: () => queryClient.invalidateQueries({ queryKey: [VOTINGS_QUERY_KEY, meetingId] }),
+    invalidateVotings: () =>
+      queryClient.invalidateQueries({ queryKey: [VOTINGS_QUERY_KEY, meetingId] }),
   };
 };
