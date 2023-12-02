@@ -9,7 +9,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState 
 
 import { createVoting, updateVoting } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Header, Page } from '../../components/pageLayout';
+import { Footer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList, UserListData } from '../../components/UserList/UserList';
 import { VoteTable } from '../../components/VoteTable/VoteTable';
@@ -186,7 +186,7 @@ function MeetingVote() {
 
   return (
     <Page>
-      <Header>
+      <>
         <FlexVertical flex={1} alignItems={'center'} gap={1}>
           <FlexVertical flex={1} gap={1} width={'100%'}>
             <Box
@@ -202,8 +202,8 @@ function MeetingVote() {
             </Box>
           </FlexVertical>
         </FlexVertical>
-      </Header>
-      <Contents>
+      </>
+      <>
         <UserList
           className="user-list"
           users={checkedUserList}
@@ -220,7 +220,7 @@ function MeetingVote() {
             headers={data.meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
         </VoteTableWrapper>
-      </Contents>
+      </>
       <Footer>
         <FullHeightButtonGroup
           fullWidth

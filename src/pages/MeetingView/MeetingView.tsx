@@ -14,7 +14,7 @@ import { Voting } from '../../apis/votes';
 import { ResultPageButton } from '../../components/buttons/ResultPageButton';
 import { VotePageButton } from '../../components/buttons/VotePageButton';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Header, Page } from '../../components/pageLayout';
+import { Footer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable } from '../../components/VoteTable/VoteTable';
@@ -130,8 +130,8 @@ function MeetingView() {
 
   return (
     <Page>
-      <Header>
-        <FlexVertical flex={1} alignItems={'center'} gap={1}>
+      <>
+        <FlexVertical flex={0} alignItems={'center'} gap={1}>
           <FlexVertical flex={1} gap={1} width={'100%'}>
             <Box
               display={'flex'}
@@ -164,8 +164,8 @@ function MeetingView() {
             ) : null}
           </FlexVertical>
         </FlexVertical>
-      </Header>
-      <Contents>
+      </>
+      <>
         <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>
@@ -178,7 +178,7 @@ function MeetingView() {
             className="vote-table"
           />
         </VoteTableWrapper>
-      </Contents>
+      </>
       <Footer>
         <FullHeightButtonGroup
           fullWidth

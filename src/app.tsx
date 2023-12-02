@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
 
 import { Loading } from './components/Loading';
+import { PageLayout } from './components/pageLayout';
 import { Progress } from './components/Progress';
 import { ProtectedAdminRoute } from './components/routes/ProtectedAdminRoute';
 import { RedirectIfConfirmedRoute } from './components/routes/RedirectIfConfirmedRoute';
@@ -30,48 +31,59 @@ const router = createBrowserRouter([
     loader: () => redirect('/meetings/new'),
   },
   {
-    path: 'meetings/new',
-    element: <MeetingCreate />,
+    element: <PageLayout useHeader={false} />,
+    children: [
+      {
+        path: 'meetings/new',
+        element: <MeetingCreate />,
+      },
+    ],
   },
+
   {
-    path: 'meetings/:meetingId',
-    element: <MeetingView />,
-  },
-  {
-    path: 'meetings/:meetingId/vote',
-    element: (
-      <RedirectIfConfirmedRoute>
-        <MeetingVote />
-      </RedirectIfConfirmedRoute>
-    ),
-  },
-  {
-    path: 'meetings/:meetingId/modify',
-    element: (
-      <RedirectIfConfirmedRoute>
-        <ProtectedAdminRoute>
-          <MeetingModify />
-        </ProtectedAdminRoute>
-      </RedirectIfConfirmedRoute>
-    ),
-  },
-  {
-    path: 'meetings/:meetingId/result',
-    element: (
-      <RedirectIfInProgressRoute>
-        <MeetingResult />
-      </RedirectIfInProgressRoute>
-    ),
-  },
-  {
-    path: 'meetings/:meetingId/confirm',
-    element: (
-      <RedirectIfConfirmedRoute>
-        <ProtectedAdminRoute>
-          <MeetingConfirm />
-        </ProtectedAdminRoute>
-      </RedirectIfConfirmedRoute>
-    ),
+    element: <PageLayout />,
+    children: [
+      {
+        path: 'meetings/:meetingId',
+        element: <MeetingView />,
+      },
+      {
+        path: 'meetings/:meetingId/vote',
+        element: (
+          <RedirectIfConfirmedRoute>
+            <MeetingVote />
+          </RedirectIfConfirmedRoute>
+        ),
+      },
+      {
+        path: 'meetings/:meetingId/modify',
+        element: (
+          <RedirectIfConfirmedRoute>
+            <ProtectedAdminRoute>
+              <MeetingModify />
+            </ProtectedAdminRoute>
+          </RedirectIfConfirmedRoute>
+        ),
+      },
+      {
+        path: 'meetings/:meetingId/result',
+        element: (
+          <RedirectIfInProgressRoute>
+            <MeetingResult />
+          </RedirectIfInProgressRoute>
+        ),
+      },
+      {
+        path: 'meetings/:meetingId/confirm',
+        element: (
+          <RedirectIfConfirmedRoute>
+            <ProtectedAdminRoute>
+              <MeetingConfirm />
+            </ProtectedAdminRoute>
+          </RedirectIfConfirmedRoute>
+        ),
+      },
+    ],
   },
 ]);
 

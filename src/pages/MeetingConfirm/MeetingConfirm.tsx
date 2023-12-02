@@ -11,7 +11,7 @@ import { useSetRecoilState } from 'recoil';
 import { confirmMeeting } from '../../apis/meetings';
 import { Voting, VotingSlot } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Header, Page } from '../../components/pageLayout';
+import { Footer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
@@ -99,7 +99,7 @@ function MeetingConfirm() {
 
   return (
     <Page>
-      <Header>
+      <>
         <FlexVertical flex={1} alignItems={'center'} gap={1}>
           <FlexVertical flex={1} gap={1} width={'100%'}>
             <Box
@@ -121,8 +121,8 @@ function MeetingConfirm() {
             </Typography>
           </FlexVertical>
         </FlexVertical>
-      </Header>
-      <Contents>
+      </>
+      <>
         <UserList users={userList} isSticky>
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>
@@ -134,7 +134,7 @@ function MeetingConfirm() {
             headers={data.meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
         </VoteTableWrapper>
-      </Contents>
+      </>
       <Footer>
         <FullHeightButtonGroup
           fullWidth

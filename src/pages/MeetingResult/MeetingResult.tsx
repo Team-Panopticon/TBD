@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil';
 import { Voting } from '../../apis/votes';
 import { HifiveIcon } from '../../components/IconComponent/HiFive';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Header, Page } from '../../components/pageLayout';
+import { Footer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { useMeetingData } from '../../hooks/useMeetingData';
@@ -45,9 +45,9 @@ function MeetingResult() {
 
   return (
     <Page>
-      <Contents>
+      <>
         <FlexVertical gap={1}>
-          <Header>
+          <>
             <FlexVertical flex={1} alignItems={'center'} gap={1}>
               <FlexVertical flex={1} gap={1}>
                 <Typography variant="h5" fontWeight={700} alignSelf={'center'}>
@@ -75,7 +75,7 @@ function MeetingResult() {
                 </Typography>
               </FlexVertical>
             </FlexVertical>
-          </Header>
+          </>
 
           <FlexVertical gap={1}>
             <UserList users={confirmedUserList}>
@@ -89,7 +89,7 @@ function MeetingResult() {
             </UserList>
           </FlexVertical>
         </FlexVertical>
-      </Contents>
+      </>
 
       <Footer>
         <FullHeightButtonGroup
