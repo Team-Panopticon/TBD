@@ -163,12 +163,6 @@ function MeetingView() {
               </Typography>
             ) : null}
           </FlexVertical>
-          {currentUser ? (
-            <Typography variant="h5" fontWeight={500} align="center">
-              <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님
-              안녕하세요
-            </Typography>
-          ) : null}
         </FlexVertical>
       </Header>
       <Contents>

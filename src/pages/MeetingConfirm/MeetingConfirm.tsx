@@ -120,12 +120,6 @@ function MeetingConfirm() {
               모임시간을 골라서 확정해주세요
             </Typography>
           </FlexVertical>
-          <FlexVertical alignItems={'center'}>
-            <EventAvailableIcon sx={{ fontSize: 110 }} />
-          </FlexVertical>
-          <Typography variant="h6" fontWeight={400} align="center">
-            모임시간을 골라서 확정해주세요
-          </Typography>
         </FlexVertical>
       </Header>
       <Contents>
