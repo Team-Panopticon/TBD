@@ -1,15 +1,17 @@
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
-import { createMeeting } from '../apis/meetings';
-import { warmUpInstance } from '../apis/utils';
-import { Page } from '../components/pageLayout';
-import useMeetingEdit from '../hooks/useMeetingEdit';
-import { createMeetingState, ValidCreateMeetingState } from '../stores/createMeeting';
-import { CreatePasswordModal } from '../templates/MeetingEdit/CreatePasswordModal';
-import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplate';
+import { createMeeting } from '../../apis/meetings';
+import { warmUpInstance } from '../../apis/utils';
+import { Page } from '../../components/pageLayout';
+import useMeetingEdit from '../../hooks/useMeetingEdit';
+import { useProgress } from '../../hooks/useProgress';
+import { createMeetingState } from '../../stores/createMeeting';
+import { CreatePasswordModal } from '../../templates/MeetingEdit/CreatePasswordModal';
+import { MeetingEditTemplate } from '../../templates/MeetingEdit/MeetingEditTemplate';
 
 /**
  * 모임생성 최상위 페이지
@@ -17,21 +19,31 @@ import { MeetingEditTemplate } from '../templates/MeetingEdit/MeetingEditTemplat
  * - 모임생성 API 호출
  * - 모임의 수정과 겹치는 공통 로직은 MeetingEditTemplate에서 처리
  */
-export function MeetingCreate() {
+function MeetingCreate() {
   const [meeting, setMeeting] = useRecoilState(createMeetingState);
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
-
-  const meetingeditSteps = useMemo(() => {
-    return getMeetingEditSteps('create');
-  }, [getMeetingEditSteps]);
-
   const navigate = useNavigate();
+  const { show, hide } = useProgress();
+  const { mutate } = useMutation({
+    mutationFn: (params: Parameters<typeof createMeeting>[0]) => createMeeting(params),
+    onMutate: () => show(),
+    onSuccess: (res) => navigate(`/meetings/${res.id}`),
+    onError: (e) => {
+      const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
+      alert(errMessage);
+    },
+    onSettled: () => hide(),
+  });
 
   useEffect(() => {
     warmUpInstance();
   }, []);
+
+  const meetingeditSteps = useMemo(() => {
+    return getMeetingEditSteps('create');
+  }, [getMeetingEditSteps]);
 
   const handleMeetingEditComplete = () => {
     setShowPasswordModal(true);
@@ -44,21 +56,11 @@ export function MeetingCreate() {
     }));
   };
 
-  const createMeetingAndNavigate = async ({ usePassword }: { usePassword: boolean }) => {
-    try {
-      const trimmedName = meeting.name?.trim();
-      const response = await createMeeting(
-        { ...meeting, name: trimmedName } as ValidCreateMeetingState,
-        usePassword,
-      );
-      navigate(`/meetings/${response.id}`);
-    } catch (e: unknown) {
-      if (e instanceof AxiosError) {
-        alert(e.message);
-      } else {
-        alert('알 수 없는 에러가 발생했습니다');
-      }
-    }
+  const createMeetingAndNavigate = ({ usePassword }: { usePassword: boolean }) => {
+    mutate({
+      meeting: { ...meeting, name: meeting.name?.trim() || '' },
+      setPassword: usePassword,
+    });
   };
 
   const handlePasswordConfirm = () => {
@@ -68,6 +70,7 @@ export function MeetingCreate() {
   const handlePasswordSkip = () => {
     createMeetingAndNavigate({ usePassword: false });
   };
+
   const handlePasswordCancel = () => {
     setShowPasswordModal(false);
     setMeeting((prev) => ({
@@ -98,3 +101,5 @@ export function MeetingCreate() {
     </Page>
   );
 }
+
+export default MeetingCreate;
