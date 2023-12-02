@@ -1,7 +1,7 @@
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { Zoom } from '@mui/material';
 
-import { BottomRightFloatingActionButton } from './styled';
+import { BottomFABContainer, BottomFloatingActionButton } from './styled';
 
 interface ScrollDownFloatingButtonProps {
   show: boolean;
@@ -11,9 +11,11 @@ interface ScrollDownFloatingButtonProps {
 export function ScrollDownFloatingButton({ onClick, show }: ScrollDownFloatingButtonProps) {
   return (
     <Zoom in={show}>
-      <BottomRightFloatingActionButton size="medium" color="primary" onClick={onClick}>
-        <KeyboardDoubleArrowDownIcon />
-      </BottomRightFloatingActionButton>
+      <BottomFABContainer>
+        <BottomFloatingActionButton size="medium" color="primary" onClick={onClick}>
+          <KeyboardDoubleArrowDownIcon />
+        </BottomFloatingActionButton>
+      </BottomFABContainer>
     </Zoom>
   );
 }
