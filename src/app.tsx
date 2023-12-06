@@ -24,14 +24,14 @@ dayjs.locale('ko');
 const router = createBrowserRouter([
   {
     path: '*',
-    element: <Navigate to={'/meetings/new'} />,
+    element: <Navigate to={'/welcome'} />,
   },
   {
     path: '/',
-    loader: () => redirect('/meetings/new'),
+    loader: () => redirect('/welcome'),
   },
   {
-    path: '/welcome',
+    path: 'welcome',
     element: <Welcome />,
   },
   {
