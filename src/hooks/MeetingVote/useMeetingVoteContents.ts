@@ -1,4 +1,5 @@
 import { Dayjs } from 'dayjs';
+import { useEffect } from 'react';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
 import { Voting, VotingSlot } from '../../apis/votes';
@@ -19,8 +20,17 @@ export const useMeetingVoteContents = () => {
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useRecoilState(
     currentUserVotingSlotsState,
   );
-  const votings = useRecoilValue(votingsState);
+  const [votings, setVotings] = useRecoilState(votingsState);
   const userList = useRecoilValue(userListState);
+
+  useEffect(() => {
+    if (meeting && votings) {
+      setVotings(votings);
+      const currentUserVoting = votings.find((voting) => voting.id === currentUser?.id);
+      const currentUserVotingSlots = currentUserVoting?.[meeting.type];
+      setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
+    }
+  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, votings, meeting]);
 
   const checkedUserList = userList.map((user) => ({
     ...user,
