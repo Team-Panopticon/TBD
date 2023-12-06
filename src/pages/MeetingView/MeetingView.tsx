@@ -1,6 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
@@ -11,15 +10,12 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { issuePublicMeetingAdminToken } from '../../apis/meetings';
 import { Voting } from '../../apis/votes';
-import { ResultPageButton } from '../../components/buttons/ResultPageButton';
-import { VotePageButton } from '../../components/buttons/VotePageButton';
 import { Loading } from '../../components/Loading';
-import { Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical } from '../../components/styled';
 import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus } from '../../constants/meeting';
 import { useMeeting } from '../../hooks/useMeeting';
 import { useProgress } from '../../hooks/useProgress';
-import useShare from '../../hooks/useShare';
 import { useVotings } from '../../hooks/useVotings';
 import GreetingHands from '../../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../../stores/adminToken';
@@ -29,6 +25,7 @@ import { votingsState } from '../../stores/voting';
 import { Dropdown } from '../../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../../templates/MeetingView/InputPasswordModal';
 import MeetingViewContents from '../../templates/MeetingView/MeetingViewContents';
+import MeetingViewFooter from '../../templates/MeetingView/MeetingViewFooter';
 import { PrimaryBold } from '../../templates/MeetingView/styled';
 
 function MeetingView() {
@@ -45,7 +42,6 @@ function MeetingView() {
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
-  const { openShare, setTarget } = useShare();
   const { show, hide } = useProgress();
 
   const { mutate } = useMutation({
@@ -60,9 +56,8 @@ function MeetingView() {
   });
 
   useEffect(() => {
-    if (meeting && votings) {
+    if (votings) {
       setVotings(votings);
-      setTarget(meeting);
     }
   }, [meeting, votings, setVotings, meetingId]);
 
@@ -160,28 +155,7 @@ function MeetingView() {
         </HeaderContainer>
       </Header>
       <MeetingViewContents />
-      <Footer>
-        <FullHeightButtonGroup
-          fullWidth
-          disableElevation
-          variant="contained"
-          aria-label="Disabled elevation buttons"
-        >
-          {meeting.status === MeetingStatus.inProgress ? (
-            <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
-          ) : (
-            <ResultPageButton meetingId={meetingId} />
-          )}
-          <Button
-            color="transPrimary"
-            onClick={() => {
-              openShare();
-            }}
-          >
-            공유
-          </Button>
-        </FullHeightButtonGroup>
-      </Footer>
+      <MeetingViewFooter />
       <InputPasswordModal
         meetingId={meetingId}
         show={showPasswordModal}
