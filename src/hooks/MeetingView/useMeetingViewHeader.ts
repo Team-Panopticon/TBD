@@ -8,11 +8,11 @@ import { INPUT_PASSWORD_FINISH_EVENT } from '../../constants/meeting';
 import { adminTokenStateFamily } from '../../stores/adminToken';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
-import { useMeetingData } from '../useMeetingData';
+import { useMeeting } from '../useMeeting';
 import { useProgress } from '../useProgress';
 
 export const useMeetingViewHeader = () => {
-  const { meeting, meetingId } = useMeetingData();
+  const { meeting, meetingId } = useMeeting();
   const navigate = useNavigate();
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
   const { show, hide } = useProgress();
