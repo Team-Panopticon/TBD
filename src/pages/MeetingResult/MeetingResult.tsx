@@ -7,12 +7,11 @@ import { Voting } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
 import { Contents, Footer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
-import { UserList } from '../../components/UserList/UserList';
 import { useMeeting } from '../../hooks/useMeeting';
-import { useMeetingResult } from '../../hooks/useMeetingResult';
 import useShare from '../../hooks/useShare';
 import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
+import MeetingResultContents from '../../templates/MeetingResult/MeetingResultContents';
 import MeetingResultHeader from '../../templates/MeetingResult/MeetingResultHeader';
 
 function MeetingResult() {
@@ -31,8 +30,6 @@ function MeetingResult() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [meeting, votings, meetingId, setVotings]);
 
-  const { confirmedUserList, missedUserList } = useMeetingResult(meeting);
-
   if (isFetching) {
     return <Loading />;
   }
@@ -42,17 +39,7 @@ function MeetingResult() {
       <Contents>
         <FlexVertical gap={1}>
           <MeetingResultHeader />
-          <FlexVertical gap={1}>
-            <UserList users={confirmedUserList}>
-              <UserList.Title> 올 수 있는 사람들</UserList.Title>
-              <UserList.Placeholder>{':('}</UserList.Placeholder>
-            </UserList>
-
-            <UserList users={missedUserList}>
-              <UserList.Title color="secondary"> 아쉽지만 못오는 사람들</UserList.Title>
-              <UserList.Placeholder>{':)'}</UserList.Placeholder>
-            </UserList>
-          </FlexVertical>
+          <MeetingResultContents />
         </FlexVertical>
       </Contents>
 
