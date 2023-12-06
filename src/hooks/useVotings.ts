@@ -19,7 +19,7 @@ export const useVotings = () => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['votings', meetingId],
+    queryKey: [VOTINGS_QUERY_KEY, meetingId],
     queryFn: () => getVotings(meetingId),
     refetchOnMount: true,
     staleTime: 5000,
