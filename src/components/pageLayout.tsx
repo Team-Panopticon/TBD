@@ -6,13 +6,13 @@ import { Outlet } from 'react-router-dom';
 
 import logo_nobg from '../assets/round.png';
 export const Page = styled('div')`
-  position: relative;
   display: flex;
+  height: 100%;
+  /* background-color: green; */
   flex-direction: column;
   flex-wrap: nowrap;
-  overflow: auto;
-  flex: 1;
-  height: 100%;
+  overflow: scroll;
+  padding-bottom: 64px;
 `;
 
 const HeaderWrapper = styled('header')`
@@ -82,7 +82,7 @@ export const EditHeaderBox = styled('div')({
   flexDirection: 'row',
   height: '100%',
   gap: '8px',
-  padding: '0 0px 32px',
+  padding: '32px 0',
 });
 
 export const EditTemplateHeader = ({ children }: { children: ReactNode }) => {
@@ -93,22 +93,21 @@ export const EditTemplateHeader = ({ children }: { children: ReactNode }) => {
   );
 };
 const ContentsWrapper = styled(Box)`
-  padding: 16px 32px;
+  padding: 0 32px 0;
   height: 100%;
   display: flex;
+  flex-direction: column;
 `;
-const ContentsBox = styled(Box)`
+const ContentsBox = styled(Box)<{ useHeader?: boolean }>`
+  height: ${(props) => (props.useHeader === true ? 'calc(100% - 64px)' : '100%')};
+  flex: auto;
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
-  flex-grow: 1;
-  he
 `;
 
 export const Footer = styled('footer')({
   backgroundColor: 'white',
   position: 'sticky',
-  bottom: 0,
   width: '100%',
   height: '64px',
   flexShrink: 0,
@@ -117,10 +116,10 @@ export const Footer = styled('footer')({
 
 export const PageLayout = ({ useHeader = true }: { useHeader?: boolean }) => {
   return (
-    <div style={{ height: 'calc(var(--vh, 1vh)*100 )' }}>
+    <div style={{ height: 'calc(var(--vh, 1vh)*100 )', overflow: 'hidden', position: 'relative' }}>
       {useHeader && <Header></Header>}
       <ContentsWrapper>
-        <ContentsBox>
+        <ContentsBox useHeader>
           <Outlet />
         </ContentsBox>
       </ContentsWrapper>

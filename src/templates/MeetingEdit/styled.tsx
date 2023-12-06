@@ -60,7 +60,7 @@ export const StepBoxContainer = styled('div')({
 });
 
 export const PasswordInput = styled('div')({
-  padding: '25px 35px 0',
+  padding: '24px 34px 0',
 
   display: 'flex',
   flexDirection: 'column',
@@ -82,7 +82,7 @@ export const PasswordSkipBtn = styled(Button)({
 });
 
 export const ConfirmModalContainer = styled('div')({
-  padding: '25px 35px',
+  padding: '24px 34px',
   display: 'flex',
   flexDirection: 'column',
   flexGrow: 1,

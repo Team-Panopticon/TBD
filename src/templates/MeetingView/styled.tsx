@@ -19,6 +19,7 @@ export const NoUserList = styled('div')((props) => ({
 
 export const VoteTableWrapper = styled('div')({
   marginTop: '36px',
+  flex: 1,
   '.vote-table': {
     marginBottom: '8px',
   },
