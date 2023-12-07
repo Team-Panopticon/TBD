@@ -1,6 +1,5 @@
 import Button from '@mui/material/Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
@@ -8,20 +7,16 @@ import { useSetRecoilState } from 'recoil';
 import { confirmMeeting } from '../../apis/meetings';
 import { Voting, VotingSlot } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Page } from '../../components/pageLayout';
+import { Footer, Page } from '../../components/pageLayout';
 import { FullHeightButtonGroup } from '../../components/styled';
-import { UserList } from '../../components/UserList/UserList';
-import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
-import { MeetingStatus, MeetingType } from '../../constants/meeting';
+import { MeetingStatus } from '../../constants/meeting';
 import { MEETING_QUERY_KEY, useMeeting } from '../../hooks/useMeeting';
-import { useMeetingView } from '../../hooks/useMeetingView';
-import { isSameSlot } from '../../hooks/useMeetingVote';
 import { useProgress } from '../../hooks/useProgress';
 import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
+import MeetingConfirmContents from '../../templates/MeetingConfirm/MeetingConfirmContents';
 import MeetingConfirmHeader from '../../templates/MeetingConfirm/MeetingConfirmHeader';
 import { CheckConfirmModal } from '../../templates/MeetingView/CheckConfirmModal';
-import { VoteTableWrapper } from '../../templates/MeetingView/styled';
 
 function MeetingConfirm() {
   const navigate = useNavigate();
@@ -31,13 +26,8 @@ function MeetingConfirm() {
   const isFetching = isMeetingFetching && isVotingsFetcing;
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
-  const {
-    handleClickVoteTable: handleVoteTableClickHightlight,
-    userList,
-    voteTableDataList,
-  } = useMeetingView(meeting);
-
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
+
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
   const { show, hide } = useProgress();
   const queryClient = useQueryClient();
@@ -66,20 +56,6 @@ function MeetingConfirm() {
     }
   }, [setVotings, votings]);
 
-  const handleClickVoteTable = (
-    date: Dayjs,
-    checked: boolean,
-    target: VoteTableVoting,
-    slot: VotingSlot,
-  ) => {
-    if (selectedSlot && isSameSlot(selectedSlot, slot)) {
-      setSelectedSlot(undefined);
-    } else {
-      setSelectedSlot(slot);
-    }
-    handleVoteTableClickHightlight(date, checked, target, slot);
-  };
-
   const handleConfirm = () => {
     if (!selectedSlot) {
       return;
@@ -96,19 +72,7 @@ function MeetingConfirm() {
   return (
     <Page>
       <MeetingConfirmHeader />
-      <Contents>
-        <UserList users={userList} isSticky>
-          <UserList.Title color="primary">투표 현황</UserList.Title>
-        </UserList>
-
-        <VoteTableWrapper>
-          <VoteTable
-            onSlotClick={handleClickVoteTable}
-            data={voteTableDataList}
-            headers={meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
-          />
-        </VoteTableWrapper>
-      </Contents>
+      <MeetingConfirmContents selectedSlot={selectedSlot} setSelectedSlot={setSelectedSlot} />
       <Footer>
         <FullHeightButtonGroup
           fullWidth
