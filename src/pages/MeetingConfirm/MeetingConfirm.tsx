@@ -1,7 +1,4 @@
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
@@ -11,8 +8,8 @@ import { useSetRecoilState } from 'recoil';
 import { confirmMeeting } from '../../apis/meetings';
 import { Voting, VotingSlot } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { Contents, Footer, Page } from '../../components/pageLayout';
+import { FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
 import { MeetingStatus, MeetingType } from '../../constants/meeting';
@@ -22,6 +19,7 @@ import { isSameSlot } from '../../hooks/useMeetingVote';
 import { useProgress } from '../../hooks/useProgress';
 import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
+import MeetingConfirmHeader from '../../templates/MeetingConfirm/MeetingConfirmHeader';
 import { CheckConfirmModal } from '../../templates/MeetingView/CheckConfirmModal';
 import { VoteTableWrapper } from '../../templates/MeetingView/styled';
 
@@ -97,31 +95,7 @@ function MeetingConfirm() {
 
   return (
     <Page>
-      <Header>
-        <HeaderContainer>
-          <FlexVertical flex={1} alignItems={'center'} gap={1}>
-            <FlexVertical flex={1} gap={1} width={'100%'}>
-              <Box
-                display={'flex'}
-                flexDirection={'row'}
-                justifyContent={'center'}
-                alignItems={'center'}
-                gap={1}
-              >
-                <Typography variant="h5" fontWeight={700}>
-                  {meeting?.name}
-                </Typography>
-              </Box>
-              <FlexVertical alignItems={'center'}>
-                <EventAvailableIcon sx={{ fontSize: 110 }} />
-              </FlexVertical>
-              <Typography variant="h6" fontWeight={400} align="center">
-                모임시간을 골라서 확정해주세요
-              </Typography>
-            </FlexVertical>
-          </FlexVertical>
-        </HeaderContainer>
-      </Header>
+      <MeetingConfirmHeader />
       <Contents>
         <UserList users={userList} isSticky>
           <UserList.Title color="primary">투표 현황</UserList.Title>
