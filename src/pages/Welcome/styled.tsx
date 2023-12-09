@@ -16,6 +16,14 @@ export const MainImageContainer = styled('section')`
   align-items: center;
 `;
 
+export const HowToContainer = styled('section')`
+  background-color: #f6f6f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 40px;
+`;
+
 export const WelcomeContents = styled('div')`
   display: flex;
   flex-direction: column;
