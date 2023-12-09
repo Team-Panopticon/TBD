@@ -25,7 +25,6 @@ import { useProgress } from '../../hooks/useProgress';
 import useShare from '../../hooks/useShare';
 import GreetingHands from '../../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../../stores/adminToken';
-import { currentMeetingStateSelector } from '../../stores/currentMeeting';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
 import { votingsState } from '../../stores/voting';
@@ -52,13 +51,7 @@ function MeetingView() {
   const { show, hide } = useProgress();
 
   const { data, isLoading } = useMeetingData(meetingId);
-  const setCurrentMeetingState = useSetRecoilState(currentMeetingStateSelector);
-  useEffect(() => {
-    if (!data.meeting) {
-      return;
-    }
-    setCurrentMeetingState(data.meeting);
-  }, [data.meeting, setCurrentMeetingState]);
+
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
     data.meeting,
   );

@@ -7,7 +7,6 @@ import { Header } from './Header';
 export const Page = styled('div')`
   display: flex;
   height: 100%;
-  /* background-color: green; */
   flex-direction: column;
   flex-wrap: nowrap;
   overflow: scroll;
@@ -37,12 +36,13 @@ export const Footer = styled('footer')({
   bottom: 0,
 });
 
-export const PageLayout = ({ useHeader = true }: { useHeader?: boolean }) => {
+export const PageLayout = (props: { useHeader?: boolean }) => {
+  const { useHeader = true } = props;
   return (
     <div style={{ height: 'calc(var(--vh, 1vh)*100 )', overflow: 'hidden', position: 'relative' }}>
       {useHeader && <Header></Header>}
       <ContentsWrapper>
-        <ContentsBox useHeader={useHeader}>
+        <ContentsBox {...props}>
           <Outlet />
         </ContentsBox>
       </ContentsWrapper>
