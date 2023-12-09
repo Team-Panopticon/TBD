@@ -1,6 +1,5 @@
 import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
@@ -11,18 +10,12 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { issuePublicMeetingAdminToken } from '../../apis/meetings';
 import { Voting } from '../../apis/votes';
-import { ResultPageButton } from '../../components/buttons/ResultPageButton';
-import { VotePageButton } from '../../components/buttons/VotePageButton';
 import { Loading } from '../../components/Loading';
-import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
-import { UserList } from '../../components/UserList/UserList';
-import { VoteTable } from '../../components/VoteTable/VoteTable';
-import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../../constants/meeting';
+import { Header, HeaderContainer, Page } from '../../components/pageLayout';
+import { FlexVertical } from '../../components/styled';
+import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus } from '../../constants/meeting';
 import { useMeeting } from '../../hooks/useMeeting';
-import { useMeetingView } from '../../hooks/useMeetingView';
 import { useProgress } from '../../hooks/useProgress';
-import useShare from '../../hooks/useShare';
 import { useVotings } from '../../hooks/useVotings';
 import GreetingHands from '../../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../../stores/adminToken';
@@ -31,7 +24,9 @@ import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
 import { votingsState } from '../../stores/voting';
 import { Dropdown } from '../../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../../templates/MeetingView/InputPasswordModal';
-import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
+import MeetingViewContents from '../../templates/MeetingView/MeetingViewContents';
+import MeetingViewFooter from '../../templates/MeetingView/MeetingViewFooter';
+import { PrimaryBold } from '../../templates/MeetingView/styled';
 
 function MeetingView() {
   const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
@@ -47,11 +42,7 @@ function MeetingView() {
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
 
-  const { openShare, setTarget } = useShare();
   const { show, hide } = useProgress();
-
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingView(meeting);
 
   const { mutate } = useMutation({
     mutationFn: async (params: { meetingId: string; destination: string }) =>
@@ -65,9 +56,8 @@ function MeetingView() {
   });
 
   useEffect(() => {
-    if (meeting && votings) {
+    if (votings) {
       setVotings(votings);
-      setTarget(meeting);
     }
   }, [meeting, votings, setVotings, meetingId]);
 
@@ -121,7 +111,7 @@ function MeetingView() {
     return <Loading />;
   }
 
-  if (!meeting || !voteTableDataList) {
+  if (!meeting) {
     return null;
   }
 
@@ -164,42 +154,8 @@ function MeetingView() {
           </FlexVertical>
         </HeaderContainer>
       </Header>
-      <Contents>
-        <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
-          <UserList.Title color="primary">투표 현황</UserList.Title>
-        </UserList>
-
-        <VoteTableWrapper>
-          <VoteTable
-            onSlotClick={handleClickVoteTable}
-            data={voteTableDataList}
-            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
-            className="vote-table"
-          />
-        </VoteTableWrapper>
-      </Contents>
-      <Footer>
-        <FullHeightButtonGroup
-          fullWidth
-          disableElevation
-          variant="contained"
-          aria-label="Disabled elevation buttons"
-        >
-          {meeting.status === MeetingStatus.inProgress ? (
-            <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
-          ) : (
-            <ResultPageButton meetingId={meetingId} />
-          )}
-          <Button
-            color="transPrimary"
-            onClick={() => {
-              openShare();
-            }}
-          >
-            공유
-          </Button>
-        </FullHeightButtonGroup>
-      </Footer>
+      <MeetingViewContents />
+      <MeetingViewFooter />
       <InputPasswordModal
         meetingId={meetingId}
         show={showPasswordModal}
