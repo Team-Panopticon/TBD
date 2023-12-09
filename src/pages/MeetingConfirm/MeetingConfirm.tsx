@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 
 import { confirmMeeting } from '../../apis/meetings';
@@ -16,30 +16,28 @@ import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
 import { VoteTable, VoteTableVoting } from '../../components/VoteTable/VoteTable';
 import { MeetingStatus, MeetingType } from '../../constants/meeting';
-import { useMeetingData } from '../../hooks/useMeetingData';
+import { MEETING_QUERY_KEY, useMeeting } from '../../hooks/useMeeting';
 import { useMeetingView } from '../../hooks/useMeetingView';
 import { isSameSlot } from '../../hooks/useMeetingVote';
 import { useProgress } from '../../hooks/useProgress';
+import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
 import { CheckConfirmModal } from '../../templates/MeetingView/CheckConfirmModal';
 import { VoteTableWrapper } from '../../templates/MeetingView/styled';
 
-interface MeetingConfirmPathParams {
-  meetingId: string;
-}
-
 function MeetingConfirm() {
   const navigate = useNavigate();
 
-  const { meetingId } = useParams<keyof MeetingConfirmPathParams>() as MeetingConfirmPathParams;
-  const { data, isLoading } = useMeetingData(meetingId);
+  const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const isFetching = isMeetingFetching && isVotingsFetcing;
 
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const {
     handleClickVoteTable: handleVoteTableClickHightlight,
     userList,
     voteTableDataList,
-  } = useMeetingView(data.meeting);
+  } = useMeetingView(meeting);
 
   const [selectedSlot, setSelectedSlot] = useState<VotingSlot>();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
@@ -49,8 +47,8 @@ function MeetingConfirm() {
     mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
     onMutate: () => show(),
     onSuccess: () => {
-      queryClient.setQueryData(['meeting', meetingId], {
-        ...data.meeting,
+      queryClient.setQueryData([MEETING_QUERY_KEY, meetingId], {
+        ...meeting,
         status: MeetingStatus.done,
       });
       navigate(`/meetings/${meetingId}/result`);
@@ -65,10 +63,10 @@ function MeetingConfirm() {
   });
 
   useEffect(() => {
-    if (data.votings) {
-      setVotings(data.votings);
+    if (votings) {
+      setVotings(votings);
     }
-  }, [setVotings, data.votings]);
+  }, [setVotings, votings]);
 
   const handleClickVoteTable = (
     date: Dayjs,
@@ -93,7 +91,7 @@ function MeetingConfirm() {
     comfirmMeetingMutation.mutate({ meetingId, slot: selectedSlot });
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 
@@ -110,7 +108,7 @@ function MeetingConfirm() {
               gap={1}
             >
               <Typography variant="h5" fontWeight={700}>
-                {data.meeting?.name}
+                {meeting?.name}
               </Typography>
             </Box>
             <FlexVertical alignItems={'center'}>
@@ -131,7 +129,7 @@ function MeetingConfirm() {
           <VoteTable
             onSlotClick={handleClickVoteTable}
             data={voteTableDataList}
-            headers={data.meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
+            headers={meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
           />
         </VoteTableWrapper>
       </>

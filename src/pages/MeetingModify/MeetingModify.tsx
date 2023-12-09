@@ -1,20 +1,18 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { getMeeting, updateMeeting } from '../../apis/meetings';
+import { updateMeeting } from '../../apis/meetings';
 import { Meeting } from '../../apis/types';
 import { Loading } from '../../components/Loading';
 import { Page } from '../../components/pageLayout';
 import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../../constants/meeting';
+import { useMeeting } from '../../hooks/useMeeting';
 import useMeetingEdit from '../../hooks/useMeetingEdit';
 import { useProgress } from '../../hooks/useProgress';
+import { useVotings } from '../../hooks/useVotings';
 import { MeetingEditTemplate } from '../../templates/MeetingEdit/MeetingEditTemplate';
-
-interface MeetingViewPathParams {
-  meetingId: string;
-}
 
 export const initialState: Meeting = {
   id: '',
@@ -28,28 +26,23 @@ export const initialState: Meeting = {
 
 function MeetingModify() {
   const [meeting, setMeeting] = useState<Meeting>(initialState);
-  const { meetingId } = useParams<keyof MeetingViewPathParams>() as MeetingViewPathParams;
+  const { meeting: initialMeeting, isLoading, isError, invalidateMeeting } = useMeeting();
+  const { invalidateVotings } = useVotings();
   const { getMeetingEditSteps } = useMeetingEdit();
   const navigate = useNavigate();
   const { show, hide } = useProgress();
   const { mutate } = useMutation({
     onMutate: () => show(),
     mutationFn: (params: Parameters<typeof updateMeeting>[0]) => updateMeeting(params),
-    onSuccess: (res) => navigate(`/meetings/${res.id}`),
+    onSuccess: async (res) => {
+      await Promise.all([invalidateMeeting(), invalidateVotings()]);
+      navigate(`/meetings/${res.id}`);
+    },
     onError: (e) => {
       const errMessage = e instanceof AxiosError ? e.message : '알 수 없는 에러가 발생했습니다';
       alert(errMessage);
     },
     onSettled: () => hide(),
-  });
-
-  const {
-    data: initialMeeting,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['meeting', meetingId],
-    queryFn: () => getMeeting(meetingId),
   });
 
   useEffect(() => {
