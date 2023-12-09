@@ -1,112 +1,36 @@
 import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Snackbar from '@mui/material/Snackbar';
-import Typography from '@mui/material/Typography';
-import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
-import { issuePublicMeetingAdminToken } from '../../apis/meetings';
 import { Voting } from '../../apis/votes';
-import { ResultPageButton } from '../../components/buttons/ResultPageButton';
-import { VotePageButton } from '../../components/buttons/VotePageButton';
 import { Loading } from '../../components/Loading';
-import { Footer, Page } from '../../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
-import { UserList } from '../../components/UserList/UserList';
-import { VoteTable } from '../../components/VoteTable/VoteTable';
-import { INPUT_PASSWORD_FINISH_EVENT, MeetingStatus, MeetingType } from '../../constants/meeting';
+import { Page } from '../../components/pageLayout';
+import { INPUT_PASSWORD_FINISH_EVENT } from '../../constants/meeting';
 import { useMeeting } from '../../hooks/useMeeting';
-import { useMeetingView } from '../../hooks/useMeetingView';
-import { useProgress } from '../../hooks/useProgress';
-import useShare from '../../hooks/useShare';
 import { useVotings } from '../../hooks/useVotings';
-import GreetingHands from '../../images/greeting-hands.png';
-import { adminTokenStateFamily } from '../../stores/adminToken';
-import { currentUserStateFamily } from '../../stores/currentUser';
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
 import { votingsState } from '../../stores/voting';
-import { Dropdown } from '../../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../../templates/MeetingView/InputPasswordModal';
-import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/styled';
+import MeetingViewContents from '../../templates/MeetingView/MeetingViewContents';
+import MeetingViewFooter from '../../templates/MeetingView/MeetingViewFooter';
 
 function MeetingView() {
   const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
   const { votings, isFetching: isVotingsFetcing } = useVotings();
   const isFetching = isMeetingFetching && isVotingsFetcing;
 
-  const navigate = useNavigate();
   const setVotings = useSetRecoilState<Voting[]>(votingsState);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
 
-  const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
-
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
-  const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
-
-  const { openShare, setTarget } = useShare();
-  const { show, hide } = useProgress();
-
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingView(meeting);
-
-  const { mutate } = useMutation({
-    mutationFn: async (params: { meetingId: string; destination: string }) =>
-      issuePublicMeetingAdminToken(params.meetingId),
-    onMutate: () => show(),
-    onSuccess: (token, { destination }) => {
-      setAdminToken(token);
-      navigate(destination);
-    },
-    onSettled: () => hide(),
-  });
 
   useEffect(() => {
-    if (meeting && votings) {
+    if (votings) {
       setVotings(votings);
-      setTarget(meeting);
     }
   }, [meeting, votings, setVotings, meetingId]);
-
-  const handleClickSettingsButton = async (destination: string) => {
-    const isLoggedInAsAdmin = adminToken !== undefined;
-    if (isLoggedInAsAdmin) {
-      navigate(destination);
-      return;
-    }
-
-    if (meeting?.adminAccess === 'public') {
-      mutate({ meetingId, destination });
-      return;
-    }
-
-    // Private meeting AND Not yet logged in as admin
-    const isInputPasswordResolved = await openInputPasswordModal();
-
-    if (isInputPasswordResolved) {
-      navigate(destination);
-    }
-  };
-
-  // Create a promise that resolves when the user closes the password input modal
-  const openInputPasswordModal = () => {
-    setShowPasswordModal(true);
-
-    const inputPasswordFinishPromise = new Promise((resolve, reject) => {
-      addEventListener(
-        INPUT_PASSWORD_FINISH_EVENT,
-        (event) => resolve((event as CustomEvent).detail),
-        {
-          once: true,
-        },
-      );
-    });
-
-    return inputPasswordFinishPromise;
-  };
 
   const handlePasswordModalConfirm = () => {
     dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: true }));
@@ -121,69 +45,14 @@ function MeetingView() {
     return <Loading />;
   }
 
-  if (!meeting || !voteTableDataList) {
+  if (!meeting) {
     return null;
   }
 
   return (
     <Page>
-      <>
-        <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
-          {meeting.status === MeetingStatus.inProgress && (
-            <Dropdown
-              onClickConfirmButton={() =>
-                handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
-              }
-              onClickEditButton={() => handleClickSettingsButton(`/meetings/${meetingId}/modify`)}
-            />
-          )}
-        </Box>
-        <FlexVertical alignItems={'center'}>
-          <img height={110} src={GreetingHands} alt="" />
-        </FlexVertical>
-        {currentUser ? (
-          <Typography variant="h5" fontWeight={500} align="center">
-            <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님 안녕하세요
-          </Typography>
-        ) : null}
-      </>
-
-      <>
-        <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
-          <UserList.Title color="primary">투표 현황</UserList.Title>
-        </UserList>
-
-        <VoteTableWrapper>
-          <VoteTable
-            onSlotClick={handleClickVoteTable}
-            data={voteTableDataList}
-            headers={meeting.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
-            className="vote-table"
-          />
-        </VoteTableWrapper>
-      </>
-      <Footer>
-        <FullHeightButtonGroup
-          fullWidth
-          disableElevation
-          variant="contained"
-          aria-label="Disabled elevation buttons"
-        >
-          {meeting.status === MeetingStatus.inProgress ? (
-            <VotePageButton meetingId={meetingId} isLoggedIn={!!currentUser?.username} />
-          ) : (
-            <ResultPageButton meetingId={meetingId} />
-          )}
-          <Button
-            color="transPrimary"
-            onClick={() => {
-              openShare();
-            }}
-          >
-            공유
-          </Button>
-        </FullHeightButtonGroup>
-      </Footer>
+      <MeetingViewContents />
+      <MeetingViewFooter />
       <InputPasswordModal
         meetingId={meetingId}
         show={showPasswordModal}
