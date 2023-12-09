@@ -1,6 +1,4 @@
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
@@ -10,7 +8,7 @@ import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState 
 import { createVoting, updateVoting } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
 import { Footer, Page } from '../../components/pageLayout';
-import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
+import { FullHeightButtonGroup } from '../../components/styled';
 import { UserList, UserListData } from '../../components/UserList/UserList';
 import { VoteTable } from '../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../constants/meeting';
@@ -187,28 +185,12 @@ function MeetingVote() {
   return (
     <Page>
       <>
-        <FlexVertical flex={1} alignItems={'center'} gap={1}>
-          <FlexVertical flex={1} gap={1} width={'100%'}>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              gap={1}
-            >
-              <Typography variant="h5" fontWeight={700}>
-                {data.meeting.name}
-              </Typography>
-            </Box>
-          </FlexVertical>
-        </FlexVertical>
-      </>
-      <>
         <UserList
           className="user-list"
           users={checkedUserList}
           onClick={handleClickUser}
           selectedTooltipText="새로운 유저로 투표하려면 다시 클릭해주세요"
+          isSticky
         >
           <UserList.Title color="primary">투표 현황</UserList.Title>
         </UserList>

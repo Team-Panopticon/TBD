@@ -6,7 +6,6 @@ import { useRecoilState } from 'recoil';
 
 import { createMeeting } from '../../apis/meetings';
 import { warmUpInstance } from '../../apis/utils';
-import { Page } from '../../components/pageLayout';
 import useMeetingEdit from '../../hooks/useMeetingEdit';
 import { useProgress } from '../../hooks/useProgress';
 import { createMeetingState } from '../../stores/createMeeting';
@@ -80,7 +79,7 @@ function MeetingCreate() {
   };
 
   return (
-    <Page>
+    <>
       <MeetingEditTemplate
         meeting={meeting}
         meetingEditSteps={meetingeditSteps}
@@ -98,7 +97,7 @@ function MeetingCreate() {
         onCancel={handlePasswordCancel}
         onSkip={handlePasswordSkip}
       />
-    </Page>
+    </>
   );
 }
 

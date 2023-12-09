@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
@@ -42,7 +43,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
     <>
       <CenterContentModal open={show} width={320} height={170}>
         <div style={{ position: 'relative', height: '100%' }}>
-          <div style={{ padding: 25 }}>
+          <Box padding={3} pb={1}>
             <InputLabel shrink>참석자 이름 (최대 20자)</InputLabel>
             <TextField
               autoComplete="off"
@@ -57,7 +58,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               helperText={invalidText}
               inputProps={{ maxLength: 20 }}
             />
-          </div>
+          </Box>
           <FullHeightButtonGroup
             fullWidth
             variant="contained"

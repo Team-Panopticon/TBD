@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { SetterOrUpdater } from 'recoil';
 
 import { Meeting } from '../../apis/types';
-import { EditTemplateHeader, Footer, Page } from '../../components/pageLayout';
+import { EditTemplateHeader } from '../../components/Header';
+import { Footer } from '../../components/pageLayout';
 import { FullHeightButtonGroup } from '../../components/styled';
 import { MeetingType } from '../../constants/meeting';
 import { IMeetingEditStep } from '../../hooks/useMeetingEdit';
@@ -83,7 +84,7 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
           {description}
         </AnimatedTypography>
       </EditTemplateHeader>
-      <Page>
+      <>
         <MeetingEditStepper
           meeting={meeting}
           currentStep={currentStep}
@@ -94,7 +95,7 @@ export function MeetingEditTemplate<T extends CreateMeetingState | Meeting>({
             }))
             .reverse()}
         ></MeetingEditStepper>
-      </Page>
+      </>
       <Footer>
         <FullHeightButtonGroup
           fullWidth

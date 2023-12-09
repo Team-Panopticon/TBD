@@ -25,6 +25,7 @@ import { useProgress } from '../../hooks/useProgress';
 import useShare from '../../hooks/useShare';
 import GreetingHands from '../../images/greeting-hands.png';
 import { adminTokenStateFamily } from '../../stores/adminToken';
+import { currentMeetingStateSelector } from '../../stores/currentMeeting';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
 import { votingsState } from '../../stores/voting';
@@ -51,7 +52,13 @@ function MeetingView() {
   const { show, hide } = useProgress();
 
   const { data, isLoading } = useMeetingData(meetingId);
-
+  const setCurrentMeetingState = useSetRecoilState(currentMeetingStateSelector);
+  useEffect(() => {
+    if (!data.meeting) {
+      return;
+    }
+    setCurrentMeetingState(data.meeting);
+  }, [data.meeting, setCurrentMeetingState]);
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } = useMeetingView(
     data.meeting,
   );
@@ -131,40 +138,26 @@ function MeetingView() {
   return (
     <Page>
       <>
-        <FlexVertical flex={0} alignItems={'center'} gap={1}>
-          <FlexVertical flex={1} gap={1} width={'100%'}>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'center'}
-              alignItems={'center'}
-            >
-              <Typography variant="h5" fontWeight={700}>
-                {data.meeting.name}
-              </Typography>
-              {data.meeting.status === MeetingStatus.inProgress && (
-                <Dropdown
-                  onClickConfirmButton={() =>
-                    handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
-                  }
-                  onClickEditButton={() =>
-                    handleClickSettingsButton(`/meetings/${meetingId}/modify`)
-                  }
-                />
-              )}
-            </Box>
-            <FlexVertical alignItems={'center'}>
-              <img height={110} src={GreetingHands} alt="" />
-            </FlexVertical>
-            {currentUser ? (
-              <Typography variant="h5" fontWeight={500} align="center">
-                <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님
-                안녕하세요
-              </Typography>
-            ) : null}
-          </FlexVertical>
+        <Box display={'flex'} flexDirection={'row'} justifyContent={'center'} alignItems={'center'}>
+          {data.meeting.status === MeetingStatus.inProgress && (
+            <Dropdown
+              onClickConfirmButton={() =>
+                handleClickSettingsButton(`/meetings/${meetingId}/confirm`)
+              }
+              onClickEditButton={() => handleClickSettingsButton(`/meetings/${meetingId}/modify`)}
+            />
+          )}
+        </Box>
+        <FlexVertical alignItems={'center'}>
+          <img height={110} src={GreetingHands} alt="" />
         </FlexVertical>
+        {currentUser ? (
+          <Typography variant="h5" fontWeight={500} align="center">
+            <PrimaryBold className="primary-bold">{currentUser.username}</PrimaryBold>님 안녕하세요
+          </Typography>
+        ) : null}
       </>
+
       <>
         <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
           <UserList.Title color="primary">투표 현황</UserList.Title>
