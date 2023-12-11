@@ -1,13 +1,15 @@
 import { useRecoilValue } from 'recoil';
 
-import { Meeting } from '../apis/types';
-import { Voting, VotingSlot } from '../apis/votes';
-import { UserListData } from '../components/UserList/UserList';
-import { MeetingType } from '../constants/meeting';
-import { votingsState } from '../stores/voting';
-import { isSameSlot } from './MeetingVote/useMeetingVoteContents';
+import { Meeting } from '../../apis/types';
+import { Voting, VotingSlot } from '../../apis/votes';
+import { UserListData } from '../../components/UserList/UserList';
+import { MeetingType } from '../../constants/meeting';
+import { votingsState } from '../../stores/voting';
+import { isSameSlot } from '../MeetingVote/useMeetingVoteContents';
+import { useMeeting } from '../useMeeting';
 
-export const useMeetingResult = (meeting?: Meeting) => {
+export const useMeetingResultContents = () => {
+  const { meeting } = useMeeting();
   const votings = useRecoilValue(votingsState);
 
   return {
