@@ -10,6 +10,9 @@ export const Page = styled('div')`
   flex-direction: column;
   flex-wrap: nowrap;
   overflow: scroll;
+  padding: 0 32px;
+  width: 100vw;
+  margin-left: -32px;
   padding-bottom: 64px;
 `;
 

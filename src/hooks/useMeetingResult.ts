@@ -5,7 +5,7 @@ import { Voting, VotingSlot } from '../apis/votes';
 import { UserListData } from '../components/UserList/UserList';
 import { MeetingType } from '../constants/meeting';
 import { votingsState } from '../stores/voting';
-import { isSameSlot } from './useMeetingVote';
+import { isSameSlot } from './MeetingVote/useMeetingVoteContents';
 
 export const useMeetingResult = (meeting?: Meeting) => {
   const votings = useRecoilValue(votingsState);

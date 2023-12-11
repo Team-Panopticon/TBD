@@ -58,13 +58,6 @@ const HeaderWrapper = styled('header')`
   flex: 0;
 `;
 
-export const HeaderBox = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  height: '100%',
-  gap: '8px',
-  padding: '0 32px 32px',
-});
 const HeaderContainer = styled('div')`
   width: 100%;
   height: 64px;

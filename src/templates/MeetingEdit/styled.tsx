@@ -51,8 +51,10 @@ export const StepBox = styled('div')<StepBox>((props) => ({
 }));
 
 export const StepBoxContainer = styled('div')({
-  // padding: '0 32px',
   height: '100%',
+  width: '100vw',
+  marginLeft: '-32px',
+  padding: '0 32px',
   overflow: 'scroll',
   paddingBottom: '4px',
   display: 'flex',
