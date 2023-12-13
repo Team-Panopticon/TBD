@@ -16,6 +16,7 @@ import MeetingModify from './pages/MeetingModify';
 import MeetingResult from './pages/MeetingResult';
 import MeetingView from './pages/MeetingView';
 import MeetingVote from './pages/MeetingVote';
+import Welcome from './pages/Welcome';
 import { theme } from './theme';
 
 dayjs.locale('ko');
@@ -23,11 +24,15 @@ dayjs.locale('ko');
 const router = createBrowserRouter([
   {
     path: '*',
-    element: <Navigate to={'/meetings/new'} />,
+    element: <Navigate to={'/welcome'} />,
   },
   {
     path: '/',
-    loader: () => redirect('/meetings/new'),
+    loader: () => redirect('/welcome'),
+  },
+  {
+    path: 'welcome',
+    element: <Welcome />,
   },
   {
     path: 'meetings/new',
