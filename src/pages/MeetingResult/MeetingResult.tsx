@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 
 import { Voting } from '../../apis/votes';
@@ -10,21 +10,20 @@ import { Loading } from '../../components/Loading';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
 import { UserList } from '../../components/UserList/UserList';
-import { useMeetingData } from '../../hooks/useMeetingData';
+import { useMeeting } from '../../hooks/useMeeting';
 import { useMeetingResult } from '../../hooks/useMeetingResult';
 import useShare from '../../hooks/useShare';
+import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
 import { getMealLabel } from '../../utils/getMealLabel';
 
 function MeetingResult() {
   const navigate = useNavigate();
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
-  const { meetingId } = useParams();
   const { openShare, setTarget } = useShare();
-  const {
-    data: { meeting, votings },
-    isLoading,
-  } = useMeetingData(meetingId || '');
+  const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingsFetcing } = useVotings();
+  const isFetching = isMeetingFetching && isVotingsFetcing;
 
   useEffect(() => {
     if (meeting && votings) {
@@ -39,7 +38,7 @@ function MeetingResult() {
   const meetingDate = meeting?.confirmedDateType?.date;
   const meetingMeal = meeting?.confirmedDateType?.meal;
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loading />;
   }
 
