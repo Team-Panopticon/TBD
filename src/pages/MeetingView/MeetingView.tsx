@@ -6,6 +6,7 @@ import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { UIEvent, useEffect, useRef, useState } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -76,6 +77,17 @@ function MeetingView() {
       setTarget(data.meeting);
     }
   }, [data.meeting, data.votings, setVotings, meetingId]);
+
+  useResizeDetector({
+    targetRef: pageElementRef,
+    onResize: () => {
+      if (pageElementRef.current === null) {
+        return;
+      }
+      const { scrollTop, scrollHeight, clientHeight } = pageElementRef.current;
+      setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+    },
+  });
 
   const handleClickSettingsButton = async (destination: string) => {
     const isLoggedInAsAdmin = adminToken !== undefined;

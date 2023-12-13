@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { UIEvent, useEffect, useRef, useState } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
@@ -120,6 +121,17 @@ function MeetingVote() {
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
     }
   }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, data.votings, data.meeting]);
+
+  useResizeDetector({
+    targetRef: pageElementRef,
+    onResize: () => {
+      if (pageElementRef.current === null) {
+        return;
+      }
+      const { scrollTop, scrollHeight, clientHeight } = pageElementRef.current;
+      setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+    },
+  });
 
   const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
     if (!data.meeting) {
