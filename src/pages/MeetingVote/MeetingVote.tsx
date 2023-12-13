@@ -3,12 +3,14 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { useEffect, useState } from 'react';
+import { UIEvent, useEffect, useRef, useState } from 'react';
+import { useResizeDetector } from 'react-resize-detector';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 import { createVoting, updateVoting } from '../../apis/votes';
 import WritingHands from '../../assets/writing.svg';
+import { ScrollDownFloatingButton } from '../../components/buttons/ScrollDownFloatingButton';
 import { Loading } from '../../components/Loading';
 import { Contents, Footer, Header, HeaderContainer, Page } from '../../components/pageLayout';
 import { FlexVertical, FullHeightButtonGroup } from '../../components/styled';
@@ -28,6 +30,7 @@ import { PrimaryBold, VoteTableWrapper } from '../../templates/MeetingView/style
 
 function MeetingVote() {
   const [searchParams] = useSearchParams();
+  const pageElementRef = useRef<HTMLDivElement>(null);
   const { meeting, meetingId, isFetching: isMeetingFetching } = useMeeting();
   const { votings, isFetching: isVotingsFetcing, invalidateVotings } = useVotings();
   const isFetching = isMeetingFetching && isVotingsFetcing;
@@ -46,6 +49,7 @@ function MeetingVote() {
   }));
 
   const [showUsernameModal, setShowUsernameModal] = useState<boolean>(false);
+  const [hasMoreBottomScroll, setHasMoreBottomScroll] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const { show, hide } = useProgress();
@@ -117,6 +121,17 @@ function MeetingVote() {
     }
   }, [meetingId, setVotingsState, setCurrentUserVotingSlots, currentUser, votings, meeting]);
 
+  useResizeDetector({
+    targetRef: pageElementRef,
+    onResize: () => {
+      if (pageElementRef.current === null) {
+        return;
+      }
+      const { scrollTop, scrollHeight, clientHeight } = pageElementRef.current;
+      setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+    },
+  });
+
   const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
     if (!meeting) {
       return;
@@ -176,6 +191,25 @@ function MeetingVote() {
     });
   };
 
+  const handlePageScroll = (event: UIEvent<HTMLDivElement>) => {
+    const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+    setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+  };
+
+  const handleScollDownButtonClick = () => {
+    if (!pageElementRef.current) {
+      return;
+    }
+
+    const viewportHeight = window.innerHeight;
+    const scrollAmount = viewportHeight * 0.5;
+
+    pageElementRef.current.scrollTo({
+      top: pageElementRef.current.scrollTop + scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
   if (isFetching) {
     return <Loading />;
   }
@@ -185,7 +219,7 @@ function MeetingVote() {
   }
 
   return (
-    <Page>
+    <Page onScroll={handlePageScroll} ref={pageElementRef}>
       <Header>
         <HeaderContainer>
           <FlexVertical flex={1} alignItems={'center'} gap={1}>
@@ -273,6 +307,7 @@ function MeetingVote() {
         onConfirm={handleUsernameConfirm}
         onCancel={() => setShowUsernameModal(false)}
       />
+      <ScrollDownFloatingButton onClick={handleScollDownButtonClick} show={hasMoreBottomScroll} />
     </Page>
   );
 }
