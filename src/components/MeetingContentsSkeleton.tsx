@@ -1,9 +1,9 @@
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
-import { Contents } from '../../../components/pageLayout';
-import { FlexVertical } from '../../../components/styled';
-import { SECONDARY_COLOR } from '../../../theme';
+import { SECONDARY_COLOR } from '../theme';
+import { Contents } from './pageLayout';
+import { FlexVertical } from './styled';
 
 const commonStyle = {
   flex: 1,
@@ -16,7 +16,7 @@ const commonStyle = {
   marginTop: '8px',
 };
 
-const MeetingViewContentsSkeleton = () => {
+const MeetingContentsSkeleton = () => {
   return (
     <Contents>
       <div>
@@ -72,4 +72,4 @@ const MeetingViewContentsSkeleton = () => {
   );
 };
 
-export default MeetingViewContentsSkeleton;
+export default MeetingContentsSkeleton;

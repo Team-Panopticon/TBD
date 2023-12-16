@@ -1,10 +1,10 @@
+import MeetingContentsSkeleton from '../../../components/MeetingContentsSkeleton';
 import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
 import { useMeetingViewContents } from '../../../hooks/MeetingView/useMeetingViewContents';
 import { useMeeting } from '../../../hooks/useMeeting';
 import { VoteTableWrapper } from '../styled';
-import MeetingViewContentsSkeleton from './MeetingViewContentsSkeleton';
 
 const MeetingViewContents = () => {
   const { isFetching, meeting } = useMeeting();
@@ -12,7 +12,7 @@ const MeetingViewContents = () => {
     useMeetingViewContents(meeting);
 
   if (isFetching) {
-    return <MeetingViewContentsSkeleton />;
+    return <MeetingContentsSkeleton />;
   }
 
   return (
