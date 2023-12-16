@@ -2,10 +2,8 @@ import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 
 import { Voting } from '../../apis/votes';
-import { Loading } from '../../components/Loading';
 import { Page } from '../../components/pageLayout';
 import { FlexVertical } from '../../components/styled';
-import { useMeeting } from '../../hooks/useMeeting';
 import { useVotings } from '../../hooks/useVotings';
 import { votingsState } from '../../stores/voting';
 import MeetingResultContents from '../../templates/MeetingResult/MeetingResultContents';
@@ -14,9 +12,7 @@ import MeetingResultHeader from '../../templates/MeetingResult/MeetingResultHead
 
 function MeetingResult() {
   const [, setVotings] = useRecoilState<Voting[]>(votingsState);
-  const { isFetching: isMeetingFetching } = useMeeting();
-  const { votings, isLoading, isFetching: isVotingsFetcing } = useVotings();
-  const isFetching = isMeetingFetching && isVotingsFetcing;
+  const { votings, isLoading } = useVotings();
 
   useEffect(() => {
     if (!isLoading && votings) {
@@ -24,10 +20,6 @@ function MeetingResult() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
-
-  if (isFetching) {
-    return <Loading />;
-  }
 
   return (
     <Page>

@@ -9,12 +9,13 @@ import { isSameSlot } from '../MeetingVote/useMeetingVoteContents';
 import { useMeeting } from '../useMeeting';
 
 export const useMeetingResultContents = () => {
-  const { meeting } = useMeeting();
+  const { meeting, isFetching } = useMeeting();
   const votings = useRecoilValue(votingsState);
 
   return {
     confirmedUserList: getConfirmedUserList(votings, meeting),
     missedUserList: getMissedUserList(votings, meeting),
+    isFetching,
   };
 };
 
