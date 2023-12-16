@@ -9,7 +9,7 @@ import { VoteTableWrapper } from '../styled';
 const MeetingViewContents = () => {
   const { isFetching, meeting } = useMeeting();
   const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingViewContents(meeting);
+    useMeetingViewContents();
 
   if (isFetching) {
     return <MeetingContentsSkeleton />;

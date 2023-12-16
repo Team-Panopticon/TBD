@@ -10,9 +10,11 @@ import { currentUserStateFamily } from '../../stores/currentUser';
 import { currentUserVotingSlotsState } from '../../stores/currentUserVotingSlots';
 import { getVotings, userListState, votingsState } from '../../stores/voting';
 import { useMeeting } from '../useMeeting';
+import { useVotings } from '../useVotings';
 
 export const useMeetingVoteContents = () => {
-  const { meetingId, meeting } = useMeeting();
+  const { meetingId, meeting, isFetching: isMeetingFetching } = useMeeting();
+  const votingsData = useVotings();
 
   const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
   const resetCurrentUser = useResetRecoilState(currentUserStateFamily(meetingId));
@@ -24,13 +26,13 @@ export const useMeetingVoteContents = () => {
   const userList = useRecoilValue(userListState);
 
   useEffect(() => {
-    if (meeting && votings) {
-      setVotings(votings);
-      const currentUserVoting = votings.find((voting) => voting.id === currentUser?.id);
+    if (meeting && votingsData.votings) {
+      setVotings(votingsData.votings);
+      const currentUserVoting = votingsData.votings.find((voting) => voting.id === currentUser?.id);
       const currentUserVotingSlots = currentUserVoting?.[meeting.type];
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
     }
-  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, votings, meeting]);
+  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, meeting, data.votings]);
 
   const checkedUserList = userList.map((user) => ({
     ...user,
@@ -145,6 +147,7 @@ export const useMeetingVoteContents = () => {
     checkedUserList,
     handleClickUser,
     meeting,
+    isFetching: isMeetingFetching && votingsData.isFetching,
   };
 };
 
