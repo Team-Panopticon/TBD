@@ -5,9 +5,9 @@ import { useSetRecoilState } from 'recoil';
 import { Voting, VotingSlot } from '../../apis/votes';
 import { VoteTableVoting } from '../../components/VoteTable/VoteTable';
 import { votingsState } from '../../stores/voting';
+import { isSameSlot } from '../MeetingVote/useMeetingVoteContents';
 import { useMeeting } from '../useMeeting';
 import { useMeetingView } from '../useMeetingView';
-import { isSameSlot } from '../useMeetingVote';
 import { useVotings } from '../useVotings';
 
 export const useMeetingConfirmContents = ({

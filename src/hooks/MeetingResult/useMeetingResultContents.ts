@@ -5,8 +5,8 @@ import { Voting, VotingSlot } from '../../apis/votes';
 import { UserListData } from '../../components/UserList/UserList';
 import { MeetingType } from '../../constants/meeting';
 import { votingsState } from '../../stores/voting';
+import { isSameSlot } from '../MeetingVote/useMeetingVoteContents';
 import { useMeeting } from '../useMeeting';
-import { isSameSlot } from '../useMeetingVote';
 
 export const useMeetingResultContents = () => {
   const { meeting } = useMeeting();
