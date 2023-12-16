@@ -12,11 +12,10 @@ export const useMeetingConfirmFooter = (selectedSlot?: VotingSlot) => {
   const { meeting, meetingId } = useMeeting();
   const navigate = useNavigate();
   const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
-  const { show, hide } = useProgress();
+  const { show } = useProgress();
   const queryClient = useQueryClient();
   const comfirmMeetingMutation = useMutation<void, Error, { meetingId: string; slot: VotingSlot }>({
     mutationFn: ({ meetingId, slot }) => confirmMeeting(meetingId, slot),
-    onMutate: () => show(),
     onSuccess: () => {
       queryClient.setQueryData([MEETING_QUERY_KEY, meetingId], {
         ...meeting,
@@ -30,7 +29,6 @@ export const useMeetingConfirmFooter = (selectedSlot?: VotingSlot) => {
       alert(errorMessage);
       setShowConfirmModal(false);
     },
-    onSettled: () => hide(),
   });
 
   const handleConfirm = () => {

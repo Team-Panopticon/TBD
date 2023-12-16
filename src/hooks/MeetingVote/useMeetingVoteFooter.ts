@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
@@ -10,7 +9,6 @@ import { currentUserVotingSlotsState } from '../../stores/currentUserVotingSlots
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
 import { userListState } from '../../stores/voting';
 import { useMeeting } from '../useMeeting';
-import { useProgress } from '../useProgress';
 import { useVotings } from '../useVotings';
 
 export const useMeetingVoteFooter = () => {
@@ -24,31 +22,19 @@ export const useMeetingVoteFooter = () => {
   const isNewUser = !currentUser;
 
   const navigate = useNavigate();
-  const { show, hide } = useProgress();
 
   const { mutate: updateVotingMutate } = useMutation({
     mutationFn: updateVoting,
-    onMutate: () => show(),
     onSuccess: async () => {
       setShowUsernameModal(false);
       setShowVoteSuccessPopup(true);
       await invalidateVotings();
       navigate(`/meetings/${meetingId}`);
     },
-    onError: (error) => {
-      if (error instanceof AxiosError) {
-        const errorResponseData = error.response?.data as { message: string };
-        alert(errorResponseData?.message);
-      } else {
-        alert(error);
-      }
-    },
-    onSettled: () => hide(),
   });
 
   const { mutate: createVotingMutate } = useMutation({
     mutationFn: createVoting,
-    onMutate: () => show(),
     onSuccess: async (res) => {
       setCurrentUser({
         id: res.id,
@@ -59,15 +45,6 @@ export const useMeetingVoteFooter = () => {
       await invalidateVotings();
       navigate(`/meetings/${meetingId}`);
     },
-    onError: (error) => {
-      if (error instanceof AxiosError) {
-        const errorResponseData = error.response?.data as { message: string };
-        alert(errorResponseData?.message);
-      } else {
-        alert(error);
-      }
-    },
-    onSettled: () => hide(),
   });
 
   const handleClickVote = () => {

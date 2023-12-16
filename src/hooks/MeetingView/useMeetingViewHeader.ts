@@ -9,25 +9,21 @@ import { adminTokenStateFamily } from '../../stores/adminToken';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import { showVoteSuccessPopupState } from '../../stores/showVoteSuccessPopup';
 import { useMeeting } from '../useMeeting';
-import { useProgress } from '../useProgress';
 
 export const useMeetingViewHeader = () => {
   const { meeting, meetingId } = useMeeting();
   const navigate = useNavigate();
   const [adminToken, setAdminToken] = useRecoilState(adminTokenStateFamily(meetingId));
-  const { show, hide } = useProgress();
   const [showPasswordModal, setShowPasswordModal] = useState<boolean>(false);
   const [showVoteSuccessPopup, setShowVoteSuccessPopup] = useRecoilState(showVoteSuccessPopupState);
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
   const { mutate } = useMutation({
     mutationFn: async (params: { meetingId: string; destination: string }) =>
       issuePublicMeetingAdminToken(params.meetingId),
-    onMutate: () => show(),
     onSuccess: (token, { destination }) => {
       setAdminToken(token);
       navigate(destination);
     },
-    onSettled: () => hide(),
   });
 
   // Create a promise that resolves when the user closes the password input modal
