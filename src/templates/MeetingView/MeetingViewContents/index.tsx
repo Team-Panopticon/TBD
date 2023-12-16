@@ -3,13 +3,17 @@ import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
 import { useMeetingViewContents } from '../../../hooks/MeetingView/useMeetingViewContents';
-import { useMeeting } from '../../../hooks/useMeeting';
 import { VoteTableWrapper } from '../styled';
 
 const MeetingViewContents = () => {
-  const { isFetching, meeting } = useMeeting();
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingViewContents();
+  const {
+    handleClickUserList,
+    handleClickVoteTable,
+    userList,
+    voteTableDataList,
+    isFetching,
+    meeting,
+  } = useMeetingViewContents();
 
   if (isFetching) {
     return <MeetingContentsSkeleton />;
