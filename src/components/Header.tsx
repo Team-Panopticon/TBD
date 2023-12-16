@@ -1,17 +1,58 @@
+import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton, Snackbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ReactNode, useState } from 'react';
-import { useRecoilState } from 'recoil';
 
 import logo_nobg from '../assets/round.png';
-import { currentMeetingStateSelector } from '../stores/currentMeeting';
+import { MeetingStatus } from '../constants/meeting';
+import { useMeetingViewHeader } from '../hooks/MeetingView/useMeetingViewHeader';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
+import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 export const Header = () => {
-  const [setCurrentMeetingState] = useRecoilState(currentMeetingStateSelector);
   const [show, setShow] = useState(false);
   const handleShowDropdown = () => {
     setShow(true);
   };
+
+  const {
+    meeting,
+    meetingId,
+    showPasswordModal,
+    showVoteSuccessPopup,
+    setShowVoteSuccessPopup,
+    handleClickSettingsButton,
+    handlePasswordModalCancel,
+    handlePasswordModalConfirm,
+  } = useMeetingViewHeader();
+
+  const menuList = [
+    ...(meeting?.status === MeetingStatus.inProgress
+      ? [
+          {
+            name: '모임 확정',
+            icon: <></>,
+            onClick: () => {
+              handleClickSettingsButton(`/meetings/${meetingId}/confirm`);
+            },
+          },
+          {
+            name: '모임 수정',
+            icon: <></>,
+            onClick: () => {
+              handleClickSettingsButton(`/meetings/${meetingId}/modify`);
+            },
+          },
+        ]
+      : []),
+    {
+      name: '새로운 모임 만들기',
+      icon: <></>,
+      onClick: () => {
+        handleClickSettingsButton(`/meetings/new`);
+      },
+    },
+  ];
 
   return (
     <HeaderWrapper>
@@ -24,15 +65,36 @@ export const Header = () => {
             height: '32px',
           }}
         />
-        <h1>{setCurrentMeetingState.name}</h1>
+        <h1>{meeting?.name}</h1>
         <MenuIconButton onClick={handleShowDropdown}></MenuIconButton>
       </HeaderContainer>
-      <Dropdown
-        show={show}
-        setShow={setShow}
-        // onClickConfirmButton={() => {}}
-        // onClickEditButton={() => {}}
-      ></Dropdown>
+      <Dropdown show={show} setShow={setShow} munuList={menuList}></Dropdown>
+      <InputPasswordModal
+        meetingId={meetingId}
+        show={showPasswordModal}
+        onConfirm={handlePasswordModalConfirm}
+        onCancel={handlePasswordModalCancel}
+      />
+      <Snackbar
+        open={showVoteSuccessPopup}
+        autoHideDuration={5000}
+        onClose={() => {
+          setShowVoteSuccessPopup(false);
+        }}
+        message="투표해주셔서 감사합니다!"
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={() => {
+              setShowVoteSuccessPopup(false);
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        }
+      />
     </HeaderWrapper>
   );
 };

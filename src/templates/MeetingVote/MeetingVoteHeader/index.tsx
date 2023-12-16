@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 import WritingHands from '../../../assets/writing.svg';
@@ -14,17 +13,6 @@ const MeetingVoteHeader = () => {
       <>
         <FlexVertical flex={1} alignItems={'center'} gap={1}>
           <FlexVertical flex={1} gap={1} width={'100%'}>
-            <Box
-              display={'flex'}
-              flexDirection={'row'}
-              justifyContent={'center'}
-              alignItems={'center'}
-              gap={1}
-            >
-              <Typography variant="h5" fontWeight={700}>
-                {meeting?.name}
-              </Typography>
-            </Box>
             <FlexVertical alignItems={'center'}>
               <img height={110} src={WritingHands} alt="" />
             </FlexVertical>

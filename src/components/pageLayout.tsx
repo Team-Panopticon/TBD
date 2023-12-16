@@ -23,7 +23,7 @@ const ContentsWrapper = styled(Box)`
   flex-direction: column;
 `;
 const ContentsBox = styled(Box)<{ useHeader?: boolean }>`
-  height: ${(props) => (props.useHeader === true ? 'calc(100% - 64px)' : '100%')};
+  height: calc(100%);
   flex: auto;
   display: flex;
   flex-direction: column;

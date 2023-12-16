@@ -1,12 +1,8 @@
-import CloseIcon from '@mui/icons-material/Close';
-import IconButton from '@mui/material/IconButton';
-import Snackbar from '@mui/material/Snackbar';
 import Typography from '@mui/material/Typography';
 
 import { FlexVertical } from '../../../components/styled';
 import { useMeetingViewHeader } from '../../../hooks/MeetingView/useMeetingViewHeader';
 import GreetingHands from '../../../images/greeting-hands.png';
-import { InputPasswordModal } from '../InputPasswordModal';
 import { PrimaryBold } from '../styled';
 
 const MeetingViewHeader = () => {
@@ -39,32 +35,6 @@ const MeetingViewHeader = () => {
           </FlexVertical>
         </FlexVertical>
       </>
-      <InputPasswordModal
-        meetingId={meetingId}
-        show={showPasswordModal}
-        onConfirm={handlePasswordModalConfirm}
-        onCancel={handlePasswordModalCancel}
-      />
-      <Snackbar
-        open={showVoteSuccessPopup}
-        autoHideDuration={5000}
-        onClose={() => {
-          setShowVoteSuccessPopup(false);
-        }}
-        message="투표해주셔서 감사합니다!"
-        action={
-          <IconButton
-            size="small"
-            aria-label="close"
-            color="inherit"
-            onClick={() => {
-              setShowVoteSuccessPopup(false);
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
-        }
-      />
     </>
   );
 };
