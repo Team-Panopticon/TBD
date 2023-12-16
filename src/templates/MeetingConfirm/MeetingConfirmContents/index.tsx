@@ -1,4 +1,5 @@
 import { VotingSlot } from '../../../apis/votes';
+import MeetingContentsSkeleton from '../../../components/MeetingContentsSkeleton';
 import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
@@ -11,8 +12,13 @@ interface Props {
 }
 
 const MeetingConfirmContents = (props: Props) => {
-  const { userList, handleClickVoteTable, voteTableDataList, meeting } =
+  const { userList, handleClickVoteTable, voteTableDataList, meeting, isFetching } =
     useMeetingConfirmContents(props);
+
+  if (isFetching) {
+    return <MeetingContentsSkeleton />;
+  }
+
   return (
     <>
       <UserList users={userList} isSticky>

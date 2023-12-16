@@ -17,8 +17,8 @@ export const useMeetingConfirmContents = ({
   selectedSlot?: VotingSlot;
   setSelectedSlot: React.Dispatch<React.SetStateAction<VotingSlot | undefined>>;
 }) => {
-  const { meeting } = useMeeting();
-  const { votings } = useVotings();
+  const { meeting, isFetching: isMeetingFetching } = useMeeting();
+  const { votings, isFetching: isVotingFetching } = useVotings();
   const {
     handleClickVoteTable: handleVoteTableClickHightlight,
     userList,
@@ -50,6 +50,7 @@ export const useMeetingConfirmContents = ({
     meeting,
     userList,
     voteTableDataList,
+    isFetching: isMeetingFetching && isVotingFetching,
     handleClickVoteTable,
   };
 };
