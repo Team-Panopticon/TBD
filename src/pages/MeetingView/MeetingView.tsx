@@ -2,7 +2,6 @@ import { UIEvent, useRef, useState } from 'react';
 import { useResizeDetector } from 'react-resize-detector';
 
 import { ScrollDownFloatingButton } from '../../components/buttons/ScrollDownFloatingButton';
-import { Loading } from '../../components/Loading';
 import { Page } from '../../components/pageLayout';
 import { useMeeting } from '../../hooks/useMeeting';
 import { useVotings } from '../../hooks/useVotings';
@@ -48,10 +47,6 @@ function MeetingView() {
       behavior: 'smooth',
     });
   };
-
-  if (isFetching) {
-    return <Loading />;
-  }
 
   return (
     <Page onScroll={handlePageScroll} ref={pageElementRef}>

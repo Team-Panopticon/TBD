@@ -21,6 +21,12 @@ export const useMeetingViewContents = (meeting?: Meeting) => {
   const [voteTableDataList, setVoteTableDataList] = useState<VoteTableRowData[]>([]);
 
   useEffect(() => {
+    if (votings) {
+      setVotings(votings);
+    }
+  }, [votings, setVotings]);
+
+  useEffect(() => {
     if (data.votings) {
       setVotings(data.votings);
     }
