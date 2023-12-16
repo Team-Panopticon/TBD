@@ -1,67 +1,47 @@
-import CloseIcon from '@mui/icons-material/Close';
-import EditCalendar from '@mui/icons-material/EditCalendar';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { Flex } from '../../../components/styled';
-import { DropdownButton, DropdownContainer, ImageWrapper } from './styled';
+import { DropdownButton } from './styled';
+
+interface IMenu {
+  name: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+}
 interface Props {
-  onClickConfirmButton: () => Promise<void>;
-  onClickEditButton: () => Promise<void>;
+  onClickConfirmButton?: () => Promise<void>;
+  onClickEditButton?: () => Promise<void>;
+  show: boolean;
+  setShow: (show: boolean) => void;
+  munuList?: IMenu[];
 }
 
 export function Dropdown(props: Props) {
-  const { onClickConfirmButton, onClickEditButton } = props;
-
-  const [isShow, setShow] = useState(false);
-
-  useEffect(() => {
-    if (!isShow) {
-      return;
-    }
-    const handleCloseDropdown = () => setShow(false);
-
-    document.body.addEventListener('click', handleCloseDropdown);
-
-    return () => {
-      document.body.removeEventListener('click', handleCloseDropdown);
-    };
-  }, [isShow]);
+  const { onClickConfirmButton, onClickEditButton, show, setShow, munuList } = props;
 
   return (
     <div style={{ width: 0 }}>
-      <DropdownContainer>
-        <ImageWrapper
-          onClick={(event) => {
-            event.stopPropagation();
-            setShow((prev) => !prev);
-          }}
-        >
-          <SettingsRoundedIcon></SettingsRoundedIcon>
-        </ImageWrapper>
-      </DropdownContainer>
       {
         <Drawer
           onClose={() => {
             setShow(false);
           }}
-          open={isShow}
-          anchor="bottom"
+          open={show}
+          anchor="right"
         >
           <Flex
+            minWidth={200}
             paddingX={2}
             paddingTop={2}
             paddingBottom={1}
             justifyContent="space-between"
             alignItems={'center'}
           >
-            <Typography variant="h6" fontWeight={700}>
+            <Typography variant="h5" fontWeight={600}>
               설정
             </Typography>
-            <CloseIcon />
           </Flex>
           <Flex
             paddingX={1}
@@ -70,38 +50,24 @@ export function Dropdown(props: Props) {
             flexDirection={'column'}
             justifyContent={'space-between'}
           >
-            <DropdownButton
-              color="transPrimary"
-              onClick={(event) => {
-                event.stopPropagation();
-                onClickEditButton();
-                setShow(false);
-              }}
-            >
-              <EditCalendar />
-              <Typography variant="subtitle1" fontWeight={700}>
-                수정하기
-              </Typography>
-            </DropdownButton>
-            <hr
-              style={{
-                width: '100%',
-                border: '0 0.2px 0',
-              }}
-            ></hr>
-            <DropdownButton
-              color="transPrimary"
-              onClick={(event) => {
-                event.stopPropagation();
-                onClickConfirmButton();
-                setShow(false);
-              }}
-            >
-              <EventAvailableIcon />
-              <Typography variant="subtitle1" fontWeight={700}>
-                확정하기
-              </Typography>
-            </DropdownButton>
+            {munuList?.map((menu) => {
+              return (
+                <DropdownButton
+                  key={menu.name}
+                  color="transPrimary"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    menu.onClick();
+                    setShow(false);
+                  }}
+                >
+                  {menu.icon}
+                  <Typography variant="subtitle1" fontWeight={700}>
+                    {menu.name}
+                  </Typography>
+                </DropdownButton>
+              );
+            })}
           </Flex>
         </Drawer>
       }

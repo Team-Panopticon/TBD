@@ -1,12 +1,17 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/material/styles';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useRecoilState } from 'recoil';
 
 import logo_nobg from '../assets/round.png';
 import { currentMeetingStateSelector } from '../stores/currentMeeting';
+import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 export const Header = () => {
   const [setCurrentMeetingState] = useRecoilState(currentMeetingStateSelector);
+  const [show, setShow] = useState(false);
+  const handleShowDropdown = () => {
+    setShow(true);
+  };
 
   return (
     <HeaderWrapper>
@@ -20,8 +25,14 @@ export const Header = () => {
           }}
         />
         <h1>{setCurrentMeetingState.name}</h1>
-        <MenuIconButton></MenuIconButton>
+        <MenuIconButton onClick={handleShowDropdown}></MenuIconButton>
       </HeaderContainer>
+      <Dropdown
+        show={show}
+        setShow={setShow}
+        // onClickConfirmButton={() => {}}
+        // onClickEditButton={() => {}}
+      ></Dropdown>
     </HeaderWrapper>
   );
 };
