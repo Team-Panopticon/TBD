@@ -21,12 +21,17 @@ export const useMeetingViewContents = (meeting?: Meeting) => {
   const [voteTableDataList, setVoteTableDataList] = useState<VoteTableRowData[]>([]);
 
   useEffect(() => {
-    setUserList(userListStateValue);
-    if (voteTableDataListValue && data.votings) {
-      setVoteTableDataList(voteTableDataListValue);
+    if (data.votings) {
       setVotings(data.votings);
     }
-  }, [userListStateValue, voteTableDataListValue, meeting, data.votings, setVotings]);
+  }, [data.votings, setVotings]);
+
+  useEffect(() => {
+    setUserList(userListStateValue);
+    if (voteTableDataListValue) {
+      setVoteTableDataList(voteTableDataListValue);
+    }
+  }, [userListStateValue, voteTableDataListValue, meeting]);
 
   const handleClickUserList = (checked: boolean, target: UserListData) => {
     const meetingType = meeting?.type === MeetingType.date ? MeetingType.date : MeetingType.meal;
