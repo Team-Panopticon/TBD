@@ -68,7 +68,7 @@ export const Header = () => {
         <h1>{meeting?.name}</h1>
         <MenuIconButton onClick={handleShowDropdown}></MenuIconButton>
       </HeaderContainer>
-      <Dropdown show={show} setShow={setShow} munuList={menuList}></Dropdown>
+      <Dropdown show={show} setShow={setShow} menuList={menuList}></Dropdown>
       <InputPasswordModal
         meetingId={meetingId}
         show={showPasswordModal}

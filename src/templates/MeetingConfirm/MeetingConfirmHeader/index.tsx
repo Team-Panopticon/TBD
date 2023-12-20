@@ -6,7 +6,7 @@ import { FlexVertical } from '../../../components/styled';
 const MeetingConfirmHeader = () => {
   return (
     <>
-      <FlexVertical flex={1} alignItems={'center'} gap={1}>
+      <FlexVertical flex={0} alignItems={'center'} gap={1}>
         <FlexVertical flex={1} gap={1} width={'100%'}>
           <FlexVertical alignItems={'center'}>
             <EventAvailableIcon sx={{ fontSize: 110 }} />

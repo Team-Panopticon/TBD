@@ -17,11 +17,11 @@ interface Props {
   onClickEditButton?: () => Promise<void>;
   show: boolean;
   setShow: (show: boolean) => void;
-  munuList?: IMenu[];
+  menuList?: IMenu[];
 }
 
 export function Dropdown(props: Props) {
-  const { show, setShow, munuList } = props;
+  const { show, setShow, menuList } = props;
 
   return (
     <div style={{ width: 0 }}>
@@ -62,7 +62,7 @@ export function Dropdown(props: Props) {
           flexDirection={'column'}
           justifyContent={'space-between'}
         >
-          {munuList?.map((menu) => {
+          {menuList?.map((menu) => {
             return (
               <DropdownButton
                 key={menu.name}
