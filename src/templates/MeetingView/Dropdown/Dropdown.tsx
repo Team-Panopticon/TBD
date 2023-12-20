@@ -48,12 +48,12 @@ export function Dropdown(props: Props) {
               height: '28px',
             }}
           />
-          <Typography variant="h6" fontWeight={600}>
-            <NavLink to="/" style={{ textDecoration: 'none' }}>
+          <NavLink to="/" style={{ textDecoration: 'none' }}>
+            <Typography variant="h6" fontWeight={600}>
               {/* Todo: logo로 변경 */}
               Motoo.day
-            </NavLink>
-          </Typography>
+            </Typography>
+          </NavLink>
         </Flex>
         <Flex
           paddingX={1}
