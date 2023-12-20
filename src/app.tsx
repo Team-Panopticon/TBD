@@ -34,13 +34,14 @@ const router = createBrowserRouter([
     path: '/',
     loader: () => redirect('/welcome'),
   },
-  {
-    path: 'welcome',
-    element: <Welcome />,
-  },
+
   {
     element: <PageLayout useHeader={false} />,
     children: [
+      {
+        path: 'welcome',
+        element: <Welcome />,
+      },
       {
         path: 'meetings/new',
         element: <MeetingCreate />,
