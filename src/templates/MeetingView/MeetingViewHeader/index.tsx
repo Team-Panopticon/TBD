@@ -11,7 +11,7 @@ const MeetingViewHeader = () => {
   return (
     <>
       <>
-        <FlexVertical flex={1} alignItems={'center'} gap={1}>
+        <FlexVertical flex={0} alignItems={'center'} gap={1}>
           <FlexVertical flex={1} gap={1} width={'100%'}>
             <FlexVertical alignItems={'center'}>
               <img height={110} src={GreetingHands} alt="" />
