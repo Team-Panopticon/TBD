@@ -45,6 +45,7 @@ export const useMeetingViewHeader = () => {
 
   const handlePasswordModalConfirm = () => {
     dispatchEvent(new CustomEvent(INPUT_PASSWORD_FINISH_EVENT, { detail: true }));
+    setShowPasswordModal(false);
   };
 
   const handlePasswordModalCancel = () => {
