@@ -115,7 +115,6 @@ export const EditTemplateHeader = ({ children }: { children: ReactNode }) => {
   );
 };
 const MenuIconButton = styled(MenuIcon)(({ theme }) => ({
-  border: '1px solid',
   borderColor: theme.palette.secondary.dark,
   color: theme.palette.secondary.dark,
   borderRadius: '6px',
