@@ -6,7 +6,7 @@ import { useMeetingVoteHeader } from '../../../hooks/MeetingVote/useMeetingVoteH
 import { PrimaryBold } from '../../MeetingView/styled';
 
 const MeetingVoteHeader = () => {
-  const { meeting, currentUser } = useMeetingVoteHeader();
+  const { currentUser } = useMeetingVoteHeader();
 
   return (
     <>

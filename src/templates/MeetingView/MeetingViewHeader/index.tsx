@@ -6,17 +6,7 @@ import GreetingHands from '../../../images/greeting-hands.png';
 import { PrimaryBold } from '../styled';
 
 const MeetingViewHeader = () => {
-  const {
-    currentUser,
-    meeting,
-    meetingId,
-    showPasswordModal,
-    showVoteSuccessPopup,
-    setShowVoteSuccessPopup,
-    handleClickSettingsButton,
-    handlePasswordModalCancel,
-    handlePasswordModalConfirm,
-  } = useMeetingViewHeader();
+  const { currentUser } = useMeetingViewHeader();
 
   return (
     <>
