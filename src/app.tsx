@@ -85,11 +85,11 @@ const router = createBrowserRouter([
       {
         path: 'meetings/:meetingId/confirm',
         element: (
-          // <RedirectIfConfirmedRoute>
-          <ProtectedAdminRoute>
-            <MeetingConfirm />
-          </ProtectedAdminRoute>
-          // </RedirectIfConfirmedRoute>
+          <RedirectIfConfirmedRoute>
+            <ProtectedAdminRoute>
+              <MeetingConfirm />
+            </ProtectedAdminRoute>
+          </RedirectIfConfirmedRoute>
         ),
       },
     ],
