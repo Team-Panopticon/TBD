@@ -1,4 +1,3 @@
-import { Contents } from '../../../components/pageLayout';
 import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
@@ -16,7 +15,7 @@ const MeetingVoteContents = () => {
   } = useMeetingVoteContents();
 
   return (
-    <Contents>
+    <>
       <UserList
         className="user-list"
         users={checkedUserList}
@@ -33,7 +32,7 @@ const MeetingVoteContents = () => {
           headers={meeting?.type === MeetingType.date ? ['투표 현황'] : ['점심', '저녁']}
         />
       </VoteTableWrapper>
-    </Contents>
+    </>
   );
 };
 

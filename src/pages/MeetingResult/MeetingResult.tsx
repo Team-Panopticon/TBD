@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 
 import { Voting } from '../../apis/votes';
 import { Loading } from '../../components/Loading';
-import { Contents, Page } from '../../components/pageLayout';
+import { Page } from '../../components/pageLayout';
 import { FlexVertical } from '../../components/styled';
 import { useMeeting } from '../../hooks/useMeeting';
 import { useVotings } from '../../hooks/useVotings';
@@ -31,12 +31,10 @@ function MeetingResult() {
 
   return (
     <Page>
-      <Contents>
-        <FlexVertical gap={1}>
-          <MeetingResultHeader />
-          <MeetingResultContents />
-        </FlexVertical>
-      </Contents>
+      <FlexVertical flex={1} justifyContent={'flex-start'}>
+        <MeetingResultHeader />
+        <MeetingResultContents />
+      </FlexVertical>
       <MeetingResultFooter />
     </Page>
   );

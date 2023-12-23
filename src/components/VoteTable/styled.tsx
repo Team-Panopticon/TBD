@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 
 export const VoteTableContainer = styled('div')({});
 
-export const Header = styled('div')({ display: 'flex', gap: '8px' });
+export const VoteTableHeader = styled('div')({ display: 'flex', gap: '8px' });
 
 export const ContentWrapper = styled('div')({});
 
@@ -18,7 +18,7 @@ const commonStyle = {
   marginTop: '8px',
 };
 
-export const HeaderBox = styled(Box)((props) => ({
+export const VoteTableHeaderBox = styled(Box)((props) => ({
   ...commonStyle,
   fontWeight: 700,
   backgroundColor: props.theme.palette.secondary.main,

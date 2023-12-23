@@ -51,8 +51,20 @@ export const StepBox = styled('div')<StepBox>((props) => ({
 }));
 
 export const StepBoxContainer = styled('div')({
-  // padding: '0 32px',
   height: '100%',
+  width: '100vw',
+  marginLeft: '-32px',
+  padding: '0 32px',
+  overflow: 'scroll',
+  paddingBottom: '4px',
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+export const WelcomeContainer = styled('div')({
+  height: '100%',
+  width: '100vw',
+  marginLeft: '-32px',
   overflow: 'scroll',
   paddingBottom: '4px',
   display: 'flex',
@@ -60,7 +72,7 @@ export const StepBoxContainer = styled('div')({
 });
 
 export const PasswordInput = styled('div')({
-  padding: '25px 35px 0',
+  padding: '24px 34px 0',
 
   display: 'flex',
   flexDirection: 'column',
@@ -82,7 +94,7 @@ export const PasswordSkipBtn = styled(Button)({
 });
 
 export const ConfirmModalContainer = styled('div')({
-  padding: '25px 35px',
+  padding: '24px 34px',
   display: 'flex',
   flexDirection: 'column',
   flexGrow: 1,

@@ -1,7 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 import { getMeeting } from '../apis/meetings';
+import { currentMeetingStateSelector } from '../stores/currentMeeting';
 
 interface MeetingViewPathParams {
   meetingId: string;
@@ -23,6 +26,14 @@ export const useMeeting = () => {
     queryFn: () => getMeeting(meetingId),
     staleTime: 5000,
   });
+
+  const setCurrentMeetingState = useSetRecoilState(currentMeetingStateSelector);
+  useEffect(() => {
+    if (!meeting) {
+      return;
+    }
+    setCurrentMeetingState(meeting);
+  }, [meeting, setCurrentMeetingState]);
 
   return {
     meeting,

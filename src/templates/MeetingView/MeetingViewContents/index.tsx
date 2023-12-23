@@ -1,4 +1,3 @@
-import { Contents } from '../../../components/pageLayout';
 import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
@@ -12,7 +11,7 @@ const MeetingViewContents = () => {
     useMeetingViewContents(meeting);
 
   return (
-    <Contents>
+    <>
       <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
         <UserList.Title color="primary">투표 현황</UserList.Title>
       </UserList>
@@ -25,7 +24,7 @@ const MeetingViewContents = () => {
           className="vote-table"
         />
       </VoteTableWrapper>
-    </Contents>
+    </>
   );
 };
 
