@@ -46,6 +46,16 @@ const router = createBrowserRouter([
         path: 'meetings/new',
         element: <MeetingCreate />,
       },
+      {
+        path: 'meetings/:meetingId/modify',
+        element: (
+          <RedirectIfConfirmedRoute>
+            <ProtectedAdminRoute>
+              <MeetingModify />
+            </ProtectedAdminRoute>
+          </RedirectIfConfirmedRoute>
+        ),
+      },
     ],
   },
 
@@ -64,16 +74,7 @@ const router = createBrowserRouter([
           </RedirectIfConfirmedRoute>
         ),
       },
-      {
-        path: 'meetings/:meetingId/modify',
-        element: (
-          <RedirectIfConfirmedRoute>
-            <ProtectedAdminRoute>
-              <MeetingModify />
-            </ProtectedAdminRoute>
-          </RedirectIfConfirmedRoute>
-        ),
-      },
+
       {
         path: 'meetings/:meetingId/result',
         element: (

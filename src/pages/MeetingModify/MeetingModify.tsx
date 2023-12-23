@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { updateMeeting } from '../../apis/meetings';
 import { Meeting } from '../../apis/types';
 import { Loading } from '../../components/Loading';
-import { Page } from '../../components/pageLayout';
 import { MeetingAdminAccess, MeetingStatus, MeetingType } from '../../constants/meeting';
 import { useMeeting } from '../../hooks/useMeeting';
 import useMeetingEdit from '../../hooks/useMeetingEdit';
@@ -57,7 +56,7 @@ function MeetingModify() {
   const handleMeetingEditComplete = () => mutate(meeting);
 
   return (
-    <Page>
+    <>
       <MeetingEditTemplate
         currentStep={meetingeditSteps.length - 1}
         meeting={meeting}
@@ -66,7 +65,7 @@ function MeetingModify() {
         onSubmit={handleMeetingEditComplete}
         pageType="modify"
       ></MeetingEditTemplate>
-    </Page>
+    </>
   );
 }
 
