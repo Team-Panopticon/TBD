@@ -105,6 +105,8 @@ export const EditHeaderBox = styled('div')({
   height: '100%',
   gap: '8px',
   padding: '32px 0',
+  alignItems: 'center',
+  justifyContent: 'flex-start',
 });
 
 export const EditTemplateHeader = ({ children }: { children: ReactNode }) => {
@@ -138,14 +140,14 @@ const HeaderContainer = styled('div')`
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  h1: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '24px',
-    fontWeight: '700',
-  },
+  h1 {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+  }
 
-  h2: {
-    marginTop: '4px',
-  },
+  h2 {
+    margin-top: 4px;
+  }
 `;
