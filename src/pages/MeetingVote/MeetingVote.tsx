@@ -4,10 +4,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 
 import { ScrollDownFloatingButton } from '../../components/buttons/ScrollDownFloatingButton';
-import { Loading } from '../../components/Loading';
 import { Page } from '../../components/pageLayout';
 import { useMeeting } from '../../hooks/useMeeting';
-import { useVotings } from '../../hooks/useVotings';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import MeetingVoteContents from '../../templates/MeetingVote/MeetingVoteContents';
 import MeetingVoteFooter from '../../templates/MeetingVote/MeetingVoteFooter';
@@ -16,9 +14,7 @@ import MeetingVoteHeader from '../../templates/MeetingVote/MeetingVoteHeader';
 function MeetingVote() {
   const [searchParams] = useSearchParams();
   const pageElementRef = useRef<HTMLDivElement>(null);
-  const { meetingId, isFetching: isMeetingFetching } = useMeeting();
-  const { isFetching: isVotingsFetcing } = useVotings();
-  const isFetching = isMeetingFetching && isVotingsFetcing;
+  const { meetingId } = useMeeting();
 
   const currentUser = useRecoilValue(currentUserStateFamily(meetingId));
   const isNewUser = !currentUser;
@@ -63,10 +59,6 @@ function MeetingVote() {
       behavior: 'smooth',
     });
   };
-
-  if (isFetching) {
-    return <Loading />;
-  }
 
   return (
     <Page onScroll={handlePageScroll} ref={pageElementRef}>

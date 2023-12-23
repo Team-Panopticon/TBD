@@ -2,23 +2,31 @@ import { Dayjs } from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { Meeting } from '../../apis/types';
 import { VotingSlot } from '../../apis/votes';
 import { UserListData } from '../../components/UserList/UserList';
 import { VoteTableRowData, VoteTableVoting } from '../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../constants/meeting';
 import { userListState, voteTableDataListState, votingsState } from '../../stores/voting';
 import { isSameSlot } from '../MeetingVote/useMeetingVoteContents';
+import { useMeeting } from '../useMeeting';
 import { useVotings } from '../useVotings';
 
-export const useMeetingViewContents = (meeting?: Meeting) => {
+export const useMeetingViewContents = () => {
+  const { isFetching, meeting } = useMeeting();
   const data = useVotings();
   const [votings, setVotings] = useRecoilState(votingsState);
+
   const userListStateValue = useRecoilValue(userListState);
   const voteTableDataListValue = useRecoilValue(voteTableDataListState(meeting));
 
   const [userList, setUserList] = useState<UserListData[]>([]);
   const [voteTableDataList, setVoteTableDataList] = useState<VoteTableRowData[]>([]);
+
+  useEffect(() => {
+    if (votings) {
+      setVotings(votings);
+    }
+  }, [votings, setVotings]);
 
   useEffect(() => {
     if (data.votings) {
@@ -166,6 +174,8 @@ export const useMeetingViewContents = (meeting?: Meeting) => {
     handleClickVoteTable,
     userList,
     voteTableDataList,
+    isFetching: isFetching && data.isFetching,
+    meeting,
   };
 };
 

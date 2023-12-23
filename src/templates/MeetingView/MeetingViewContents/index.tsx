@@ -1,21 +1,29 @@
+import MeetingContentsSkeleton from '../../../components/MeetingContentsSkeleton';
 import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
 import { useMeetingViewContents } from '../../../hooks/MeetingView/useMeetingViewContents';
-import { useMeeting } from '../../../hooks/useMeeting';
 import { VoteTableWrapper } from '../styled';
 
 const MeetingViewContents = () => {
-  const { meeting } = useMeeting();
-  const { handleClickUserList, handleClickVoteTable, userList, voteTableDataList } =
-    useMeetingViewContents(meeting);
+  const {
+    handleClickUserList,
+    handleClickVoteTable,
+    userList,
+    voteTableDataList,
+    isFetching,
+    meeting,
+  } = useMeetingViewContents();
+
+  if (isFetching) {
+    return <MeetingContentsSkeleton />;
+  }
 
   return (
     <>
       <UserList className="user-list" users={userList} onClick={handleClickUserList} isSticky>
         <UserList.Title color="primary">투표 현황</UserList.Title>
       </UserList>
-
       <VoteTableWrapper>
         <VoteTable
           onSlotClick={handleClickVoteTable}

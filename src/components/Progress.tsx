@@ -16,7 +16,7 @@ export function Progress() {
   const [showProgress] = useRecoilState(showProgressState);
 
   return (
-    <Modal open={showProgress}>
+    <Modal open={showProgress} style={{ zIndex: 1500 }}>
       <ProgressContainer>
         <CircularProgress />
       </ProgressContainer>

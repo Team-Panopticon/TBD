@@ -1,3 +1,4 @@
+import MeetingContentsSkeleton from '../../../components/MeetingContentsSkeleton';
 import { UserList } from '../../../components/UserList/UserList';
 import { VoteTable } from '../../../components/VoteTable/VoteTable';
 import { MeetingType } from '../../../constants/meeting';
@@ -9,10 +10,15 @@ const MeetingVoteContents = () => {
     meeting,
     checkedUserList,
     voteTableDataList,
+    isFetching,
     handleClickUser,
     handleClickVoteTableDate,
     handleClickVoteTableSlot,
   } = useMeetingVoteContents();
+
+  if (isFetching) {
+    return <MeetingContentsSkeleton />;
+  }
 
   return (
     <>

@@ -1,8 +1,13 @@
 import { UserList } from '../../../components/UserList/UserList';
 import { useMeetingResultContents } from '../../../hooks/MeetingResult/useMeetingResultContents';
+import MeetingResultContentsSkeleton from './MeetingResultContentsSkeleton';
 
 const MeetingResultContents = () => {
-  const { confirmedUserList, missedUserList } = useMeetingResultContents();
+  const { confirmedUserList, missedUserList, isFetching } = useMeetingResultContents();
+
+  if (isFetching) {
+    return <MeetingResultContentsSkeleton />;
+  }
 
   return (
     <>
