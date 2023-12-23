@@ -1,11 +1,12 @@
 import { createTheme, ThemeOptions } from '@mui/material/styles';
 
-export const PRIMARY_COLOR = '#66D6B4';
+export const PRIMARY_COLOR = '#62d6b4';
 export const SECONDARY_COLOR = '#d9d9d9';
 
 const themeOptions: ThemeOptions = {
   typography: {
     fontFamily: [
+      'nps',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',

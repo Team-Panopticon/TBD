@@ -49,7 +49,7 @@ export function Dropdown(props: Props) {
             }}
           />
           <NavLink to="/" style={{ textDecoration: 'none' }}>
-            <Typography variant="h6" fontWeight={600}>
+            <Typography variant="h6" fontWeight={600} color="black">
               {/* Todo: logo로 변경 */}
               Motoo.day
             </Typography>
