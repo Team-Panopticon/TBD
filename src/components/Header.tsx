@@ -3,6 +3,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton, Snackbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import logo_nobg from '../assets/round.png';
 import { MeetingStatus } from '../constants/meeting';
@@ -25,6 +26,7 @@ export const Header = () => {
     handlePasswordModalCancel,
     handlePasswordModalConfirm,
   } = useMeetingViewHeader();
+  const nav = useNavigate();
 
   const menuList = [
     ...(meeting?.status === MeetingStatus.inProgress
@@ -49,7 +51,7 @@ export const Header = () => {
       name: '새로운 모임 만들기',
       icon: <></>,
       onClick: () => {
-        handleClickSettingsButton(`/meetings/new`);
+        nav(`/meetings/new`);
       },
     },
   ];
