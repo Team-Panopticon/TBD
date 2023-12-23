@@ -3,6 +3,7 @@ import { Navigate, useParams } from 'react-router-dom';
 
 import { getMeeting } from '../../apis/meetings';
 import { MeetingStatus } from '../../constants/meeting';
+import { MEETING_QUERY_KEY } from '../../hooks/useMeeting';
 
 interface MeetingPathParams {
   meetingId: string;
@@ -16,7 +17,7 @@ export function RedirectIfInProgressRoute({ children }: RedirectIfInProgressRout
   const { meetingId } = useParams<keyof MeetingPathParams>() as MeetingPathParams;
 
   const { data: meeting } = useQuery({
-    queryKey: ['meeting', meetingId],
+    queryKey: [MEETING_QUERY_KEY, meetingId],
     queryFn: () => getMeeting(meetingId),
   });
 
