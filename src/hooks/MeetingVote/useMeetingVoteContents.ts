@@ -32,7 +32,7 @@ export const useMeetingVoteContents = () => {
       const currentUserVotingSlots = currentUserVoting?.[meeting.type];
       setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
     }
-  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, meeting, data.votings]);
+  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, meeting, votingsData.votings]);
 
   const checkedUserList = userList.map((user) => ({
     ...user,
