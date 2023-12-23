@@ -64,9 +64,7 @@ export const StepBoxContainer = styled('div')({
 export const WelcomeContainer = styled('div')({
   height: '100%',
   width: '100vw',
-  marginLeft: '-32px',
   overflow: 'scroll',
-  paddingBottom: '4px',
   display: 'flex',
   flexDirection: 'column',
 });
