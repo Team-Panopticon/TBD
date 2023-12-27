@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { createMeeting } from '../../apis/meetings';
 import { warmUpInstance } from '../../apis/utils';
 import useMeetingEdit from '../../hooks/useMeetingEdit';
-import { createMeetingState } from '../../stores/createMeeting';
+import { createMeetingState, initialState } from '../../stores/createMeeting';
 import { CreatePasswordModal } from '../../templates/MeetingEdit/CreatePasswordModal';
 import { MeetingEditTemplate } from '../../templates/MeetingEdit/MeetingEditTemplate';
 
@@ -22,9 +22,13 @@ function MeetingCreate() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const { getMeetingEditSteps } = useMeetingEdit();
   const navigate = useNavigate();
+  const setCreateMeetingState = useSetRecoilState(createMeetingState);
   const { mutate } = useMutation({
     mutationFn: (params: Parameters<typeof createMeeting>[0]) => createMeeting(params),
-    onSuccess: (res) => navigate(`/meetings/${res.id}`),
+    onSuccess: (res) => {
+      navigate(`/meetings/${res.id}`);
+      setCreateMeetingState(initialState);
+    },
   });
 
   useEffect(() => {
