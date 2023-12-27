@@ -3,6 +3,7 @@ import { useResizeDetector } from 'react-resize-detector';
 
 import { ScrollDownFloatingButton } from '../../components/buttons/ScrollDownFloatingButton';
 import { Page } from '../../components/pageLayout';
+import { SCROLL_DOWN_BUTTON_MARGIN } from '../../constants/meeting';
 import MeetingViewContents from '../../templates/MeetingView/MeetingViewContents';
 import MeetingViewFooter from '../../templates/MeetingView/MeetingViewFooter';
 import MeetingViewHeader from '../../templates/MeetingView/MeetingViewHeader';
@@ -20,14 +21,14 @@ function MeetingView() {
       }
       const { scrollTop, scrollHeight, clientHeight } = pageElementRef.current;
       const remainingScroll = scrollHeight - scrollTop - clientHeight;
-      setHasMoreBottomScroll(remainingScroll > 4);
+      setHasMoreBottomScroll(remainingScroll > SCROLL_DOWN_BUTTON_MARGIN);
     },
   });
 
   const handlePageScroll = (event: UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
     const remainingScroll = scrollHeight - scrollTop - clientHeight;
-    setHasMoreBottomScroll(remainingScroll > 4);
+    setHasMoreBottomScroll(remainingScroll > SCROLL_DOWN_BUTTON_MARGIN);
   };
 
   const handleScollDownButtonClick = () => {
