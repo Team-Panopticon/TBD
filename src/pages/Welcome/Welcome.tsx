@@ -64,7 +64,7 @@ function Welcome() {
           </HowToContainer>
         </WelcomeContents>
       </WelcomeContainer>
-      <Footer style={{ backgroundColor: '#f6f6f6', padding: '8px 32px' }}>
+      <Footer style={{ position: 'fixed', backgroundColor: '#f6f6f6', padding: '8px 32px' }}>
         <FullHeightButtonGroup fullWidth disableElevation variant="contained">
           <Button onClick={handleClick}>{'모임 만들기'}</Button>
         </FullHeightButtonGroup>

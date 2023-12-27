@@ -67,6 +67,7 @@ export const WelcomeContainer = styled('div')({
   overflow: 'scroll',
   display: 'flex',
   flexDirection: 'column',
+  paddingBottom: '64px',
 });
 
 export const PasswordInput = styled('div')({
