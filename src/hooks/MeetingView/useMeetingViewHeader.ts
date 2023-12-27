@@ -28,7 +28,10 @@ export const useMeetingViewHeader = () => {
 
   // Create a promise that resolves when the user closes the password input modal
   const openInputPasswordModal = () => {
-    setShowPasswordModal(true);
+    // delay modal rendering to give the modal input focus
+    setTimeout(() => {
+      setShowPasswordModal(true);
+    }, 100);
 
     const inputPasswordFinishPromise = new Promise((resolve, reject) => {
       addEventListener(
