@@ -1,22 +1,46 @@
 import { Dayjs } from 'dayjs';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useEffect } from 'react';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 
-import { Meeting } from '../apis/types';
-import { Voting, VotingSlot } from '../apis/votes';
-import { VoteTableRowData, VoteTableVoting } from '../components/VoteTable/VoteTable';
-import { MealType, MeetingType } from '../constants/meeting';
-import { currentUserStateFamily } from '../stores/currentUser';
-import { currentUserVotingSlotsState } from '../stores/currentUserVotingSlots';
-import { getVotings, votingsState } from '../stores/voting';
+import { Voting, VotingSlot } from '../../apis/votes';
+import { UserListData } from '../../components/UserList/UserList';
+import { VoteTableRowData, VoteTableVoting } from '../../components/VoteTable/VoteTable';
+import { MealType, MeetingType } from '../../constants/meeting';
+import { currentUserStateFamily } from '../../stores/currentUser';
+import { currentUserVotingSlotsState } from '../../stores/currentUserVotingSlots';
+import { getVotings, userListState, votingsState } from '../../stores/voting';
+import { useMeeting } from '../useMeeting';
+import { useVotings } from '../useVotings';
 
-export const useMeetingViewVoteMode = (meeting?: Meeting) => {
-  const currentUser = useRecoilValue(currentUserStateFamily(meeting?.id ?? ''));
+export const useMeetingVoteContents = () => {
+  const { meetingId, meeting, isFetching: isMeetingFetching } = useMeeting();
+  const votingsData = useVotings();
+
+  const [currentUser, setCurrentUser] = useRecoilState(currentUserStateFamily(meetingId));
+  const resetCurrentUser = useResetRecoilState(currentUserStateFamily(meetingId));
+
   const [currentUserVotingSlots, setCurrentUserVotingSlots] = useRecoilState(
     currentUserVotingSlotsState,
   );
+  const [votings, setVotings] = useRecoilState(votingsState);
+  const userList = useRecoilValue(userListState);
 
-  const votings = useRecoilValue(votingsState);
+  useEffect(() => {
+    if (meeting && votingsData.votings) {
+      setVotings(votingsData.votings);
+      const currentUserVoting = votingsData.votings.find((voting) => voting.id === currentUser?.id);
+      const currentUserVotingSlots = currentUserVoting?.[meeting.type];
+      setCurrentUserVotingSlots(currentUserVotingSlots ?? []);
+    }
+  }, [meetingId, setVotings, setCurrentUserVotingSlots, currentUser, meeting, votingsData.votings]);
+
+  const checkedUserList = userList.map((user) => ({
+    ...user,
+    checked: user.id === currentUser?.id,
+  }));
   const otherUserVotings = votings.filter((voting) => voting.id !== currentUser?.id);
+  const isNewUser = currentUser === undefined;
+  const hasNewUserNotVoted = isNewUser && currentUserVotingSlots.length === 0;
 
   // TODO: 신규 유저 외에 기존 유저 선택 시 로직 반영
   const currentVoting: Voting = {
@@ -25,9 +49,6 @@ export const useMeetingViewVoteMode = (meeting?: Meeting) => {
     dateType: meeting?.type === MeetingType.date ? currentUserVotingSlots : [],
     mealType: meeting?.type === MeetingType.meal ? currentUserVotingSlots : [],
   };
-
-  const isNewUser = currentUser === undefined;
-  const hasNewUserNotVoted = isNewUser && currentUserVotingSlots.length === 0;
 
   // voteTableDataList는 userMap, currentUser, 마지막 클릭된 slot / userName의 파생 상태
   const voteTableDataList = meeting?.dates.map<VoteTableRowData>((day) => ({
@@ -39,6 +60,29 @@ export const useMeetingViewVoteMode = (meeting?: Meeting) => {
       hasNewUserNotVoted ? undefined : currentVoting,
     ),
   }));
+
+  const handleClickUser = (checked: boolean, clickedUser: UserListData) => {
+    if (!meeting) {
+      return;
+    }
+
+    const isCurrentUserClicked = currentUser?.id === clickedUser.id;
+    if (isCurrentUserClicked) {
+      setCurrentUser(undefined);
+      resetCurrentUser();
+      setCurrentUserVotingSlots([]);
+      return;
+    }
+
+    setCurrentUser({
+      id: clickedUser.id,
+      username: clickedUser.username,
+    });
+
+    const previousVoting = votings.find((voting) => voting.username === clickedUser.username);
+    const previousVotingSlots = previousVoting?.[meeting.type];
+    setCurrentUserVotingSlots(previousVotingSlots ?? []);
+  };
 
   const handleClickVoteTableDate = (date: Dayjs) => {
     if (!meeting) {
@@ -95,11 +139,15 @@ export const useMeetingViewVoteMode = (meeting?: Meeting) => {
   };
 
   return {
-    voteTableDataList,
+    voteTableDataList: voteTableDataList || [],
     currentUserVotingSlots,
     setCurrentUserVotingSlots,
     handleClickVoteTableSlot,
     handleClickVoteTableDate,
+    checkedUserList,
+    handleClickUser,
+    meeting,
+    isFetching: isMeetingFetching && votingsData.isFetching,
   };
 };
 

@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
 interface VotePageButtonProps {
@@ -16,7 +16,7 @@ export function VotePageButton({ meetingId, isLoggedIn }: VotePageButtonProps) {
         navigate(`/meetings/${meetingId}/vote`);
       }}
     >
-      {isLoggedIn ? '다시 투표하러 가기' : '투표하러 가기'}
+      {isLoggedIn ? '다시 투표' : '투표'}
     </Button>
   );
 }

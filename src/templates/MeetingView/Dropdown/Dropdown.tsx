@@ -1,109 +1,89 @@
-import { EditCalendar } from '@mui/icons-material';
-import CloseIcon from '@mui/icons-material/Close';
-import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
-import { Drawer, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import Drawer from '@mui/material/Drawer';
+import Typography from '@mui/material/Typography';
+import React from 'react';
+import { NavLink } from 'react-router-dom';
 
+import logo_nobg from '../../../assets/round.png';
 import { Flex } from '../../../components/styled';
-import { DropdownButton, DropdownContainer, ImageWrapper } from './styled';
+import { DropdownButton } from './styled';
+
+interface IMenu {
+  name: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+}
 interface Props {
-  onClickConfirmButton: () => Promise<void>;
-  onClickEditButton: () => Promise<void>;
+  onClickConfirmButton?: () => Promise<void>;
+  onClickEditButton?: () => Promise<void>;
+  show: boolean;
+  setShow: (show: boolean) => void;
+  menuList?: IMenu[];
 }
 
 export function Dropdown(props: Props) {
-  const { onClickConfirmButton, onClickEditButton } = props;
-
-  const [isShow, setShow] = useState(false);
-
-  useEffect(() => {
-    if (!isShow) {
-      return;
-    }
-    const handleCloseDropdown = () => setShow(false);
-
-    document.body.addEventListener('click', handleCloseDropdown);
-
-    return () => {
-      document.body.removeEventListener('click', handleCloseDropdown);
-    };
-  }, [isShow]);
+  const { show, setShow, menuList } = props;
 
   return (
     <div style={{ width: 0 }}>
-      <DropdownContainer>
-        <ImageWrapper
-          onClick={(event) => {
-            event.stopPropagation();
-            setShow((prev) => !prev);
-          }}
+      <Drawer
+        onClose={() => {
+          setShow(false);
+        }}
+        open={show}
+        anchor="right"
+      >
+        <Flex
+          minWidth={200}
+          paddingX={2}
+          paddingTop={2}
+          paddingBottom={1}
+          alignItems={'center'}
+          gap={1}
         >
-          <SettingsRoundedIcon></SettingsRoundedIcon>
-        </ImageWrapper>
-      </DropdownContainer>
-      {
-        <Drawer
-          onClose={() => {
-            setShow(false);
-          }}
-          open={isShow}
-          anchor="bottom"
-        >
-          <Flex
-            paddingX={2}
-            paddingTop={2}
-            paddingBottom={1}
-            justifyContent="space-between"
-            alignItems={'center'}
-          >
-            <Typography variant="h6" fontWeight={700}>
-              설정
+          <img
+            src={logo_nobg}
+            alt="로고"
+            style={{
+              width: 'auto',
+              height: '28px',
+            }}
+          />
+          <NavLink to="/" style={{ textDecoration: 'none' }}>
+            <Typography variant="h6" fontWeight={600} color="black">
+              {/* Todo: logo로 변경 */}
+              Motoo.day
             </Typography>
-            <CloseIcon />
-          </Flex>
-          <Flex
-            paddingX={1}
-            paddingBottom={1}
-            alignItems="flex-start"
-            flexDirection={'column'}
-            justifyContent={'space-between'}
-          >
-            <DropdownButton
-              color="transPrimary"
-              onClick={(event) => {
-                event.stopPropagation();
-                onClickEditButton();
-                setShow(false);
-              }}
-            >
-              <EditCalendar />
-              <Typography variant="subtitle1" fontWeight={700}>
-                수정하기
-              </Typography>
-            </DropdownButton>
-            <hr
-              style={{
-                width: '100%',
-                border: '0 0.2px 0',
-              }}
-            ></hr>
-            <DropdownButton
-              color="transPrimary"
-              onClick={(event) => {
-                event.stopPropagation();
-                onClickConfirmButton();
-                setShow(false);
-              }}
-            >
-              <EventAvailableIcon />
-              <Typography variant="subtitle1" fontWeight={700}>
-                확정하기
-              </Typography>
-            </DropdownButton>
-          </Flex>
-        </Drawer>
-      }
+          </NavLink>
+        </Flex>
+        <Flex
+          paddingX={1}
+          paddingBottom={1}
+          alignItems="flex-start"
+          flexDirection={'column'}
+          justifyContent={'space-between'}
+        >
+          {menuList?.map((menu) => {
+            return (
+              <DropdownButton
+                key={menu.name}
+                color="transPrimary"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setTimeout(() => {
+                    setShow(false);
+                  }, 100);
+                  menu.onClick();
+                }}
+              >
+                {menu.icon}
+                <Typography variant="subtitle1" fontWeight={700}>
+                  {menu.name}
+                </Typography>
+              </DropdownButton>
+            );
+          })}
+        </Flex>
+      </Drawer>
     </div>
   );
 }

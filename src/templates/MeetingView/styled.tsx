@@ -1,4 +1,6 @@
-import { Button, IconButton, styled } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
 
 export const UserListWrapper = styled('div')({
   '.user-list': {
@@ -17,6 +19,7 @@ export const NoUserList = styled('div')((props) => ({
 
 export const VoteTableWrapper = styled('div')({
   marginTop: '36px',
+  flex: 1,
   '.vote-table': {
     marginBottom: '8px',
   },

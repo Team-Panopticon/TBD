@@ -1,5 +1,6 @@
-import { Close as CloseIcon } from '@mui/icons-material';
-import { Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 
@@ -26,6 +27,17 @@ interface Props {
 export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Props) {
   const [password, setPassword] = useState<string>('');
   const setAdminToken = useSetRecoilState(adminTokenStateFamily(meetingId));
+  const { mutate } = useMutation({
+    mutationFn: issuePrivateMeetingAdminToken,
+    onSuccess: (adminToken) => {
+      setAdminToken(adminToken);
+      onConfirm();
+    },
+    onError: () => {
+      // TODO: password 틀림을 표시 UI 효과
+      setPassword('');
+    },
+  });
 
   const handlePasswordChange = (newPassword: string) => {
     if (newPassword.length >= 4) {
@@ -46,24 +58,13 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
   };
 
   useEffect(() => {
-    const issueAdminToken = async () => {
-      try {
-        const adminToken = await issuePrivateMeetingAdminToken(meetingId, password);
-        setAdminToken(adminToken);
-        onConfirm();
-      } catch {
-        // TODO: password 틀림을 표시 UI 효과
-        setPassword('');
-      }
-    };
-
     if (password.length === 4) {
-      issueAdminToken();
+      mutate({ meetingId, password });
     }
-  }, [meetingId, password, onConfirm, setAdminToken]);
+  }, [meetingId, password, mutate]);
 
   return (
-    <CenterContentModal open={show} width={320} height={230}>
+    <CenterContentModal open={show} width={320} height={180}>
       <PasswordInput>
         <Typography variant="subtitle1" fontWeight={300}>
           비밀번호를 입력해주세요.
@@ -76,8 +77,8 @@ export function InputPasswordModal({ meetingId, show, onConfirm, onCancel }: Pro
             length={4}
             text={password}
             setText={handlePasswordChange}
-            size={28}
-            style={{ paddingTop: 10 }}
+            size={30}
+            style={{ paddingBottom: 10 }}
           />
         </MaskingInputContainer>
       </PasswordInput>

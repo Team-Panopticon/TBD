@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 
 interface ResultPageButtonProps {
@@ -15,7 +15,7 @@ export function ResultPageButton({ meetingId }: ResultPageButtonProps) {
         navigate(`/meetings/${meetingId}/result`);
       }}
     >
-      {'모임날짜 확인하기'}
+      {'날짜 확인'}
     </Button>
   );
 }

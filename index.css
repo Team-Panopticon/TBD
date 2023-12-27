@@ -1,3 +1,9 @@
+@font-face {
+	font-family: "nps";
+	src: url("./src/assets/fonts/NPSfont_regular.ttf");
+}
+  
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -21,7 +27,7 @@ time, mark, audio, video {
 	border: 0;
 	font-size: 100%;
 	font: inherit;
-	font-family: "Roboto","Helvetica","Arial",sans-serif;
+	font-family: "nps","Roboto","Helvetica","Arial",sans-serif;
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */

@@ -1,4 +1,7 @@
-import { Button, InputLabel, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 
 import { CenterContentModal } from '../../components/CenterContentModal';
@@ -12,7 +15,7 @@ enum InvalidText {
 interface Props {
   show: boolean;
   usernameList: string[];
-  onConfirm: (username: string) => Promise<void>;
+  onConfirm: (username: string) => void;
   onCancel: () => void;
 }
 
@@ -40,7 +43,7 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
     <>
       <CenterContentModal open={show} width={320} height={170}>
         <div style={{ position: 'relative', height: '100%' }}>
-          <div style={{ padding: 25 }}>
+          <Box padding={3} pb={1}>
             <InputLabel shrink>참석자 이름 (최대 20자)</InputLabel>
             <TextField
               autoComplete="off"
@@ -55,11 +58,11 @@ export function InputUsernameModal({ show, usernameList, onConfirm, onCancel }: 
               helperText={invalidText}
               inputProps={{ maxLength: 20 }}
             />
-          </div>
+          </Box>
           <FullHeightButtonGroup
             fullWidth
             variant="contained"
-            style={{ height: 45, position: 'absolute', bottom: 0 }}
+            style={{ height: 52, position: 'absolute', bottom: 0, padding: '8px 12px' }}
           >
             <Button color="secondary" onClick={onCancel}>
               다음에

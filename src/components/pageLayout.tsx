@@ -1,64 +1,54 @@
-import { Box, styled } from '@mui/material';
-import { ReactNode } from 'react';
+import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
+import { Outlet } from 'react-router-dom';
+
+import { Header } from './Header';
 
 export const Page = styled('div')`
-  position: relative;
   display: flex;
+  height: 100%;
   flex-direction: column;
   flex-wrap: nowrap;
-  height: calc(var(--vh, 1vh) * 100 - 56px);
-  overflow: auto;
+  overflow: scroll;
+  padding: 0 32px;
+  width: 100vw;
+  margin-left: -32px;
+  padding-bottom: 64px;
 `;
-
-export const Header = styled('header')`
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  flex: 0;
-`;
-
-export const HeaderContainer = styled('div')({
-  display: 'flex',
-  flexDirection: 'row',
-  height: '100%',
-  gap: '8px',
-  padding: '32px',
-
-  h1: {
-    display: 'flex',
-    alignItems: 'center',
-    fontSize: '24px',
-    fontWeight: '700',
-  },
-
-  h2: {
-    marginTop: '4px',
-  },
-});
 
 const ContentsWrapper = styled(Box)`
-  padding: 16px 32px;
+  padding: 0 32px 0;
   height: 100%;
-`;
-const ContentsBox = styled(Box)`
   display: flex;
   flex-direction: column;
-  flex-wrap: nowrap;
-  flex-grow: 1;
 `;
-export const Contents = ({ children }: { children: ReactNode }) => {
-  return (
-    <ContentsWrapper>
-      <ContentsBox>{children}</ContentsBox>
-    </ContentsWrapper>
-  );
-};
+const ContentsBox = styled(Box)<{ useHeader?: boolean }>`
+  height: calc(100%);
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+`;
 
 export const Footer = styled('footer')({
   backgroundColor: 'white',
-  position: 'fixed',
-  bottom: 0,
+  position: 'sticky',
   width: '100%',
-  height: '56px',
+  height: '64px',
   flexShrink: 0,
+  padding: '8px 0px',
+  bottom: 0,
 });
+
+export const PageLayout = (props: { useHeader?: boolean }) => {
+  const { useHeader = true } = props;
+  return (
+    <div style={{ height: 'calc(var(--vh, 1vh)*100 )', overflow: 'hidden', position: 'relative' }}>
+      {useHeader && <Header></Header>}
+      <ContentsWrapper>
+        <ContentsBox {...props}>
+          <Outlet />
+        </ContentsBox>
+      </ContentsWrapper>
+    </div>
+  );
+};
