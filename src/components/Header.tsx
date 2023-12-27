@@ -4,10 +4,12 @@ import { IconButton, Snackbar } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
 
 import logo_nobg from '../assets/round.png';
 import { MeetingStatus } from '../constants/meeting';
 import { useMeetingViewHeader } from '../hooks/MeetingView/useMeetingViewHeader';
+import { createMeetingState, initialState } from '../stores/createMeeting';
 import { Dropdown } from '../templates/MeetingView/Dropdown/Dropdown';
 import { InputPasswordModal } from '../templates/MeetingView/InputPasswordModal';
 export const Header = () => {
@@ -27,6 +29,7 @@ export const Header = () => {
     handlePasswordModalConfirm,
   } = useMeetingViewHeader();
   const nav = useNavigate();
+  const setCreateMeetingState = useSetRecoilState(createMeetingState);
 
   const menuList = [
     ...(meeting?.status === MeetingStatus.inProgress
@@ -50,7 +53,8 @@ export const Header = () => {
     {
       name: '새로운 모임 만들기',
       icon: <></>,
-      onClick: () => {
+      onClick: async () => {
+        setCreateMeetingState(initialState);
         nav(`/meetings/new`);
       },
     },
