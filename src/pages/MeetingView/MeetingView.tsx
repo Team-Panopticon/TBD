@@ -19,13 +19,15 @@ function MeetingView() {
         return;
       }
       const { scrollTop, scrollHeight, clientHeight } = pageElementRef.current;
-      setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+      const remainingScroll = scrollHeight - scrollTop - clientHeight;
+      setHasMoreBottomScroll(remainingScroll > 4);
     },
   });
 
   const handlePageScroll = (event: UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
-    setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+    const remainingScroll = scrollHeight - scrollTop - clientHeight;
+    setHasMoreBottomScroll(remainingScroll > 4);
   };
 
   const handleScollDownButtonClick = () => {
