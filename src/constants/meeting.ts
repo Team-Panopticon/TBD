@@ -19,3 +19,4 @@ export enum MeetingAdminAccess {
 }
 
 export const INPUT_PASSWORD_FINISH_EVENT = 'inputPasswordFinish';
+export const SCROLL_DOWN_BUTTON_MARGIN = 4;

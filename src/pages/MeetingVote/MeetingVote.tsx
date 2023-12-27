@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil';
 
 import { ScrollDownFloatingButton } from '../../components/buttons/ScrollDownFloatingButton';
 import { Page } from '../../components/pageLayout';
+import { SCROLL_DOWN_BUTTON_MARGIN } from '../../constants/meeting';
 import { useMeeting } from '../../hooks/useMeeting';
 import { currentUserStateFamily } from '../../stores/currentUser';
 import MeetingVoteContents from '../../templates/MeetingVote/MeetingVoteContents';
@@ -37,13 +38,15 @@ function MeetingVote() {
         return;
       }
       const { scrollTop, scrollHeight, clientHeight } = pageElementRef.current;
-      setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+      const remainingScroll = scrollHeight - scrollTop - clientHeight;
+      setHasMoreBottomScroll(remainingScroll > SCROLL_DOWN_BUTTON_MARGIN);
     },
   });
 
   const handlePageScroll = (event: UIEvent<HTMLDivElement>) => {
     const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
-    setHasMoreBottomScroll(scrollTop + clientHeight < scrollHeight);
+    const remainingScroll = scrollHeight - scrollTop - clientHeight;
+    setHasMoreBottomScroll(remainingScroll > SCROLL_DOWN_BUTTON_MARGIN);
   };
 
   const handleScollDownButtonClick = () => {
