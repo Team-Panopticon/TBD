@@ -50,7 +50,7 @@ export const Header = () => {
     {
       name: '새로운 모임 만들기',
       icon: <></>,
-      onClick: async () => {
+      onClick: () => {
         nav(`/meetings/new`);
       },
     },
