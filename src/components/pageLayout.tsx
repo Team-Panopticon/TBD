@@ -16,6 +16,12 @@ export const Page = styled('div')`
   padding-bottom: 64px;
 `;
 
+const LayoutWrapper = styled('div')`
+  height: 100dvh;
+  overflow: hidden;
+  position: relative;
+`;
+
 const ContentsWrapper = styled(Box)`
   padding: 0 32px 0;
   height: 100%;
@@ -42,13 +48,13 @@ export const Footer = styled('footer')({
 export const PageLayout = (props: { useHeader?: boolean }) => {
   const { useHeader = true } = props;
   return (
-    <div style={{ height: 'calc(var(--vh, 1vh)*100 )', overflow: 'hidden', position: 'relative' }}>
+    <LayoutWrapper>
       {useHeader && <Header></Header>}
       <ContentsWrapper>
         <ContentsBox {...props}>
           <Outlet />
         </ContentsBox>
       </ContentsWrapper>
-    </div>
+    </LayoutWrapper>
   );
 };
