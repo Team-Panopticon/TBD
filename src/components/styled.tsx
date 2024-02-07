@@ -52,6 +52,7 @@ export const CalanderDayBtn = styled('button')<{ today?: boolean; isSelected?: b
   font-size: 16px;
   font-weight: 400;
   line-height: 20px;
+  color: ${(props) => props.theme.palette.text.primary};
 
   &::after {
     content: '오늘';
