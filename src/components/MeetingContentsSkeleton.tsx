@@ -34,9 +34,9 @@ const MeetingContentsSkeleton = () => {
             borderRadius: '4px',
           }}
         >
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
             {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} width="100px" variant="rounded" />
+              <Skeleton key={i} width="100%" variant="rounded" />
             ))}
           </div>
         </div>
